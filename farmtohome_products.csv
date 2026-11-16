@@ -1,0 +1,28 @@
+product_name,price_in_rupees,quantity,image_path
+Tomato,30,1 kg,images/tomato.jpg
+Onion,35,1 kg,images/onion.jpg
+Potato,25,1 kg,images/potato.jpg
+Carrot,50,1 kg,images/carrot.jpg
+Brinjal,40,1 kg,images/brinjal.jpg
+Cabbage,30,1 pc,images/cabbage.jpg
+Cauliflower,45,1 pc,images/cauliflower.jpg
+Green Chilli,80,250 g,images/green_chilli.jpg
+Capsicum,70,500 g,images/capsicum.jpg
+Red Chilli,200,100 kg,images/red_chilli.jpg
+Apple,160,1 kg,images/apple.jpg
+Banana,60,1 dozen,images/banana.jpg
+Mango,120,1 kg,images/mango.jpg
+Grapes,90,1 kg,images/grapes.jpg
+Pomegranate,180,1 kg,images/pomegranate.jpg
+Watermelon,40,1 pc,images/watermelon.jpg
+Rice,55,1 kg,images/rice.jpg
+Wheat,30,1 kg,images/wheat.jpg
+Maize,28,1 kg,images/maize.jpg
+Sugarcane,15,1 stick,images/sugarcane.jpg
+Groundnut,90,1 kg,images/groundnut.jpg
+Tur Dal,130,1 kg,images/turdal.jpg
+Moong Dal,110,1 kg,images/moongdal.jpg
+Chana Dal,95,1 kg,images/chanadal.jpg
+Milk,60,1 L,images/milk.jpg
+Curd,50,500 g,images/curd.jpg
+Eggs,60,6 pcs,images/eggs.jpg

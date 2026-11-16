@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="farmGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2e7d32" />
+      <stop offset="100%" stop-color="#1b5e20" />
+    </linearGradient>
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#81c784" />
+      <stop offset="100%" stop-color="#388e3c" />
+    </linearGradient>
+    <linearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe082" />
+      <stop offset="100%" stop-color="#ffb300" />
+    </linearGradient>
+  </defs>
+  <!-- Background Circle -->
+  <rect width="64" height="64" rx="16" fill="url(#farmGrad)" />
+  <!-- Sun -->
+  <circle cx="48" cy="18" r="7" fill="url(#sunGrad)" opacity="0.9" />
+  <!-- Farm Soil / Rolling Hill -->
+  <path d="M4 52 Q 22 42, 40 46 T 60 52 L 60 60 L 4 60 Z" fill="#8d6e63" opacity="0.8" />
+  <path d="M4 56 Q 30 48, 60 56 L 60 60 L 4 60 Z" fill="#5d4037" />
+  <!-- Sprout Stem -->
+  <path d="M32 50 Q 32 32, 33 22" stroke="#a5d6a7" stroke-width="3.5" stroke-linecap="round" fill="none" />
+  <!-- Left Leaf -->
+  <path d="M32 34 C 20 32, 16 20, 22 18 C 28 16, 32 26, 32 34 Z" fill="url(#leafGrad)" />
+  <!-- Right Leaf -->
+  <path d="M33 28 C 45 25, 48 14, 42 13 C 36 12, 33 21, 33 28 Z" fill="#a5d6a7" />
+  <!-- Heart of sprout -->
+  <circle cx="32" cy="20" r="2.5" fill="#c8e6c9" />
+</svg>

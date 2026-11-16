@@ -1,0 +1,52 @@
+const createSvgPlaceholder = (label = 'Fresh Harvest') => {
+  const safeText = encodeURIComponent(label);
+  return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="%23f1f8e9"/><circle cx="200" cy="180" r="80" fill="%23c8e6c9"/><text x="200" y="195" font-size="64" text-anchor="middle">🌱</text><text x="200" y="300" font-family="system-ui,-apple-system,sans-serif" font-size="20" font-weight="bold" fill="%232e7d32" text-anchor="middle">${safeText}</text><text x="200" y="328" font-family="system-ui,-apple-system,sans-serif" font-size="14" fill="%23689f38" text-anchor="middle">Village Farm Produce</text></svg>`;
+};
+
+const productImageMap = {
+  tomato: 'https://images.unsplash.com/photo-1546470427-0d4db154ceb7?w=600&auto=format&fit=crop&q=80',
+  onion: 'https://images.unsplash.com/photo-1508747703725-719777637510?w=600&auto=format&fit=crop&q=80',
+  potato: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600&auto=format&fit=crop&q=80',
+  carrot: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5c317?w=600&auto=format&fit=crop&q=80',
+  brinjal: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=600&auto=format&fit=crop&q=80',
+  cabbage: 'https://images.unsplash.com/photo-1550950158-d0d960dff51b?w=600&auto=format&fit=crop&q=80',
+  cauliflower: 'https://images.unsplash.com/photo-1568584711075-3d021a7c3ca3?w=600&auto=format&fit=crop&q=80',
+  'green chilli': 'https://images.unsplash.com/photo-1588252303782-cb80119abd6d?w=600&auto=format&fit=crop&q=80',
+  capsicum: 'https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?w=600&auto=format&fit=crop&q=80',
+  'red chilli': 'https://images.unsplash.com/photo-1596797882870-8c33deeac224?w=600&auto=format&fit=crop&q=80',
+  apple: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=600&auto=format&fit=crop&q=80',
+  banana: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&auto=format&fit=crop&q=80',
+  mango: 'https://images.unsplash.com/photo-1553279768-865429fa0078?w=600&auto=format&fit=crop&q=80',
+  grapes: 'https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=600&auto=format&fit=crop&q=80',
+  pomegranate: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=600&auto=format&fit=crop&q=80',
+  watermelon: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600&auto=format&fit=crop&q=80',
+  rice: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&auto=format&fit=crop&q=80',
+  wheat: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&auto=format&fit=crop&q=80',
+  maize: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=600&auto=format&fit=crop&q=80',
+  sugarcane: 'https://images.unsplash.com/photo-1589923188900-85dae523342b?w=600&auto=format&fit=crop&q=80',
+  groundnut: 'https://images.unsplash.com/photo-1567894340315-735d7c361db0?w=600&auto=format&fit=crop&q=80',
+  'tur dal': 'https://images.unsplash.com/photo-1585994192701-f1665a58c067?w=600&auto=format&fit=crop&q=80',
+  'toor dal': 'https://images.unsplash.com/photo-1585994192701-f1665a58c067?w=600&auto=format&fit=crop&q=80',
+  'moong dal': 'https://images.unsplash.com/photo-1585994192701-f1665a58c067?w=600&auto=format&fit=crop&q=80',
+  'chana dal': 'https://images.unsplash.com/photo-1585994192701-f1665a58c067?w=600&auto=format&fit=crop&q=80',
+  milk: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=600&auto=format&fit=crop&q=80',
+  curd: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600&auto=format&fit=crop&q=80',
+  eggs: 'https://images.unsplash.com/photo-1516448620398-c5f44bf9f441?w=600&auto=format&fit=crop&q=80'
+};
+
+export const getProductImage = (imagePath, productName) => {
+  if (imagePath && /^https?:\/\//i.test(imagePath)) {
+    return imagePath;
+  }
+
+  const normalized = productName?.toLowerCase?.() || '';
+  const matchedEntry = Object.entries(productImageMap).find(([key]) =>
+    normalized.includes(key)
+  );
+
+  if (matchedEntry) {
+    return matchedEntry[1];
+  }
+
+  return createSvgPlaceholder(productName || 'Fresh Harvest');
+};
