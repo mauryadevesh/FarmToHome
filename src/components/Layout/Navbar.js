@@ -13,9 +13,11 @@ import {
   FaMapMarkerAlt,
   FaSignOutAlt,
   FaLeaf,
-  FaUsers
+  FaUsers,
+  FaUserCircle,
+  FaTachometerAlt
 } from 'react-icons/fa';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const Navbar = () => {
   const { isAuthenticated, user, logout } = useAuth();
@@ -40,13 +42,6 @@ const Navbar = () => {
       <Link to={to} className={`nav-link ${active ? 'nav-item--active' : ''}`}>
         {icon}
         <span>{label}</span>
-        {active && (
-          <motion.div
-            layoutId="navActiveIndicator"
-            className="nav-active-indicator"
-            transition={{ type: 'spring', stiffness: 380, damping: 28 }}
-          />
-        )}
       </Link>
     );
   };
@@ -59,11 +54,11 @@ const Navbar = () => {
           <div className="brand-logo-badge">
             <FaLeaf className="brand-leaf-icon" />
           </div>
-          <div className="brand-copy">
-            <div className="brand-title-wrap">
-              <span className="brand-wordmark">Farm2Home</span>
-            </div>
-            <span className="brand-descriptor">Fresh from Local Farms to Your Home</span>
+          <div className="brand-text">
+            <span className="brand-name">
+              Farm<span className="brand-accent">2</span>Home
+            </span>
+            <span className="brand-tagline">Fresh Local Produce</span>
           </div>
         </Link>
 
@@ -77,8 +72,8 @@ const Navbar = () => {
             <>
               {renderNavLink('/cart', <FaShoppingCart className="nav-icon" />, 'Cart')}
               {renderNavLink('/orders', <FaClipboardList className="nav-icon" />, 'My Orders')}
-              {renderNavLink('/tracking', <FaMapMarkerAlt className="nav-icon" />, 'Live Tracking')}
-              {renderNavLink('/consumer-dashboard', null, 'Account')}
+              {renderNavLink('/tracking', <FaMapMarkerAlt className="nav-icon" />, 'Tracking')}
+              {renderNavLink('/consumer-dashboard', <FaUserCircle className="nav-icon" />, 'Account')}
             </>
           )}
 
@@ -93,7 +88,7 @@ const Navbar = () => {
           {/* Admin navigation */}
           {isAuthenticated && user?.role === 'admin' && (
             <>
-              {renderNavLink('/admin-dashboard', null, 'Operations Desk')}
+              {renderNavLink('/admin-dashboard', <FaTachometerAlt className="nav-icon" />, 'Admin Hub')}
               {renderNavLink('/admin/products', <FaBox className="nav-icon" />, 'Catalog')}
               {renderNavLink('/admin/orders', <FaClipboardList className="nav-icon" />, 'Orders')}
               {renderNavLink('/admin/users', <FaUsers className="nav-icon" />, 'Members')}
@@ -102,7 +97,7 @@ const Navbar = () => {
           )}
 
           {/* Universal Help link */}
-          {(!user || user.role !== 'admin') && renderNavLink('/support', <FaHeadset className="nav-icon" />, 'Help & Support')}
+          {(!user || user.role !== 'admin') && renderNavLink('/support', <FaHeadset className="nav-icon" />, 'Help')}
         </nav>
 
         {/* Auth & Session Actions */}
@@ -122,11 +117,11 @@ const Navbar = () => {
             </div>
           ) : (
             <div className="guest-actions">
-              <Link to="/login" className="btn btn--secondary btn--sm">
+              <Link to="/login" className="btn-signin">
                 <FaSignInAlt className="btn-icon" />
                 <span>Sign in</span>
               </Link>
-              <Link to="/register" className="btn btn--primary btn--sm">
+              <Link to="/register" className="btn-join">
                 <FaUserPlus className="btn-icon" />
                 <span>Join</span>
               </Link>
