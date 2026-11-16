@@ -97,17 +97,81 @@ const OrderTracking = () => {
     const lower = s.trim().toLowerCase();
     const map = {
       pending: 'Pending',
+      ordered: 'Pending',
       accepted: 'Accepted',
       preparing: 'Preparing',
       ready: 'Ready',
       'out for delivery': 'Out for Delivery',
+      out_for_delivery: 'Out for Delivery',
       delivered: 'Delivered',
+      cancelled: 'Cancelled',
     };
     return map[lower] || s;
   };
 
   const currentOrder = orders.find(o => (o.id || o._id) === selectedOrderId);
   const currentStatus = normalizeStatus(trackingData?.currentStatus || currentOrder?.order_status || currentOrder?.status || 'Pending');
+
+  // Dynamic origin and route geometry based on order produce items
+  const orderItems = currentOrder?.items || [];
+  const isChenaOrigin = orderItems.some(it => {
+    const n = (it.name || '').toLowerCase();
+    const f = (it.farmer_name || '').toLowerCase();
+    return n.includes('palak') || n.includes('methi') || n.includes('milk') || n.includes('curd') || f.includes('chena');
+  });
+  const isRaiOrigin = !isChenaOrigin && orderItems.some(it => {
+    const n = (it.name || '').toLowerCase();
+    const f = (it.farmer_name || '').toLowerCase();
+    return n.includes('banana') || n.includes('wada') || n.includes('rice') || f.includes('rai');
+  });
+
+  const originName = isChenaOrigin
+    ? 'Chena Creek Farm Station'
+    : isRaiOrigin
+    ? 'Rai-Morva Field Station'
+    : 'Uttan Coastal Agro Station';
+
+  const rawAddress = currentOrder?.shipping_address || currentOrder?.shippingAddress || 'Beverly Park, Mira Rd (401107)';
+  const destinationShort = rawAddress.length > 28 ? rawAddress.slice(0, 25) + '...' : rawAddress;
+  const transitSector = rawAddress.toLowerCase().includes('bhayandar')
+    ? 'Bhayandar West Sector'
+    : 'Mira Road East / Kanakia Sector';
+  const destPincode = rawAddress.match(/\b(400\d{3}|401\d{3})\b/)?.[0] || 'MBMC 401107';
+
+  // Geographic coordinates on the 600x480 canvas
+  const startX = isChenaOrigin ? 500 : isRaiOrigin ? 210 : 110;
+  const startY = isChenaOrigin ? 170 : isRaiOrigin ? 95 : 300;
+  const hubX = 310;
+  const hubY = 270;
+  const destX = 420;
+  const destY = 295;
+
+  // Real-time van positioning along the active route
+  let vanX = startX;
+  let vanY = startY;
+  if (currentStatus === 'Accepted') {
+    vanX = Math.round(startX + (hubX - startX) * 0.35);
+    vanY = Math.round(startY + (hubY - startY) * 0.35);
+  } else if (currentStatus === 'Preparing') {
+    vanX = Math.round(startX + (hubX - startX) * 0.72);
+    vanY = Math.round(startY + (hubY - startY) * 0.72);
+  } else if (currentStatus === 'Ready') {
+    vanX = hubX;
+    vanY = hubY;
+  } else if (currentStatus === 'Out for Delivery') {
+    vanX = Math.round(hubX + (destX - hubX) * 0.65);
+    vanY = Math.round(hubY + (destY - hubY) * 0.65);
+  } else if (currentStatus === 'Delivered') {
+    vanX = destX;
+    vanY = destY;
+  }
+
+  // Active highlighted transit path
+  const activeRouteD = isChenaOrigin
+    ? `M 500,170 Q 400,220 310,270 Q 365,280 420,295`
+    : isRaiOrigin
+    ? `M 210,95 Q 260,180 310,270 Q 365,280 420,295`
+    : `M 110,300 Q 210,285 310,270 Q 365,280 420,295`;
 
   const getStageIndex = (status) => {
     const idx = DELIVERY_STAGES.findIndex(s => s.key.toLowerCase() === (status || '').toLowerCase());
@@ -331,130 +395,203 @@ const OrderTracking = () => {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   {/* Background terrain */}
-                  <rect width="600" height="480" fill="#f4f8f4" rx="8" />
+                  <rect width="600" height="480" fill="#f4f8f4" rx="10" />
 
                   {/* Arabian Sea / Coast on West */}
                   <path
-                    d="M 0,0 L 90,0 Q 110,120 70,240 T 80,480 L 0,480 Z"
-                    fill="#e3f2fd"
+                    d="M 0,0 L 80,0 Q 100,120 65,240 T 75,480 L 0,480 Z"
+                    fill="#e0f2fe"
                   />
-                  <text x="20" y="240" fill="#90caf9" fontSize="12" fontWeight="600" transform="rotate(-90 20 240)">
-                    Arabian Sea (West)
-                  </text>
+                  <g transform="translate(26, 240) rotate(-90)">
+                    <text x="0" y="0" textAnchor="middle" fill="#0284c7" opacity="0.65" fontSize="10.5" fontWeight="700" letterSpacing="2">
+                      ARABIAN SEA (WEST)
+                    </text>
+                  </g>
 
                   {/* Vasai Creek (North) */}
                   <path
-                    d="M 70,0 Q 250,50 600,30 L 600,0 Z"
-                    fill="#bbdefb"
+                    d="M 65,0 Q 250,45 600,28 L 600,0 Z"
+                    fill="#bae6fd"
                   />
-                  <text x="320" y="22" fill="#1565c0" fontSize="11" fontWeight="600">
-                    Vasai Creek Northern Border
+                  <text x="330" y="19" textAnchor="middle" fill="#0369a1" opacity="0.85" fontSize="10" fontWeight="700" letterSpacing="1">
+                    VASAI CREEK (NORTHERN BOUNDARY)
                   </text>
 
                   {/* Western Railway Tracks Corridor */}
-                  <line x1="280" y1="40" x2="290" y2="480" stroke="#b0bec5" strokeWidth="4" strokeDasharray="6,4" />
-                  <text x="296" y="220" fill="#78909c" fontSize="10" transform="rotate(88 296 220)">
+                  <line x1="285" y1="35" x2="295" y2="480" stroke="#94a3b8" strokeWidth="3" strokeDasharray="6,4" />
+                  <text x="278" y="95" textAnchor="end" fill="#64748b" fontSize="9.5" fontWeight="700">
                     Western Railway Line
+                  </text>
+                  <text x="278" y="107" textAnchor="end" fill="#94a3b8" fontSize="8">
+                    (Churchgate ⇄ Virar)
                   </text>
 
                   {/* Ghodbunder / Chena Creek Green Hills (East) */}
                   <path
-                    d="M 500,60 Q 560,180 520,320 T 570,480 L 600,480 L 600,60 Z"
-                    fill="#e8f5e9"
+                    d="M 520,50 Q 560,180 530,320 T 575,480 L 600,480 L 600,50 Z"
+                    fill="#ecfdf5"
                   />
-                  <text x="530" y="250" fill="#4caf50" fontSize="11" fontWeight="600" transform="rotate(90 530 250)">
-                    Chena Creek Green Valley
-                  </text>
+                  <g transform="translate(584, 250) rotate(90)">
+                    <text x="0" y="0" textAnchor="middle" fill="#059669" opacity="0.75" fontSize="10" fontWeight="700" letterSpacing="1.5">
+                      CHENA FOREST HILLS
+                    </text>
+                  </g>
+
+                  {/* Static Agricultural Road Network (faint dashed lines) */}
+                  {/* Uttan to Hub */}
+                  <path
+                    d="M 110,300 Q 210,285 310,270"
+                    fill="none"
+                    stroke="#bbf7d0"
+                    strokeWidth="2.5"
+                    strokeDasharray="4,4"
+                  />
+                  {/* Rai to Hub */}
+                  <path
+                    d="M 210,95 Q 260,180 310,270"
+                    fill="none"
+                    stroke="#bbf7d0"
+                    strokeWidth="2.5"
+                    strokeDasharray="4,4"
+                  />
+                  {/* Chena Creek to Hub */}
+                  <path
+                    d="M 500,170 Q 400,220 310,270"
+                    fill="none"
+                    stroke="#bbf7d0"
+                    strokeWidth="2.5"
+                    strokeDasharray="4,4"
+                  />
+                  {/* Hub to Destination */}
+                  <path
+                    d="M 310,270 Q 365,280 420,295"
+                    fill="none"
+                    stroke="#bbf7d0"
+                    strokeWidth="2.5"
+                    strokeDasharray="4,4"
+                  />
+
+                  {/* ACTIVE Delivery Transit Route (illuminated animated dashed path) */}
+                  <path
+                    d={activeRouteD}
+                    fill="none"
+                    stroke="#15803d"
+                    strokeWidth="3.5"
+                    strokeDasharray="8,5"
+                    className="route-active-line"
+                  />
 
                   {/* Farm Zone 1: Uttan Coastal Belt */}
                   <g className="map-node farm-node">
-                    <circle cx="110" cy="300" r="14" fill="#2d7a3e" />
-                    <circle cx="110" cy="300" r="22" fill="rgba(45, 122, 62, 0.2)" />
-                    <text x="110" y="332" textAnchor="middle" fill="#1b4d29" fontSize="11" fontWeight="700">
+                    <circle cx="110" cy="300" r="14" fill="#15803d" />
+                    {(!isChenaOrigin && !isRaiOrigin) && (
+                      <circle cx="110" cy="300" r="22" fill="rgba(21, 128, 61, 0.25)">
+                        <animate attributeName="r" values="18;26;18" dur="2s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0.35;0.08;0.35" dur="2s" repeatCount="indefinite" />
+                      </circle>
+                    )}
+                    <text x="110" y="304" textAnchor="middle" fill="#ffffff" fontSize="9" fontWeight="bold">🌱</text>
+                    <text x="110" y="328" textAnchor="middle" fill="#14532d" fontSize="11" fontWeight="700">
                       Uttan Coastal Farm
                     </text>
-                    <text x="110" y="344" textAnchor="middle" fill="#555" fontSize="9">
+                    <text x="110" y="340" textAnchor="middle" fill="#64748b" fontSize="8.5">
                       Vine Tomatoes & Root Crops
                     </text>
                   </g>
 
                   {/* Farm Zone 2: Chena Creek Greens */}
                   <g className="map-node farm-node">
-                    <circle cx="510" cy="180" r="14" fill="#2d7a3e" />
-                    <circle cx="510" cy="180" r="22" fill="rgba(45, 122, 62, 0.2)" />
-                    <text x="510" y="210" textAnchor="middle" fill="#1b4d29" fontSize="11" fontWeight="700">
+                    <circle cx="500" cy="170" r="14" fill="#15803d" />
+                    {isChenaOrigin && (
+                      <circle cx="500" cy="170" r="22" fill="rgba(21, 128, 61, 0.25)">
+                        <animate attributeName="r" values="18;26;18" dur="2s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0.35;0.08;0.35" dur="2s" repeatCount="indefinite" />
+                      </circle>
+                    )}
+                    <text x="500" y="174" textAnchor="middle" fill="#ffffff" fontSize="9" fontWeight="bold">🌿</text>
+                    <text x="500" y="196" textAnchor="middle" fill="#14532d" fontSize="11" fontWeight="700">
                       Chena Creek Greens
                     </text>
-                    <text x="510" y="222" textAnchor="middle" fill="#555" fontSize="9">
-                      Palak, Methi, Cow Milk
+                    <text x="500" y="208" textAnchor="middle" fill="#64748b" fontSize="8.5">
+                      Palak, Methi, A2 Cow Milk
                     </text>
                   </g>
 
                   {/* Farm Zone 3: Rai-Morva Fields */}
                   <g className="map-node farm-node">
-                    <circle cx="210" cy="90" r="12" fill="#2d7a3e" />
-                    <text x="210" y="118" textAnchor="middle" fill="#1b4d29" fontSize="10" fontWeight="700">
-                      Rai-Morva Fields
+                    <circle cx="210" cy="95" r="12" fill="#15803d" />
+                    {isRaiOrigin && (
+                      <circle cx="210" cy="95" r="20" fill="rgba(21, 128, 61, 0.25)">
+                        <animate attributeName="r" values="16;24;16" dur="2s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0.35;0.08;0.35" dur="2s" repeatCount="indefinite" />
+                      </circle>
+                    )}
+                    <text x="210" y="99" textAnchor="middle" fill="#ffffff" fontSize="8" fontWeight="bold">🌾</text>
+                    <text x="210" y="121" textAnchor="middle" fill="#14532d" fontSize="10.5" fontWeight="700">
+                      Rai-Morva Agro Plot
+                    </text>
+                    <text x="210" y="132" textAnchor="middle" fill="#64748b" fontSize="8">
+                      Local Bananas & Grains
                     </text>
                   </g>
 
                   {/* Central Transit Hub: Mira Road Station Quality Hub */}
                   <g className="map-node hub-node">
-                    <rect x="295" y="260" width="30" height="26" rx="4" fill="#1565c0" />
-                    <text x="310" y="278" textAnchor="middle" fill="#ffffff" fontSize="12" fontWeight="bold">
+                    <rect x="292" y="254" width="36" height="30" rx="6" fill="#1d4ed8" stroke="#ffffff" strokeWidth="2" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.18))" />
+                    <text x="310" y="273" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="bold">
                       HUB
                     </text>
-                    <text x="310" y="304" textAnchor="middle" fill="#0d47a1" fontSize="11" fontWeight="700">
+                    <text x="310" y="300" textAnchor="middle" fill="#1e3a8a" fontSize="11" fontWeight="700">
                       Mira Rd Quality Center
                     </text>
-                    <text x="310" y="316" textAnchor="middle" fill="#666" fontSize="9">
-                      Batch Sorting & Cold Staging
+                    <text x="310" y="312" textAnchor="middle" fill="#64748b" fontSize="8.5">
+                      Batch Sorting & Staging
                     </text>
                   </g>
 
-                  {/* Delivery Transit Route Line */}
-                  <path
-                    d="M 110,300 Q 200,280 295,273 T 410,290"
-                    fill="none"
-                    stroke="#2e7d32"
-                    strokeWidth="3.5"
-                    strokeDasharray="6,4"
-                  />
-
-                  {/* Destination: Customer Address in Beverly Park / Mira Road */}
+                  {/* Destination: Customer Address */}
                   <g className="map-node destination-node">
-                    <circle cx="410" cy="290" r="14" fill="#d32f2f" />
-                    <circle cx="410" cy="290" r="24" fill="rgba(211, 47, 47, 0.2)" />
-                    <text x="410" y="322" textAnchor="middle" fill="#b71c1c" fontSize="11" fontWeight="700">
-                      Delivery Address
+                    <circle cx={destX} cy={destY} r="14" fill="#dc2626" />
+                    <circle cx={destX} cy={destY} r="22" fill="rgba(220, 38, 38, 0.2)">
+                      <animate attributeName="r" values="18;26;18" dur="2.2s" repeatCount="indefinite" />
+                      <animate attributeName="opacity" values="0.3;0.06;0.3" dur="2.2s" repeatCount="indefinite" />
+                    </circle>
+                    <text x={destX} y={destY + 4} textAnchor="middle" fill="#ffffff" fontSize="9" fontWeight="bold">🏠</text>
+                    <text x={destX} y={destY + 28} textAnchor="middle" fill="#991b1b" fontSize="11" fontWeight="700">
+                      Delivery Destination
                     </text>
-                    <text x="410" y="334" textAnchor="middle" fill="#555" fontSize="9">
-                      Beverly Park, Mira Rd (401107)
+                    <text x={destX} y={destY + 40} textAnchor="middle" fill="#64748b" fontSize="8.5">
+                      {destinationShort}
                     </text>
                   </g>
 
                   {/* Dynamic Van Marker on Route based on progress */}
-                  {(() => {
-                    // Interpolate coordinates based on status
-                    let vanX = 110;
-                    let vanY = 300;
-                    if (currentStatus === 'Accepted') { vanX = 160; vanY = 288; }
-                    else if (currentStatus === 'Preparing') { vanX = 220; vanY = 278; }
-                    else if (currentStatus === 'Ready') { vanX = 310; vanY = 273; }
-                    else if (currentStatus === 'Out for Delivery') { vanX = 370; vanY = 282; }
-                    else if (currentStatus === 'Delivered') { vanX = 410; vanY = 290; }
+                  <g className="animated-van-marker" transform={`translate(${vanX}, ${vanY})`}>
+                    {/* SVG Native Pulse Ring (Immune to transform-origin CSS bugs) */}
+                    <circle cx="0" cy="0" r="16" fill="#ea580c" opacity="0.25">
+                      <animate attributeName="r" values="14;24;14" dur="2s" repeatCount="indefinite" />
+                      <animate attributeName="opacity" values="0.35;0.06;0.35" dur="2s" repeatCount="indefinite" />
+                    </circle>
 
-                    return (
-                      <g className="animated-van-marker" transform={`translate(${vanX}, ${vanY})`}>
-                        <circle r="18" fill="#ff9800" opacity="0.3" className="van-pulse-circle" />
-                        <rect x="-12" y="-10" width="24" height="20" rx="3" fill="#e65100" />
-                        <text x="0" y="4" textAnchor="middle" fill="#ffffff" fontSize="11">🚚</text>
-                        <text x="0" y="-15" textAnchor="middle" fill="#e65100" fontSize="10" fontWeight="bold">
-                          Van #03
-                        </text>
-                      </g>
-                    );
-                  })()}
+                    {/* Shadow underneath */}
+                    <ellipse cx="0" cy="14" rx="11" ry="3.5" fill="rgba(0,0,0,0.18)" />
+
+                    {/* Clean Van Badge */}
+                    <rect x="-18" y="-13" width="36" height="24" rx="6" fill="#15803d" stroke="#ffffff" strokeWidth="2" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.22))" />
+
+                    {/* Vector Delivery Truck Icon */}
+                    <g transform="translate(-10, -7) scale(0.65)" fill="#ffffff">
+                      <path d="M1 3h15v11H1zM16 7h4l3 3.5V14h-7V7zM4.5 17a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM17.5 17a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+                    </g>
+
+                    {/* Van Label Tag above */}
+                    <g transform="translate(0, -20)">
+                      <rect x="-24" y="-8" width="48" height="14" rx="3" fill="#14532d" />
+                      <text x="0" y="2.5" textAnchor="middle" fill="#ffffff" fontSize="8.5" fontWeight="bold">
+                        {currentStatus === 'Delivered' ? 'ARRIVED' : 'VAN #03'}
+                      </text>
+                    </g>
+                  </g>
                 </svg>
               </div>
 
@@ -481,19 +618,19 @@ const OrderTracking = () => {
               <div className="transit-diagnostics-grid">
                 <div className="diag-box">
                   <span className="diag-label">Origin Hub</span>
-                  <span className="diag-val">Uttan Collection Station</span>
+                  <span className="diag-val">{originName}</span>
                 </div>
                 <div className="diag-box">
                   <span className="diag-label">Transit Sector</span>
-                  <span className="diag-val">Kanakia Rd / Beverly Park</span>
+                  <span className="diag-val">{transitSector}</span>
                 </div>
                 <div className="diag-box">
                   <span className="diag-label">Destination Pincode</span>
-                  <span className="diag-val">MBMC 401107</span>
+                  <span className="diag-val">{destPincode}</span>
                 </div>
                 <div className="diag-box">
                   <span className="diag-label">Scheduled Slot</span>
-                  <span className="diag-val">{currentOrder.delivery_time_slot || '07:00 AM - 10:00 AM'}</span>
+                  <span className="diag-val">{currentOrder.delivery_time_slot || currentOrder.deliveryTimeSlot || '07:00 AM - 10:00 AM'}</span>
                 </div>
               </div>
             </div>

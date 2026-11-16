@@ -1027,9 +1027,25 @@
   display: block;
 }
 
+.animated-van-marker {
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+
+@keyframes dashTravel {
+  to {
+    stroke-dashoffset: -26;
+  }
+}
+
+.route-active-line {
+  animation: dashTravel 1.4s linear infinite;
+}
+
 .van-pulse-circle {
-  animation: beaconPulse 1.5s infinite;
+  transform-box: fill-box;
   transform-origin: center;
+  animation: beaconPulse 1.5s infinite;
 }
 
 /* Driver Strip */
