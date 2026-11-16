@@ -1,128 +1,75 @@
-# Quick Setup Guide
+# FarmToHome Quick Setup & Deployment Guide
 
-Follow these steps to get FarmToHome up and running:
+This guide walks you through setting up FarmToHome locally or deploying it in one click to Vercel.
 
-## Step 1: Install MongoDB
+---
 
-Make sure MongoDB is installed and running on your system.
+## 🚀 Option A: 1-Click Vercel Deployment
 
-**Windows:**
-- Download from https://www.mongodb.com/try/download/community
-- Install and start MongoDB service
+1. **Push to GitHub**:
+   Ensure your FarmToHome code is committed to a GitHub repository.
 
-**macOS:**
+2. **Import to Vercel**:
+   - Go to [Vercel](https://vercel.com) and click **"Add New Project"**.
+   - Select your GitHub repository.
+   - Vercel automatically selects the Create React App framework preset.
+
+3. **Configure Environment Variables**:
+   In the Vercel project configuration, add the following variables:
+   - `JWT_SECRET`: Any 32+ character random string (e.g. `your_production_secret_key_farmtohome`)
+   - `SUPABASE_URL`: `https://your-project-id.supabase.co`
+   - `SUPABASE_ANON_KEY`: `eyJhbGciOi...`
+   - `SUPABASE_SERVICE_ROLE_KEY`: `eyJhbGciOi...`
+
+4. **Deploy**:
+   Click **Deploy**. Vercel will build the frontend and deploy the serverless functions in `/api`.
+
+---
+
+## 🗄️ Supabase PostgreSQL Setup
+
+1. Create a free account at [supabase.com](https://supabase.com).
+2. Create a new project named `farmtohome`.
+3. In the left sidebar, click **SQL Editor** -> **New Query**.
+4. Copy the entire contents of [`supabase/schema.sql`](./supabase/schema.sql) and paste it into the query window.
+5. Click **Run**.
+6. All 5 tables (`users`, `products`, `cart_items`, `orders`, `support_tickets`), constraints, indexes, RLS policies, and 27 farm products are created and seeded.
+7. Go to **Project Settings** -> **API** to copy your **Project URL**, **anon key**, and **service_role key**.
+
+---
+
+## 💻 Option B: Local Development Setup
+
+### 1. Install Dependencies
 ```bash
-brew install mongodb-community
-brew services start mongodb-community
-```
-
-**Linux:**
-```bash
-sudo apt-get install mongodb
-sudo systemctl start mongodb
-```
-
-## Step 2: Backend Setup
-
-```bash
-# Navigate to backend folder
-cd backend
-
-# Install dependencies
 npm install
-
-# Create .env file
-# Copy the content below into a new file named .env
 ```
 
-Create `backend/.env`:
-```
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/farmtohome
-JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
-NODE_ENV=development
-```
-
+### 2. Configure Environment
 ```bash
-# Start backend server
+cp .env.example .env
+```
+Add your Supabase credentials to `.env`. (If left blank, the app will run in offline local-storage fallback mode!).
+
+### 3. Start the Development Servers
+```bash
+npm run dev
+```
+- Frontend: `http://localhost:3000`
+- API Server: `http://localhost:5001`
+
+### 4. Build and Test Production Locally
+```bash
+npm run build
 npm start
 ```
 
-Backend should now be running on http://localhost:5000
+---
 
-## Step 3: Frontend Setup
+## 🔑 Demo Login Accounts
 
-Open a **new terminal window**:
+All accounts come pre-configured with the database seed:
 
-```bash
-# Navigate to frontend folder
-cd frontend
-
-# Install dependencies
-npm install
-
-# Optional: Create .env file for custom API URL
-# (Defaults to http://localhost:5000 if not set)
-```
-
-Create `frontend/.env` (optional):
-```
-REACT_APP_API_URL=http://localhost:5000
-```
-
-```bash
-# Start frontend development server
-npm start
-```
-
-Frontend should open automatically at http://localhost:3000
-
-## Step 4: Test the Application
-
-1. **Register as a Farmer:**
-   - Go to Register page
-   - Select "Farmer" role
-   - Fill in details and register
-   - Login with your credentials
-
-2. **Add Products:**
-   - Go to "My Dashboard"
-   - Click "Add New Product"
-   - Fill in product details
-   - Save the product
-
-3. **Register as a Consumer:**
-   - Logout
-   - Register a new account with "Consumer" role
-   - Login
-
-4. **Shop:**
-   - Go to "Products" page
-   - Browse products
-   - Add items to cart
-   - Go to Cart and place an order
-
-## Troubleshooting
-
-### MongoDB not connecting?
-- Check if MongoDB is running: `mongod` or check services
-- Verify connection string in `backend/.env`
-- Default: `mongodb://localhost:27017/farmtohome` (Note: Backend automatically falls back to built-in local JSON storage if MongoDB is not running, so the app runs out-of-the-box!)
-
-### Port already in use?
-- Backend: Change `PORT` in `backend/.env`
-- Frontend: React will prompt for different port
-
-### CORS errors?
-- Ensure backend is running
-- Check `REACT_APP_API_URL` in `frontend/.env` matches backend URL
-
-### Module not found errors?
-- Delete `node_modules` and `package-lock.json`
-- Run `npm install` again
-
-## Need Help?
-
-Check the main README.md for detailed documentation and API endpoints.
-
-
+- **Admin Portal**: `admin@farmtohome.com` / `admin123`
+- **Farmer Dashboard**: `farmer@farmtohome.com` / `password123`
+- **Consumer Storefront**: `consumer@farmtohome.com` / `password123`

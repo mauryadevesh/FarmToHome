@@ -1,0 +1,78 @@
+/* Hallmark · theme: garden · genre: editorial · mode: redesign · depth: full */
+/* Critique: A grower's voice: warm oat ground, deep green ink, Vollkorn 600 display heads, Hanken Grotesk text, flat daylight surfaces, hairline rules */
+
+:root {
+  /* Paper (Grounds) */
+  --color-paper: oklch(96.8% 0.016 90);
+  --color-paper-2: oklch(93.8% 0.022 90);
+  --color-paper-3: oklch(90.5% 0.028 90);
+  --color-surface: #ffffff;
+
+  /* Ink (Typography & Marks) */
+  --color-ink: oklch(21% 0.045 152);
+  --color-ink-2: oklch(31% 0.042 150);
+  --color-muted: oklch(48% 0.030 142);
+  --color-faint: oklch(65% 0.020 135);
+
+  /* Rules & Borders */
+  --color-rule: oklch(86% 0.020 112);
+  --color-rule-2: oklch(72% 0.035 138);
+
+  /* Accents */
+  --color-accent: oklch(44% 0.130 142);
+  --color-accent-hover: oklch(38% 0.125 142);
+  --color-accent-2: oklch(86% 0.075 128);
+  --color-accent-ink: oklch(97% 0.015 95);
+  --color-focus: oklch(44% 0.130 142);
+
+  /* Tints */
+  --tint-moss: oklch(44% 0.130 142 / 0.08);
+  --tint-clay: oklch(54% 0.140 46 / 0.07);
+  --tint-warm: oklch(94% 0.025 85);
+  --tint-danger: oklch(45% 0.18 28 / 0.10);
+  --color-danger: oklch(45% 0.18 28);
+
+  /* Typography */
+  --font-display: "Vollkorn", ui-serif, Georgia, serif;
+  --font-body: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-outlier: "Newsreader", ui-serif, Georgia, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --tracking-display: -0.015em;
+  --display-weight: 600;
+
+  /* Spacing Scale */
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4.5rem;
+  --space-4xl: 6rem;
+
+  /* Typography Scale */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.625rem;
+  --text-3xl: 2.125rem;
+  --text-4xl: 2.875rem;
+  --text-5xl: 3.75rem;
+
+  /* Layout */
+  --container-max: 1200px;
+  --radius-card: 4px;
+  --radius-pill: 999px;
+  --rule-hair: 1px;
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-pop: 0 8px 24px -8px rgba(25, 45, 30, 0.08);
+
+  /* Motion */
+  --dur-short: 180ms;
+  --dur-med: 280ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}

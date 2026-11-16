@@ -1,0 +1,734 @@
+{
+  "users": [
+    {
+      "id": "user_admin",
+      "_id": "user_admin",
+      "name": "Admin Desk",
+      "email": "admin@farmtohome.com",
+      "password": "$2a$10$XpCogPu.KYDENw.nAPoOaOD1pyZ1.yi5Hz/t9PNod3wLyWaHIM4ZW",
+      "role": "admin",
+      "phone": "+91 76710 14068",
+      "address": "FarmToHome Operations Center, Sector 4, Bengaluru",
+      "login_history": [
+        {
+          "loginTime": "2026-11-16T11:36:06.786Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": ""
+        },
+        {
+          "loginTime": "2026-11-16T12:47:20.290Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": ""
+        },
+        {
+          "loginTime": "2026-11-16T13:00:12.359Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": ""
+        },
+        {
+          "loginTime": "2026-11-16T13:17:47.181Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": ""
+        },
+        {
+          "loginTime": "2026-11-16T13:27:56.807Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": ""
+        }
+      ],
+      "created_at": "2026-11-16T11:36:06.601Z",
+      "last_login": "2026-11-16T13:27:56.807Z"
+    },
+    {
+      "id": "user_farmer",
+      "_id": "user_farmer",
+      "name": "Kisan Ramesh Kumar",
+      "email": "farmer@farmtohome.com",
+      "password": "$2a$10$XpCogPu.KYDENw.nAPoOaOaRpZ4QXywEugf2R7SjQZMFdXPyZ8LQO",
+      "role": "farmer",
+      "phone": "+91 98765 12345",
+      "address": "Green Valley Organic Farms, Doddaballapura, Karnataka",
+      "login_history": [],
+      "created_at": "2026-11-16T11:36:06.601Z"
+    },
+    {
+      "id": "user_consumer",
+      "_id": "user_consumer",
+      "name": "Priya Sharma",
+      "email": "consumer@farmtohome.com",
+      "password": "$2a$10$XpCogPu.KYDENw.nAPoOaOaRpZ4QXywEugf2R7SjQZMFdXPyZ8LQO",
+      "role": "consumer",
+      "phone": "+91 98765 43210",
+      "address": "Flat 302, Palm Grove Apts, Indiranagar, Bengaluru",
+      "login_history": [
+        {
+          "loginTime": "2026-11-16T11:36:06.700Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": ""
+        },
+        {
+          "loginTime": "2026-11-16T12:47:20.227Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": ""
+        },
+        {
+          "loginTime": "2026-11-16T13:00:12.297Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": ""
+        },
+        {
+          "loginTime": "2026-11-16T13:17:47.116Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": ""
+        },
+        {
+          "loginTime": "2026-11-16T13:27:56.735Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": ""
+        },
+        {
+          "loginTime": "2026-11-16T13:57:18.231Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36 OPR/139.0.0.0"
+        }
+      ],
+      "created_at": "2026-11-16T11:36:06.601Z",
+      "last_login": "2026-11-16T13:57:18.231Z"
+    }
+  ],
+  "products": [
+    {
+      "id": "prod_1",
+      "_id": "prod_1",
+      "name": "Tomato",
+      "description": "Fresh, crisp, pesticide-free Tomato sourced directly from verified local family farms.",
+      "price": 30,
+      "category": "vegetables",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 kg",
+      "image": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_2",
+      "_id": "prod_2",
+      "name": "Onion",
+      "description": "Fresh, crisp, pesticide-free Onion sourced directly from verified local family farms.",
+      "price": 35,
+      "category": "vegetables",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 kg",
+      "image": "https://images.unsplash.com/photo-1508747703725-719777637510?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_3",
+      "_id": "prod_3",
+      "name": "Potato",
+      "description": "Fresh, crisp, pesticide-free Potato sourced directly from verified local family farms.",
+      "price": 25,
+      "category": "vegetables",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 kg",
+      "image": "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_4",
+      "_id": "prod_4",
+      "name": "Carrot",
+      "description": "Fresh, crisp, pesticide-free Carrot sourced directly from verified local family farms.",
+      "price": 50,
+      "category": "vegetables",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 kg",
+      "image": "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_5",
+      "_id": "prod_5",
+      "name": "Brinjal",
+      "description": "Fresh, crisp, pesticide-free Brinjal sourced directly from verified local family farms.",
+      "price": 40,
+      "category": "vegetables",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 kg",
+      "image": "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_6",
+      "_id": "prod_6",
+      "name": "Cabbage",
+      "description": "Fresh, crisp, pesticide-free Cabbage sourced directly from verified local family farms.",
+      "price": 30,
+      "category": "vegetables",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 pc",
+      "image": "https://images.unsplash.com/photo-1550950158-d0d960dff51b?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_7",
+      "_id": "prod_7",
+      "name": "Cauliflower",
+      "description": "Fresh, crisp, pesticide-free Cauliflower sourced directly from verified local family farms.",
+      "price": 45,
+      "category": "vegetables",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 pc",
+      "image": "https://images.unsplash.com/photo-1568584711075-3d021a7c3ca3?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_8",
+      "_id": "prod_8",
+      "name": "Green Chilli",
+      "description": "Fresh, crisp, pesticide-free Green Chilli sourced directly from verified local family farms.",
+      "price": 80,
+      "category": "vegetables",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "250 g",
+      "image": "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_9",
+      "_id": "prod_9",
+      "name": "Capsicum",
+      "description": "Fresh, crisp, pesticide-free Capsicum sourced directly from verified local family farms.",
+      "price": 70,
+      "category": "vegetables",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "500 g",
+      "image": "https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_10",
+      "_id": "prod_10",
+      "name": "Red Chilli",
+      "description": "Fresh, crisp, pesticide-free Red Chilli sourced directly from verified local family farms.",
+      "price": 200,
+      "category": "spices",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "100 kg",
+      "image": "https://images.unsplash.com/photo-1601648764658-cf37e8c89b70?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_11",
+      "_id": "prod_11",
+      "name": "Apple",
+      "description": "Fresh, crisp, pesticide-free Apple sourced directly from verified local family farms.",
+      "price": 160,
+      "category": "fruits",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 kg",
+      "image": "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_12",
+      "_id": "prod_12",
+      "name": "Banana",
+      "description": "Fresh, crisp, pesticide-free Banana sourced directly from verified local family farms.",
+      "price": 60,
+      "category": "fruits",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 dozen",
+      "image": "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_13",
+      "_id": "prod_13",
+      "name": "Mango",
+      "description": "Fresh, crisp, pesticide-free Mango sourced directly from verified local family farms.",
+      "price": 120,
+      "category": "fruits",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 kg",
+      "image": "https://images.unsplash.com/photo-1553279768-865429fa0078?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_14",
+      "_id": "prod_14",
+      "name": "Grapes",
+      "description": "Fresh, crisp, pesticide-free Grapes sourced directly from verified local family farms.",
+      "price": 90,
+      "category": "fruits",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 kg",
+      "image": "https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_15",
+      "_id": "prod_15",
+      "name": "Pomegranate",
+      "description": "Fresh, crisp, pesticide-free Pomegranate sourced directly from verified local family farms.",
+      "price": 180,
+      "category": "fruits",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 kg",
+      "image": "https://images.unsplash.com/photo-1615485290176-e137f8849bfa?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_16",
+      "_id": "prod_16",
+      "name": "Watermelon",
+      "description": "Fresh, crisp, pesticide-free Watermelon sourced directly from verified local family farms.",
+      "price": 40,
+      "category": "fruits",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 pc",
+      "image": "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_17",
+      "_id": "prod_17",
+      "name": "Rice",
+      "description": "Fresh, crisp, pesticide-free Rice sourced directly from verified local family farms.",
+      "price": 55,
+      "category": "grains",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 kg",
+      "image": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_18",
+      "_id": "prod_18",
+      "name": "Wheat",
+      "description": "Fresh, crisp, pesticide-free Wheat sourced directly from verified local family farms.",
+      "price": 30,
+      "category": "grains",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 kg",
+      "image": "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_19",
+      "_id": "prod_19",
+      "name": "Maize",
+      "description": "Fresh, crisp, pesticide-free Maize sourced directly from verified local family farms.",
+      "price": 28,
+      "category": "grains",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 kg",
+      "image": "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_20",
+      "_id": "prod_20",
+      "name": "Sugarcane",
+      "description": "Fresh, crisp, pesticide-free Sugarcane sourced directly from verified local family farms.",
+      "price": 15,
+      "category": "grains",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 stick",
+      "image": "https://images.unsplash.com/photo-1589927986089-35812388d1f4?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_21",
+      "_id": "prod_21",
+      "name": "Groundnut",
+      "description": "Fresh, crisp, pesticide-free Groundnut sourced directly from verified local family farms.",
+      "price": 90,
+      "category": "pulses",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 kg",
+      "image": "https://images.unsplash.com/photo-1567332766624-958a0b067d58?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_22",
+      "_id": "prod_22",
+      "name": "Tur Dal",
+      "description": "Fresh, crisp, pesticide-free Tur Dal sourced directly from verified local family farms.",
+      "price": 130,
+      "category": "pulses",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 kg",
+      "image": "https://images.unsplash.com/photo-1585994192701-44755106e232?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_23",
+      "_id": "prod_23",
+      "name": "Moong Dal",
+      "description": "Fresh, crisp, pesticide-free Moong Dal sourced directly from verified local family farms.",
+      "price": 110,
+      "category": "pulses",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 kg",
+      "image": "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_24",
+      "_id": "prod_24",
+      "name": "Chana Dal",
+      "description": "Fresh, crisp, pesticide-free Chana Dal sourced directly from verified local family farms.",
+      "price": 95,
+      "category": "pulses",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 kg",
+      "image": "https://images.unsplash.com/photo-1585994192701-44755106e232?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_25",
+      "_id": "prod_25",
+      "name": "Milk",
+      "description": "Fresh, crisp, pesticide-free Milk sourced directly from verified local family farms.",
+      "price": 60,
+      "category": "dairy",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "1 L",
+      "image": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_26",
+      "_id": "prod_26",
+      "name": "Curd",
+      "description": "Fresh, crisp, pesticide-free Curd sourced directly from verified local family farms.",
+      "price": 50,
+      "category": "dairy",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "500 g",
+      "image": "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    },
+    {
+      "id": "prod_27",
+      "_id": "prod_27",
+      "name": "Eggs",
+      "description": "Fresh, crisp, pesticide-free Eggs sourced directly from verified local family farms.",
+      "price": 60,
+      "category": "dairy",
+      "farmer_id": "user_farmer",
+      "farmer": {
+        "id": "user_farmer",
+        "_id": "user_farmer",
+        "name": "Kisan Ramesh Kumar",
+        "email": "farmer@farmtohome.com"
+      },
+      "stock": 100,
+      "unit": "6 pcs",
+      "image": "https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=500",
+      "is_available": true,
+      "isAvailable": true,
+      "created_at": "2026-11-16T11:36:06.602Z"
+    }
+  ],
+  "cart_items": [
+    {
+      "id": "cart_item_1794828966707_4kda",
+      "_id": "cart_item_1794828966707_4kda",
+      "user_id": "user_consumer",
+      "product_id": "prod_1",
+      "quantity": 15
+    }
+  ],
+  "orders": [
+    {
+      "id": "order_1001",
+      "_id": "order_1001",
+      "user_id": "user_consumer",
+      "user": {
+        "id": "user_consumer",
+        "_id": "user_consumer",
+        "name": "Priya Sharma",
+        "email": "consumer@farmtohome.com"
+      },
+      "items": [
+        {
+          "product": "prod_1",
+          "name": "Tomato",
+          "price": 30,
+          "quantity": 2,
+          "image": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=500"
+        },
+        {
+          "product": "prod_2",
+          "name": "Onion",
+          "price": 35,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1508747703725-719777637510?w=500"
+        }
+      ],
+      "total_amount": 95,
+      "totalAmount": 95,
+      "shipping_address": "Flat 302, Palm Grove Apts, Indiranagar, Bengaluru",
+      "shippingAddress": "Flat 302, Palm Grove Apts, Indiranagar, Bengaluru",
+      "status": "delivered",
+      "payment_status": "paid",
+      "paymentStatus": "paid",
+      "created_at": "2026-11-15T11:36:06.602Z"
+    }
+  ],
+  "support_tickets": [
+    {
+      "id": "ticket_1",
+      "_id": "ticket_1",
+      "user_id": "user_consumer",
+      "user": {
+        "id": "user_consumer",
+        "_id": "user_consumer",
+        "name": "Priya Sharma",
+        "email": "consumer@farmtohome.com"
+      },
+      "subject": "Scheduled delivery window query",
+      "message": "Could my Sunday produce be delivered before 9:00 AM?",
+      "category": "order",
+      "priority": "low",
+      "status": "resolved",
+      "response": "Yes Priya! Early morning delivery has been noted with your farmer route.",
+      "created_at": "2026-11-15T23:36:06.602Z"
+    }
+  ]
+}

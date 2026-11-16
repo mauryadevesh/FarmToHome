@@ -1,0 +1,6 @@
+@import './tokens.css';
+@import './base.css';
+
+code {
+  font-family: var(--font-mono);
+}

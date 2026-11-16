@@ -1,0 +1,58 @@
+/* LoadingSpinner.css · Garden Theme */
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+}
+
+.loading-spinner--small {
+  padding: var(--space-md);
+}
+
+.loading-spinner--large {
+  padding: var(--space-3xl);
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--color-rule);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.loading-spinner--small .spinner {
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
+}
+
+.loading-spinner--large .spinner {
+  width: 48px;
+  height: 48px;
+  border-width: 3px;
+}
+
+.loading-text {
+  margin-top: var(--space-sm);
+  color: var(--color-muted);
+  font-size: var(--text-xs);
+}
+
+.loading-spinner--small .loading-text {
+  font-size: 11px;
+  margin-top: var(--space-2xs);
+}
+
+.loading-spinner--large .loading-text {
+  font-size: var(--text-sm);
+  margin-top: var(--space-md);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
