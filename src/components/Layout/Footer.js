@@ -1,35 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaPhoneAlt, FaWhatsapp, FaEnvelope, FaMapMarkerAlt, FaLeaf, FaTruck, FaRupeeSign } from 'react-icons/fa';
+import { FaPhoneAlt, FaWhatsapp, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 
 const Footer = () => {
   return (
     <footer className="editorial-footer">
       <div className="footer-container">
-        {/* Top Impact Banner for College Idea Lab */}
-        <div className="footer-idea-lab-strip">
-          <div className="idea-lab-tag">
-            <span className="idea-lab-pill">College Idea Lab Initiative</span>
-            <span className="idea-lab-text">
-              Direct Peri-Urban Agricultural Network solving the Mira Bhayandar farm-to-table delivery challenge.
-            </span>
-          </div>
-          <div className="idea-lab-stats">
-            <div className="lab-stat">
-              <FaRupeeSign />
-              <span>0% Middleman Deduction</span>
-            </div>
-            <div className="lab-stat">
-              <FaTruck />
-              <span>&lt;12h Field to Doorstep</span>
-            </div>
-            <div className="lab-stat">
-              <FaLeaf />
-              <span>100% Pesticide Tested</span>
-            </div>
-          </div>
-        </div>
-
         <div className="footer-grid">
           {/* Brand & Mission */}
           <div className="footer-col brand-col">

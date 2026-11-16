@@ -1477,6 +1477,22 @@
       "estimated_arrival": "Delivered to Doorstep",
       "updated_at": "2026-11-16T19:52:50.258Z",
       "deliveryStatus": "Delivered"
+    },
+    {
+      "id": "del_order_1794853902926",
+      "_id": "del_order_1794853902926",
+      "order_id": "order_1794853902926",
+      "orderId": "order_1794853902926",
+      "delivery_slot_id": "slot_1",
+      "delivery_status": "processing",
+      "driver_name": "Sanjay Raut (Mira Electric Van #03)",
+      "driver_phone": "+91 98205 99887",
+      "origin_hub": "Uttan Farmers Collection Hub (Mira Bhayandar)",
+      "destination_area": "Flat 302, Palm Grove Apts, Indiranagar, Bengaluru",
+      "current_lat": 19.2845,
+      "current_lng": 72.8612,
+      "estimated_arrival": "Scheduled within selected delivery window",
+      "updated_at": "2026-11-16T20:20:41.273Z"
     }
   ],
   "reviews": [
