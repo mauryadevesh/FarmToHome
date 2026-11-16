@@ -32,6 +32,34 @@ const Register = () => {
     }
   }, [location.state]);
 
+  const fillSampleRegistration = (roleType) => {
+    const rand = Math.floor(100 + Math.random() * 900);
+    if (roleType === 'consumer') {
+      setFormData({
+        name: 'Sneha Kulkarni',
+        email: `sneha.consumer${rand}@example.com`,
+        password: 'password123',
+        confirmPassword: 'password123',
+        role: 'consumer',
+        phone: '+91 98201 54321',
+        address: 'Flat 602, Beverly Park, Kanakia Road, Mira Road East 401107',
+        farmName: ''
+      });
+    } else {
+      setFormData({
+        name: 'Vikas Patil',
+        email: `vikas.farmer${rand}@example.com`,
+        password: 'password123',
+        confirmPassword: 'password123',
+        role: 'farmer',
+        phone: '+91 98202 98765',
+        address: 'Survey 28, Uttan Coastal Agro Zone, Mira Bhayandar 401106',
+        farmName: 'Uttan Fresh Agro Farms'
+      });
+    }
+    setErrors({});
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -130,7 +158,7 @@ const Register = () => {
   return (
     <PageTransition className="auth-container">
       <motion.div
-        className="auth-card"
+        className="auth-card auth-card--register"
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
@@ -172,7 +200,9 @@ const Register = () => {
           <div className="form-group role-selector-group">
             <div className="role-selector-header">
               <label className="form-label">I want to:</label>
-              <span className="role-selector-hint">Select your marketplace role</span>
+              <span className="role-selector-active-tag">
+                {formData.role === 'farmer' ? '🌱 Cultivator Account' : '🛒 Consumer Account'}
+              </span>
             </div>
             <div className="role-selection-grid">
               <button
@@ -200,6 +230,16 @@ const Register = () => {
                     Order morning harvests picked from Uttan & Chena Creek, delivered to your doorstep.
                   </p>
                 </div>
+                <div className={`role-card-select-btn ${formData.role === 'consumer' ? 'selected' : ''}`}>
+                  {formData.role === 'consumer' ? (
+                    <>
+                      <FaCheckCircle />
+                      <span>Selected</span>
+                    </>
+                  ) : (
+                    <span>Select Consumer</span>
+                  )}
+                </div>
               </button>
 
               <button
@@ -224,8 +264,18 @@ const Register = () => {
                   <span className="role-choice-title">Sell Farm Harvest</span>
                   <span className="role-choice-badge">Cultivator</span>
                   <p className="role-choice-desc">
-                    List crops with 0% middleman deduction and direct scheduled delivery.
+                    List crops with 0% middleman deduction and direct scheduled delivery routes.
                   </p>
+                </div>
+                <div className={`role-card-select-btn ${formData.role === 'farmer' ? 'selected' : ''}`}>
+                  {formData.role === 'farmer' ? (
+                    <>
+                      <FaCheckCircle />
+                      <span>Selected</span>
+                    </>
+                  ) : (
+                    <span>Select Cultivator</span>
+                  )}
                 </div>
               </button>
             </div>
@@ -311,7 +361,7 @@ const Register = () => {
           </div>
 
           <div className="form-row">
-            <div className="form-group col-6">
+            <div className="form-group">
               <label htmlFor="password" className="form-label">Password</label>
               <input
                 type="password"
@@ -326,7 +376,7 @@ const Register = () => {
               {errors.password && <span className="error-message">{errors.password}</span>}
             </div>
 
-            <div className="form-group col-6">
+            <div className="form-group">
               <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
               <input
                 type="password"
@@ -361,6 +411,16 @@ const Register = () => {
               Sign in here
             </Link>
           </p>
+
+          <div className="demo-accounts-subtle">
+            <span>Fill sample:</span>
+            <button type="button" className="demo-chip" onClick={() => fillSampleRegistration('consumer')}>
+              Consumer
+            </button>
+            <button type="button" className="demo-chip" onClick={() => fillSampleRegistration('farmer')}>
+              Cultivator
+            </button>
+          </div>
         </div>
       </motion.div>
     </PageTransition>
