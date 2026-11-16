@@ -7,7 +7,6 @@ import {
   FaUsers,
   FaBoxes,
   FaLeaf,
-  FaShoppingBag,
   FaClipboardList,
   FaHeadset,
   FaStore,
@@ -17,11 +16,9 @@ import {
   FaShieldAlt,
   FaHeartbeat,
   FaCheck,
-  FaTimes,
   FaClock,
   FaCalendarAlt,
-  FaPlus,
-  FaAward
+  FaPlus
 } from 'react-icons/fa';
 import { PageTransition } from '../UI/Motion';
 

@@ -44,6 +44,10 @@ router.get('/:id', auth, async (req, res) => {
 // @desc    Create a new order from active cart with delivery slot scheduling
 router.post('/', auth, async (req, res) => {
   try {
+    if (req.user.role !== 'consumer') {
+      return res.status(403).json({ message: 'Only consumers can place farm harvest delivery orders' });
+    }
+
     const { shippingAddress, deliverySlotId, deliveryDate, deliveryTimeSlot, paymentMethod } = req.body;
     if (!shippingAddress || !shippingAddress.trim()) {
       return res.status(400).json({ message: 'Shipping delivery address in Mira Bhayandar is required' });
@@ -120,6 +124,20 @@ router.put('/:id/status', auth, async (req, res) => {
 
     if (!isAdmin && !isFarmer) {
       return res.status(403).json({ message: 'Only cultivators or admins can update order tracking stage' });
+    }
+
+    if (isFarmer) {
+      const allowedFarmerStages = ['Accepted', 'Preparing', 'Ready', 'Cancelled', 'pending', 'processing', 'cancelled'];
+      if (!allowedFarmerStages.includes(status)) {
+        return res.status(403).json({
+          message: 'Farmers can only update preparation stages (Accepted, Preparing, Ready). Dispatch & Delivery are handled exclusively by delivery logistics / administrators.'
+        });
+      }
+
+      const isOwner = await dbAdapter.isOrderBelongingToFarmer(req.params.id, userId);
+      if (!isOwner) {
+        return res.status(403).json({ message: 'Access denied: You can only update orders for your own farm harvest.' });
+      }
     }
 
     const updated = await dbAdapter.updateOrderStatus(req.params.id, status);

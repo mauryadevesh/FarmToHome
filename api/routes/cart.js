@@ -20,8 +20,8 @@ router.get('/', auth, async (req, res) => {
 // @desc    Add item to cart
 router.post('/', auth, async (req, res) => {
   try {
-    if (req.user.role === 'admin') {
-      return res.status(403).json({ message: 'Admin users cannot maintain consumer shopping carts' });
+    if (req.user.role !== 'consumer') {
+      return res.status(403).json({ message: 'Only consumers can maintain shopping carts and place orders' });
     }
 
     const { productId, quantity } = req.body;

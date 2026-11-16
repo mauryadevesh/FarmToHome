@@ -108,6 +108,21 @@ router.put('/status/:orderId', auth, async (req, res) => {
       });
     }
 
+    const userId = req.user.id || req.user._id;
+    if (req.user.role === 'farmer') {
+      const allowedFarmerStages = ['Accepted', 'Preparing', 'Ready', 'Cancelled'];
+      if (!allowedFarmerStages.includes(normalizedStatus)) {
+        return res.status(403).json({
+          message: 'Farmers can only update preparation stages (Accepted, Preparing, Ready). Dispatch & Delivery are handled exclusively by delivery logistics / administrators.'
+        });
+      }
+
+      const isOwner = await dbAdapter.isOrderBelongingToFarmer(req.params.orderId, userId);
+      if (!isOwner) {
+        return res.status(403).json({ message: 'Access denied: You can only update delivery status for orders containing your farm crops.' });
+      }
+    }
+
     const updated = await dbAdapter.updateDeliveryStatus(req.params.orderId, normalizedStatus, {
       driverName,
       driverPhone,

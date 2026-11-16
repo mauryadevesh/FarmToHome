@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import apiService from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
@@ -9,7 +9,6 @@ import {
   FaShoppingBasket,
   FaTruck,
   FaMoneyBillWave,
-  FaMobileAlt,
   FaArrowRight,
   FaCheckCircle,
   FaExclamationCircle,
@@ -39,7 +38,6 @@ const Cart = () => {
   const [error, setError] = useState(null);
   const [updatingItemId, setUpdatingItemId] = useState(null);
   const [checkoutMessage, setCheckoutMessage] = useState(null);
-  const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [placingOrder, setPlacingOrder] = useState(false);
 
   // Delivery Scheduling & Address State
@@ -57,15 +55,23 @@ const Cart = () => {
   const [pincode, setPincode] = useState('401107');
   const [paymentMethod, setPaymentMethod] = useState('cod');
 
-  useEffect(() => {
-    fetchCart();
-    fetchSlotsForDate(todayStr);
-    if (user?.address) {
-      setFlatBuilding(user.address);
+  const fetchSlotsForDate = useCallback(async (date) => {
+    try {
+      setSlotsLoading(true);
+      const slots = await apiService.getDeliverySlots(date);
+      setAvailableSlots(slots || []);
+      const firstAvailable = (slots || []).find(s => !s.is_full);
+      if (firstAvailable) {
+        setSelectedSlotId(firstAvailable.id || firstAvailable._id);
+      }
+    } catch (err) {
+      console.error('Error fetching delivery slots:', err);
+    } finally {
+      setSlotsLoading(false);
     }
-  }, [user]);
+  }, []);
 
-  const fetchCart = async () => {
+  const fetchCart = useCallback(async () => {
     try {
       setLoading(true);
       const response = await apiService.getCart();
@@ -77,24 +83,15 @@ const Cart = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const fetchSlotsForDate = async (date) => {
-    try {
-      setSlotsLoading(true);
-      const slots = await apiService.getDeliverySlots(date);
-      setAvailableSlots(slots || []);
-      // Auto select first non-full slot
-      const firstAvailable = (slots || []).find(s => !s.is_full);
-      if (firstAvailable) {
-        setSelectedSlotId(firstAvailable.id || firstAvailable._id);
-      }
-    } catch (err) {
-      console.error('Error fetching delivery slots:', err);
-    } finally {
-      setSlotsLoading(false);
+  useEffect(() => {
+    fetchCart();
+    fetchSlotsForDate(todayStr);
+    if (user?.address) {
+      setFlatBuilding(user.address);
     }
-  };
+  }, [user, todayStr, fetchCart, fetchSlotsForDate]);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -219,6 +216,13 @@ const Cart = () => {
         <h1>My Fresh Produce Basket</h1>
         <p>Harvest items reserved from local cultivators in Mira Bhayandar.</p>
       </div>
+
+      {error && (
+        <div className="alert alert-error" style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <FaExclamationCircle />
+          <span>{error}</span>
+        </div>
+      )}
 
       <AnimatePresence>
         {checkoutMessage && (

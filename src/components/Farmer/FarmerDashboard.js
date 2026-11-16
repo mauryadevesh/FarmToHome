@@ -13,9 +13,7 @@ import {
   FaPlus,
   FaClipboardList,
   FaCheck,
-  FaTimes,
   FaRupeeSign,
-  FaBoxOpen,
   FaAward,
   FaTruck
 } from 'react-icons/fa';
@@ -188,9 +186,15 @@ const FarmerDashboard = () => {
     }
   };
 
-  // Farmer metrics
+  // Farmer metrics strictly scoped to current cultivator
   const myFarmerId = user?.id || user?._id;
-  const myProducts = products.filter(p => p.farmer_id === myFarmerId || p.farmerId === myFarmerId || p.farmer?.id === myFarmerId || p.farmer?._id === myFarmerId || true); // fallback for demo convenience
+  const myProducts = products.filter(p => (
+    p.farmer_id === myFarmerId ||
+    p.farmerId === myFarmerId ||
+    p.farmer?.id === myFarmerId ||
+    p.farmer?._id === myFarmerId ||
+    (myFarmerId === 'user_farmer' && (p.farmer_id === 'user_farmer' || p.farmer_id === 'farmer_1'))
+  ));
   const totalStock = myProducts.reduce((sum, p) => sum + (p.stock || 0), 0);
   const pendingOrdersCount = orders.filter(o => ['Pending', 'Accepted', 'Preparing'].includes(o.status || o.order_status)).length;
 
@@ -264,6 +268,12 @@ const FarmerDashboard = () => {
           <span className="kpi-sub">100% fair gate payout</span>
         </div>
       </div>
+
+      {error && (
+        <div className="alert alert-error" style={{ margin: '1rem 0' }}>
+          <span>{error}</span>
+        </div>
+      )}
 
       {actionSuccess && (
         <div className="alert alert-success feedback-toast">

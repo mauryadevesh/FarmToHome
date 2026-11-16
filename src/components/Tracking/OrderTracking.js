@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import apiService from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
 import formatCurrency from '../../utils/currency';
-import { PageTransition, motion } from '../UI/Motion';
+import { PageTransition } from '../UI/Motion';
 import {
   FaTruck,
   FaCheckCircle,
@@ -11,11 +11,7 @@ import {
   FaPhoneAlt,
   FaMapMarkerAlt,
   FaLeaf,
-  FaArrowRight,
-  FaShoppingBag,
-  FaInfoCircle,
-  FaChevronRight,
-  FaCalendarAlt
+  FaShoppingBag
 } from 'react-icons/fa';
 
 // The 6-stage delivery lifecycle required by the specification
@@ -38,11 +34,7 @@ const OrderTracking = () => {
   const [error, setError] = useState(null);
   const [advancingStage, setAdvancingStage] = useState(false);
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       setLoading(true);
       const res = await apiService.getOrders();
@@ -65,7 +57,11 @@ const OrderTracking = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [location.search]);
+
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
 
   useEffect(() => {
     if (selectedOrderId) {
@@ -178,6 +174,12 @@ const OrderTracking = () => {
         </div>
       </div>
 
+      {error && (
+        <div className="alert alert-error" style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span>{error}</span>
+        </div>
+      )}
+
       {currentOrder && (
         <div className="tracking-grid-layout">
           {/* Left Column: 6-Stage Stepper & Order Details */}
@@ -237,29 +239,31 @@ const OrderTracking = () => {
               </div>
             </div>
 
-            {/* Demo / Admin / Farmer Control Panel (To Advance Stages Live) */}
-            <div className="stage-advance-panel">
-              <div className="advance-panel-head">
-                <span className="badge-demo">Idea Lab Interactive Demo</span>
-                <h4>Advance Delivery Stage:</h4>
+            {/* Admin-only Stage Advancement Panel */}
+            {user?.role === 'admin' && (
+              <div className="stage-advance-panel">
+                <div className="advance-panel-head">
+                  <span className="badge-demo">Idea Lab Admin Console</span>
+                  <h4>Advance Delivery Stage:</h4>
+                </div>
+                <p className="advance-panel-sub">
+                  Simulate the real-time fulfillment progression across Mira Bhayandar and update transit coordinates:
+                </p>
+                <div className="stage-buttons-row">
+                  {DELIVERY_STAGES.map((stg) => (
+                    <button
+                      key={stg.key}
+                      type="button"
+                      onClick={() => handleAdvanceStage(stg.key)}
+                      disabled={advancingStage || currentStatus === stg.key}
+                      className={`btn-stage-step ${currentStatus === stg.key ? 'active' : ''}`}
+                    >
+                      {stg.label}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <p className="advance-panel-sub">
-                Click any stage button below to simulate the real-time fulfillment progression and watch the map update:
-              </p>
-              <div className="stage-buttons-row">
-                {DELIVERY_STAGES.map((stg) => (
-                  <button
-                    key={stg.key}
-                    type="button"
-                    onClick={() => handleAdvanceStage(stg.key)}
-                    disabled={advancingStage || currentStatus === stg.key}
-                    className={`btn-stage-step ${currentStatus === stg.key ? 'active' : ''}`}
-                  >
-                    {stg.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+            )}
 
             {/* Order Items Preview */}
             <div className="tracking-items-card">

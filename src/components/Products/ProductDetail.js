@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import apiService from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
@@ -13,7 +13,6 @@ import {
   FaShieldAlt,
   FaMapMarkerAlt,
   FaClock,
-  FaStar,
   FaCommentDots
 } from 'react-icons/fa';
 import { PageTransition, motion, AnimatePresence } from '../UI/Motion';
@@ -40,11 +39,7 @@ const ProductDetail = () => {
   const [submittingReview, setSubmittingReview] = useState(false);
   const [reviewSuccess, setReviewSuccess] = useState(null);
 
-  useEffect(() => {
-    fetchProductAndReviews();
-  }, [id]);
-
-  const fetchProductAndReviews = async () => {
+  const fetchProductAndReviews = useCallback(async () => {
     try {
       setLoading(true);
       const [prodRes, revsRes] = await Promise.all([
@@ -59,7 +54,11 @@ const ProductDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchProductAndReviews();
+  }, [fetchProductAndReviews]);
 
   const handleQuantityChange = (e) => {
     const val = parseInt(e.target.value, 10);

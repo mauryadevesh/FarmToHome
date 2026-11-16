@@ -47,55 +47,6 @@ router.put('/farmers/:id/approve', async (req, res) => {
   }
 });
 
-// @route   GET /api/admin/delivery-slots
-// @desc    Get delivery slots with capacity utilization
-router.get('/delivery-slots', async (req, res) => {
-  try {
-    const slots = await dbAdapter.getDeliverySlots();
-    return res.json(slots);
-  } catch (error) {
-    console.error('Error fetching delivery slots for admin:', error);
-    return res.status(500).json({ message: 'Error fetching delivery slots' });
-  }
-});
-
-// @route   POST /api/admin/delivery-slots
-// @desc    Create new delivery slot
-router.post('/delivery-slots', async (req, res) => {
-  try {
-    const slot = await dbAdapter.createDeliverySlot(req.body);
-    return res.status(201).json(slot);
-  } catch (error) {
-    console.error('Error creating delivery slot:', error);
-    return res.status(400).json({ message: error.message || 'Error creating delivery slot' });
-  }
-});
-
-// @route   PUT /api/admin/delivery-slots/:id
-// @desc    Update delivery slot capacity or toggle active
-router.put('/delivery-slots/:id', async (req, res) => {
-  try {
-    const updated = await dbAdapter.updateDeliverySlot(req.params.id, req.body);
-    if (!updated) return res.status(404).json({ message: 'Slot not found' });
-    return res.json(updated);
-  } catch (error) {
-    console.error('Error updating delivery slot:', error);
-    return res.status(400).json({ message: error.message || 'Error updating delivery slot' });
-  }
-});
-
-// @route   GET /api/admin/categories
-// @desc    List all produce categories
-router.get('/categories', async (req, res) => {
-  try {
-    const categories = await dbAdapter.getCategories();
-    return res.json(categories);
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-    return res.status(500).json({ message: 'Error fetching categories' });
-  }
-});
-
 // @route   GET /api/admin/orders
 // @desc    Get all platform orders
 router.get('/orders', async (req, res) => {

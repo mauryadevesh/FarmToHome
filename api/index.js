@@ -11,7 +11,6 @@ const deliveryRouter = require('./routes/delivery');
 const reviewsRouter = require('./routes/reviews');
 const supportRouter = require('./routes/support');
 const adminRouter = require('./routes/admin');
-const usersRouter = require('./routes/users');
 
 const app = express();
 
@@ -44,7 +43,6 @@ app.use('/api/delivery', deliveryRouter);
 app.use('/api/reviews', reviewsRouter);
 app.use('/api/support', supportRouter);
 app.use('/api/admin', adminRouter);
-app.use('/api/users', usersRouter);
 
 // Also mount without /api prefix for maximum proxy and serverless compatibility
 app.use('/auth', authRouter);
@@ -55,7 +53,6 @@ app.use('/delivery', deliveryRouter);
 app.use('/reviews', reviewsRouter);
 app.use('/support', supportRouter);
 app.use('/admin', adminRouter);
-app.use('/users', usersRouter);
 
 // Export for Vercel Serverless Function
 module.exports = app;

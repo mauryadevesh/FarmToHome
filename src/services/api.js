@@ -267,10 +267,6 @@ class ApiService {
     return this.get('/admin/stats');
   }
 
-  async getUsers() {
-    return this.get('/users');
-  }
-
   async getAdminUsers() {
     return this.get('/admin/users');
   }

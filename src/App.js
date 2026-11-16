@@ -94,7 +94,7 @@ const AppContent = () => {
             <Route
               path="/tracking"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={['consumer', 'admin']}>
                   <OrderTracking />
                 </ProtectedRoute>
               }
@@ -102,7 +102,7 @@ const AppContent = () => {
             <Route
               path="/tracking/:orderId"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={['consumer', 'admin']}>
                   <OrderTracking />
                 </ProtectedRoute>
               }

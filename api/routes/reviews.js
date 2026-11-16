@@ -19,6 +19,10 @@ router.get('/product/:productId', async (req, res) => {
 // @desc    Authenticated customer add verified review
 router.post('/', auth, async (req, res) => {
   try {
+    if (req.user.role !== 'consumer') {
+      return res.status(403).json({ message: 'Only consumers can submit produce reviews.' });
+    }
+
     const { productId, farmerId, rating, comment } = req.body;
     if (!productId || !comment || !comment.trim()) {
       return res.status(400).json({ message: 'Product ID and comment are required' });

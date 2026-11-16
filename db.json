@@ -11,11 +11,6 @@
       "address": "FarmToHome Operations Center, Sector 4, Bengaluru",
       "login_history": [
         {
-          "loginTime": "2026-11-16T13:00:12.359Z",
-          "ipAddress": "127.0.0.1",
-          "userAgent": ""
-        },
-        {
           "loginTime": "2026-11-16T13:17:47.181Z",
           "ipAddress": "127.0.0.1",
           "userAgent": ""
@@ -69,10 +64,15 @@
           "loginTime": "2026-11-16T18:58:05.736Z",
           "ipAddress": "127.0.0.1",
           "userAgent": ""
+        },
+        {
+          "loginTime": "2026-11-16T19:52:50.237Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": ""
         }
       ],
       "created_at": "2026-11-16T11:36:06.601Z",
-      "last_login": "2026-11-16T18:58:05.736Z"
+      "last_login": "2026-11-16T19:52:50.237Z"
     },
     {
       "id": "user_farmer",
@@ -88,10 +88,15 @@
           "loginTime": "2026-11-16T17:55:01.911Z",
           "ipAddress": "127.0.0.1",
           "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36 OPR/139.0.0.0"
+        },
+        {
+          "loginTime": "2026-11-16T19:52:50.173Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": ""
         }
       ],
       "created_at": "2026-11-16T11:36:06.601Z",
-      "last_login": "2026-11-16T17:55:01.911Z"
+      "last_login": "2026-11-16T19:52:50.173Z"
     },
     {
       "id": "user_consumer",
@@ -103,11 +108,6 @@
       "phone": "+91 98765 43210",
       "address": "Flat 302, Palm Grove Apts, Indiranagar, Bengaluru",
       "login_history": [
-        {
-          "loginTime": "2026-11-16T13:00:12.297Z",
-          "ipAddress": "127.0.0.1",
-          "userAgent": ""
-        },
         {
           "loginTime": "2026-11-16T13:17:47.116Z",
           "ipAddress": "127.0.0.1",
@@ -157,10 +157,15 @@
           "loginTime": "2026-11-16T18:58:05.659Z",
           "ipAddress": "127.0.0.1",
           "userAgent": ""
+        },
+        {
+          "loginTime": "2026-11-16T19:52:50.110Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": ""
         }
       ],
       "created_at": "2026-11-16T11:36:06.601Z",
-      "last_login": "2026-11-16T18:58:05.659Z"
+      "last_login": "2026-11-16T19:52:50.110Z"
     },
     {
       "id": "user_farmer_2",
@@ -202,18 +207,18 @@
         "name": "Kisan Ramesh Kumar",
         "email": "farmer@farmtohome.com"
       },
-      "stock": 75,
+      "stock": 73,
       "unit": "1 kg",
       "image": "https://images.unsplash.com/photo-1561136594-7f68413baa99?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
       "created_at": "2026-11-16T11:36:06.602Z",
-      "updated_at": "2026-11-16T18:58:05.668Z",
+      "updated_at": "2026-11-16T19:52:50.248Z",
       "origin_farm": "Uttan Coastal Agro Farm",
       "originFarm": "Uttan Coastal Agro Farm",
       "harvest_date": "Today at 5:30 AM",
       "harvestDate": "Today at 5:30 AM",
-      "rating": 4.8
+      "rating": 5
     },
     {
       "id": "prod_2",
@@ -895,6 +900,47 @@
   "cart_items": [],
   "orders": [
     {
+      "id": "order_1794858770248",
+      "_id": "order_1794858770248",
+      "user_id": "user_consumer",
+      "userId": "user_consumer",
+      "user": {
+        "id": "user_consumer",
+        "_id": "user_consumer",
+        "name": "Priya Sharma",
+        "email": "consumer@farmtohome.com",
+        "phone": "+91 98765 43210"
+      },
+      "items": [
+        {
+          "product": "prod_1",
+          "name": "Tomato",
+          "price": 30,
+          "quantity": 2,
+          "unit": "1 kg",
+          "image": "https://images.unsplash.com/photo-1561136594-7f68413baa99?w=600&auto=format&fit=crop&q=80",
+          "farmer_name": "Kisan Ramesh Kumar"
+        }
+      ],
+      "total_amount": 60,
+      "totalAmount": 60,
+      "shipping_address": "Flat 302, Beverly Park, Mira Road East, 401107",
+      "shippingAddress": "Flat 302, Beverly Park, Mira Road East, 401107",
+      "delivery_date": "Tomorrow Morning",
+      "deliveryDate": "Tomorrow Morning",
+      "delivery_time_slot": "07:00 AM - 10:00 AM",
+      "deliveryTimeSlot": "07:00 AM - 10:00 AM",
+      "delivery_slot_id": "slot_1",
+      "deliverySlotId": "slot_1",
+      "status": "Delivered",
+      "order_status": "Delivered",
+      "orderStatus": "Delivered",
+      "payment_status": "pending",
+      "paymentStatus": "pending",
+      "created_at": "2026-11-16T19:52:50.248Z",
+      "updated_at": "2026-11-16T19:52:50.258Z"
+    },
+    {
       "id": "order_1794855485668",
       "_id": "order_1794855485668",
       "user_id": "user_consumer",
@@ -1040,6 +1086,31 @@
     }
   ],
   "support_tickets": [
+    {
+      "id": "ticket_1794858770263",
+      "_id": "ticket_1794858770263",
+      "user_id": "user_consumer",
+      "user": {
+        "id": "user_consumer",
+        "_id": "user_consumer",
+        "name": "Priya Sharma",
+        "email": "consumer@farmtohome.com"
+      },
+      "subject": "Inquiry regarding morning harvest delivery window",
+      "message": "Can I request delivery by 7:30 AM before leaving for office?",
+      "category": "delivery",
+      "priority": "medium",
+      "status": "resolved",
+      "response": "Yes, our electric van #03 reaches Beverly Park at 7:15 AM daily.",
+      "created_at": "2026-11-16T19:52:50.263Z",
+      "respondedBy": {
+        "id": "user_admin",
+        "_id": "user_admin",
+        "name": "Admin Desk",
+        "email": "admin@farmtohome.com"
+      },
+      "responded_at": "2026-11-16T19:52:50.265Z"
+    },
     {
       "id": "ticket_1",
       "_id": "ticket_1",
@@ -1195,9 +1266,9 @@
       "time_window": "07:00 AM - 10:00 AM",
       "timeWindow": "07:00 AM - 10:00 AM",
       "label": "Morning Harvest Dispatch (7 AM - 10 AM)",
-      "max_capacity": 25,
+      "max_capacity": 30,
       "maxCapacity": 25,
-      "booked_count": 16,
+      "booked_count": 17,
       "bookedCount": 14,
       "is_active": true,
       "isActive": true
@@ -1379,9 +1450,41 @@
       "estimated_arrival": "15-20 mins (Driver on Mira Road East route)",
       "updated_at": "2026-11-16T18:58:05.742Z",
       "deliveryStatus": "Out for Delivery"
+    },
+    {
+      "id": "del_order_1794858770248",
+      "_id": "del_order_1794858770248",
+      "order_id": "order_1794858770248",
+      "orderId": "order_1794858770248",
+      "delivery_slot_id": "slot_1",
+      "delivery_status": "Delivered",
+      "driver_name": "Sanjay Raut",
+      "driver_phone": "+91 98205 99887",
+      "origin_hub": "Uttan Farmers Collection Hub (Mira Bhayandar)",
+      "destination_area": "Flat 302, Beverly Park, Mira Road East, 401107",
+      "current_lat": 19.286,
+      "current_lng": 72.864,
+      "estimated_arrival": "Delivered to Doorstep",
+      "updated_at": "2026-11-16T19:52:50.258Z",
+      "deliveryStatus": "Delivered"
     }
   ],
   "reviews": [
+    {
+      "id": "rev_1794858770261",
+      "_id": "rev_1794858770261",
+      "product_id": "prod_1",
+      "productId": "prod_1",
+      "farmer_id": "user_farmer",
+      "farmerId": "user_farmer",
+      "user_id": "user_consumer",
+      "userId": "user_consumer",
+      "user_name": "Priya Sharma",
+      "userName": "Priya Sharma",
+      "rating": 5,
+      "comment": "Super fresh vine tomatoes delivered straight from Uttan farm within 4 hours!",
+      "created_at": "2026-11-16T19:52:50.261Z"
+    },
     {
       "id": "rev_1",
       "_id": "rev_1",

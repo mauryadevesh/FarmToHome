@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { FaUserPlus, FaLeaf, FaShoppingBag, FaExclamationCircle, FaCheckCircle, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaUserPlus, FaLeaf, FaShoppingBag, FaExclamationCircle, FaCheckCircle } from 'react-icons/fa';
 import { PageTransition, motion, AnimatePresence } from '../UI/Motion';
 
 const Register = () => {

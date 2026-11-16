@@ -173,11 +173,12 @@ const Orders = () => {
                       >
                         🚚 Track Delivery
                       </Link>
-                      {['ordered', 'pending', 'processing', 'shipped', 'accepted', 'preparing', 'ready'].includes(order.status?.toLowerCase()) && (
+                      {['ordered', 'pending', 'accepted'].includes(order.status?.toLowerCase()) && (
                         <button
                           className="btn btn-outline"
                           onClick={() => handleCancel(order._id || order.id)}
                           disabled={cancellingId === (order._id || order.id)}
+                          style={{ fontSize: '0.85rem', padding: '6px 12px' }}
                         >
                           {cancellingId === (order._id || order.id) ? 'Cancelling...' : 'Cancel Order'}
                         </button>

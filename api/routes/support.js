@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const dbAdapter = require('../services/dbAdapter');
-const { auth } = require('../middleware/auth');
+const { auth, isAdmin } = require('../middleware/auth');
 
 // @route   GET /api/support
 // @desc    Get support tickets for logged-in user (or all if admin)
@@ -66,8 +66,8 @@ router.post('/', auth, async (req, res) => {
 });
 
 // @route   PUT /api/support/:id/respond
-// @desc    Respond to a support ticket
-router.put('/:id/respond', auth, async (req, res) => {
+// @desc    Respond to a support ticket (Admin only)
+router.put('/:id/respond', [auth, isAdmin], async (req, res) => {
   try {
     const { response } = req.body;
     if (!response || !response.trim()) {

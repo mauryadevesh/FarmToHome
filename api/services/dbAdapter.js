@@ -1657,9 +1657,20 @@ const dbAdapter = {
         });
       });
     } else if (role !== 'admin') {
-      orders = orders.filter(o => o.user_id === userId && o.status !== 'cancelled');
+      orders = orders.filter(o => o.user_id === userId || o.userId === userId);
     }
     return orders.map(formatEntity);
+  },
+
+  async isOrderBelongingToFarmer(orderId, farmerId) {
+    const order = await this.getOrderById(orderId);
+    if (!order) return false;
+    const store = loadLocalStore();
+    return (order.items || []).some(item => {
+      const prodId = item.product_id || item.productId || item.product?.id || item.product?._id || item.product;
+      const p = store.products?.find(prod => prod.id === prodId || prod._id === prodId);
+      return p && (p.farmer_id === farmerId || p.farmerId === farmerId || p.farmer?.id === farmerId || p.farmer?._id === farmerId);
+    });
   },
 
   async getOrderById(id) {
@@ -1822,13 +1833,26 @@ const dbAdapter = {
   async cancelOrder(id, userId) {
     const order = await this.getOrderById(id);
     if (!order) throw new Error('Order not found');
-    if (order.user_id !== userId && order.user?.id !== userId && order.user?._id !== userId) {
+    const orderUserId = order.user_id || order.userId || order.user?.id || order.user?._id;
+    if (orderUserId !== userId && userId !== 'user_admin') {
       throw new Error('Access denied to cancel this order');
     }
 
     const cancellable = ['pending', 'ordered', 'Pending', 'Accepted'];
     if (!cancellable.includes(order.status)) {
       throw new Error('Order can no longer be cancelled as it is already being harvested or dispatched.');
+    }
+
+    // Release slot reservation if scheduled
+    if (order.delivery_slot_id || order.deliverySlotId) {
+      const slotId = order.delivery_slot_id || order.deliverySlotId;
+      const store = loadLocalStore();
+      const slot = (store.delivery_slots || []).find(s => s.id === slotId || s._id === slotId);
+      if (slot && (slot.booked_count || slot.bookedCount) > 0) {
+        slot.booked_count = Math.max(0, (slot.booked_count || slot.bookedCount || 1) - 1);
+        slot.bookedCount = slot.booked_count;
+        saveLocalStore();
+      }
     }
 
     return this.updateOrderStatus(id, 'Cancelled');

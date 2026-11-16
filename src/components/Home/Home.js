@@ -5,9 +5,6 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { PageTransition } from '../UI/Motion';
 import {
   FaLeaf,
-  FaTruck,
-  FaRupeeSign,
-  FaUsers,
   FaArrowRight,
   FaPhoneAlt,
   FaWhatsapp,
@@ -61,7 +58,6 @@ const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [farmers, setFarmers] = useState([]);
   const [deliverySlots, setDeliverySlots] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
@@ -79,8 +75,6 @@ const Home = () => {
         }
       } catch (err) {
         console.error('Error loading home data:', err);
-      } finally {
-        if (isMounted) setIsLoading(false);
       }
     }
     loadHomeData();
