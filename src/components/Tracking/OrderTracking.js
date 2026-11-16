@@ -63,20 +63,20 @@ const OrderTracking = () => {
     fetchOrders();
   }, [fetchOrders]);
 
-  useEffect(() => {
-    if (selectedOrderId) {
-      fetchTrackingDetails(selectedOrderId);
-    }
-  }, [selectedOrderId]);
-
-  const fetchTrackingDetails = async (orderId) => {
+  const fetchTrackingDetails = useCallback(async (orderId) => {
     try {
       const data = await apiService.getDeliveryTracking(orderId);
       setTrackingData(data);
     } catch (err) {
       console.error('Error loading tracking data:', err);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (selectedOrderId) {
+      fetchTrackingDetails(selectedOrderId);
+    }
+  }, [selectedOrderId, fetchTrackingDetails]);
 
   const handleAdvanceStage = async (nextStage) => {
     if (!selectedOrderId) return;
@@ -92,8 +92,22 @@ const OrderTracking = () => {
     }
   };
 
+  const normalizeStatus = (s) => {
+    if (!s) return 'Pending';
+    const lower = s.trim().toLowerCase();
+    const map = {
+      pending: 'Pending',
+      accepted: 'Accepted',
+      preparing: 'Preparing',
+      ready: 'Ready',
+      'out for delivery': 'Out for Delivery',
+      delivered: 'Delivered',
+    };
+    return map[lower] || s;
+  };
+
   const currentOrder = orders.find(o => (o.id || o._id) === selectedOrderId);
-  const currentStatus = trackingData?.currentStatus || currentOrder?.order_status || currentOrder?.status || 'Pending';
+  const currentStatus = normalizeStatus(trackingData?.currentStatus || currentOrder?.order_status || currentOrder?.status || 'Pending');
 
   const getStageIndex = (status) => {
     const idx = DELIVERY_STAGES.findIndex(s => s.key.toLowerCase() === (status || '').toLowerCase());
@@ -117,18 +131,18 @@ const OrderTracking = () => {
 
   if (loading) {
     return (
-      <div className="tracking-page-container">
+      <PageTransition className="tracking-container">
         <div className="loading-state">
           <div className="spinner"></div>
           <p>Connecting to Mira Bhayandar GPS delivery network...</p>
         </div>
-      </div>
+      </PageTransition>
     );
   }
 
   if (orders.length === 0) {
     return (
-      <PageTransition className="tracking-page-container">
+      <PageTransition className="tracking-container">
         <div className="tracking-header">
           <span className="section-label">Live Dispatch Coordination</span>
           <h1>Track Your Farm Harvest</h1>
@@ -147,7 +161,7 @@ const OrderTracking = () => {
   }
 
   return (
-    <PageTransition className="tracking-page-container">
+    <PageTransition className="tracking-container">
       {/* Header */}
       <div className="tracking-header">
         <div className="tracking-header-left">
@@ -165,9 +179,9 @@ const OrderTracking = () => {
             onChange={(e) => setSelectedOrderId(e.target.value)}
             className="order-select-input"
           >
-            {orders.map((ord) => (
+            {orders.map((ord, idx) => (
               <option key={ord.id || ord._id} value={ord.id || ord._id}>
-                Order #{ord.id || ord._id} • {ord.delivery_time_slot || ord.deliveryTimeSlot || 'Morning'} ({ord.status || ord.order_status})
+                Order #{String(idx + 1).padStart(3, '0')} • {ord.delivery_time_slot || ord.deliveryTimeSlot || 'Morning'} ({ord.status || ord.order_status})
               </option>
             ))}
           </select>

@@ -62,7 +62,6 @@ const Navbar = () => {
           <div className="brand-copy">
             <div className="brand-title-wrap">
               <span className="brand-wordmark">Farm2Home</span>
-              <span className="brand-locality-pill">Mira Bhayandar</span>
             </div>
             <span className="brand-descriptor">Fresh from Local Farms to Your Home</span>
           </div>

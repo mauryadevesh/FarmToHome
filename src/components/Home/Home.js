@@ -12,7 +12,6 @@ import {
   FaMapMarkerAlt,
   FaClock,
   FaShieldAlt,
-  FaAward,
   FaCheckCircle,
   FaCalendarCheck,
   FaSeedling
@@ -92,21 +91,6 @@ const Home = () => {
 
   return (
     <PageTransition className="home-editorial">
-      {/* 0. Idea Lab Problem Statement Ribbon */}
-      <div className="idealab-ribbon">
-        <div className="idealab-ribbon-content">
-          <span className="idealab-badge">
-            <FaAward /> Idea Lab College Project
-          </span>
-          <span className="idealab-text">
-            <strong>Mira Bhayandar Challenge:</strong> Connecting local cultivators in Uttan, Chena Creek & Rai directly with urban households, eliminating 40–60% middleman deduction and irregular delivery schedules.
-          </span>
-          <Link to="/products" className="idealab-link">
-            Explore Direct Model →
-          </Link>
-        </div>
-      </div>
-
       {/* 1. Hero Stage */}
       <section className="hero-stage">
         <div className="hero-stage-container">
@@ -116,11 +100,6 @@ const Home = () => {
             animate="visible"
             variants={staggerContainer}
           >
-            <motion.div variants={fadeInUp} className="hero-locality-badge">
-              <FaMapMarkerAlt className="icon-pulse" />
-              <span>Direct Peri-Urban Harvest • Mira Bhayandar & Vasai Belt</span>
-            </motion.div>
-
             <motion.h1 variants={fadeInUp} className="hero-title">
               Fresh from Local Farms <span className="hero-title-italic">to Your Home</span>
             </motion.h1>
