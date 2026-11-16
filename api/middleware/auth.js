@@ -52,10 +52,18 @@ const isAdmin = (req, res, next) => {
   next();
 };
 
+const isFarmerOrAdmin = (req, res, next) => {
+  if (!req.user || (req.user.role !== 'farmer' && req.user.role !== 'admin')) {
+    return res.status(403).json({ message: 'Access denied. Farmer or Admin role required.' });
+  }
+  next();
+};
+
 module.exports = {
   auth,
   isFarmer,
   isConsumer,
   isAdmin,
+  isFarmerOrAdmin,
   JWT_SECRET,
 };

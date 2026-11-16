@@ -1,14 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const dbAdapter = require('../services/dbAdapter');
-const { auth, isFarmer } = require('../middleware/auth');
+const { auth, isFarmerOrAdmin } = require('../middleware/auth');
 
 // @route   GET /api/products
-// @desc    Get all available products
+// @desc    Get available products (or all products if all=true)
 router.get('/', async (req, res) => {
   try {
-    const { category } = req.query;
-    const filter = { isAvailable: true };
+    const { category, all } = req.query;
+    const filter = {};
+    if (all !== 'true') {
+      filter.isAvailable = true;
+    }
     if (category) filter.category = category;
 
     const products = await dbAdapter.getProducts(filter);
@@ -35,8 +38,8 @@ router.get('/:id', async (req, res) => {
 });
 
 // @route   POST /api/products
-// @desc    Create a new product (Farmer only)
-router.post('/', [auth, isFarmer], async (req, res) => {
+// @desc    Create a new product (Farmer or Admin)
+router.post('/', [auth, isFarmerOrAdmin], async (req, res) => {
   try {
     const { name, description, price, category, image, stock, unit } = req.body;
 

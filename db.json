@@ -44,10 +44,25 @@
           "loginTime": "2026-11-16T17:46:16.659Z",
           "ipAddress": "127.0.0.1",
           "userAgent": ""
+        },
+        {
+          "loginTime": "2026-11-16T17:53:31.065Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36 OPR/139.0.0.0"
+        },
+        {
+          "loginTime": "2026-11-16T18:14:34.340Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": ""
+        },
+        {
+          "loginTime": "2026-11-16T18:17:41.636Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": ""
         }
       ],
       "created_at": "2026-11-16T11:36:06.601Z",
-      "last_login": "2026-11-16T17:46:16.659Z"
+      "last_login": "2026-11-16T18:17:41.636Z"
     },
     {
       "id": "user_farmer",
@@ -58,8 +73,15 @@
       "role": "farmer",
       "phone": "+91 98765 12345",
       "address": "Green Valley Organic Farms, Doddaballapura, Karnataka",
-      "login_history": [],
-      "created_at": "2026-11-16T11:36:06.601Z"
+      "login_history": [
+        {
+          "loginTime": "2026-11-16T17:55:01.911Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36 OPR/139.0.0.0"
+        }
+      ],
+      "created_at": "2026-11-16T11:36:06.601Z",
+      "last_login": "2026-11-16T17:55:01.911Z"
     },
     {
       "id": "user_consumer",
@@ -110,10 +132,20 @@
           "loginTime": "2026-11-16T17:46:16.550Z",
           "ipAddress": "127.0.0.1",
           "userAgent": ""
+        },
+        {
+          "loginTime": "2026-11-16T18:14:34.156Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": ""
+        },
+        {
+          "loginTime": "2026-11-16T18:17:41.558Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": ""
         }
       ],
       "created_at": "2026-11-16T11:36:06.601Z",
-      "last_login": "2026-11-16T17:46:16.550Z"
+      "last_login": "2026-11-16T18:17:41.558Z"
     }
   ],
   "products": [
@@ -691,7 +723,7 @@
       "_id": "cart_item_1794828966707_4kda",
       "user_id": "user_consumer",
       "product_id": "prod_1",
-      "quantity": 17
+      "quantity": 21
     }
   ],
   "orders": [

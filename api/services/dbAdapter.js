@@ -245,14 +245,53 @@ function formatEntity(item) {
   if (clone.is_available !== undefined && clone.isAvailable === undefined) {
     clone.isAvailable = clone.is_available;
   }
+  if (clone.isAvailable !== undefined && clone.is_available === undefined) {
+    clone.is_available = clone.isAvailable;
+  }
   if (clone.total_amount !== undefined && clone.totalAmount === undefined) {
     clone.totalAmount = clone.total_amount;
+  }
+  if (clone.totalAmount !== undefined && clone.total_amount === undefined) {
+    clone.total_amount = clone.totalAmount;
   }
   if (clone.shipping_address !== undefined && clone.shippingAddress === undefined) {
     clone.shippingAddress = clone.shipping_address;
   }
+  if (clone.shippingAddress !== undefined && clone.shipping_address === undefined) {
+    clone.shipping_address = clone.shippingAddress;
+  }
   if (clone.payment_status !== undefined && clone.paymentStatus === undefined) {
     clone.paymentStatus = clone.payment_status;
+  }
+  if (clone.paymentStatus !== undefined && clone.payment_status === undefined) {
+    clone.payment_status = clone.paymentStatus;
+  }
+  if (clone.created_at !== undefined && clone.createdAt === undefined) {
+    clone.createdAt = clone.created_at;
+  }
+  if (clone.createdAt !== undefined && clone.created_at === undefined) {
+    clone.created_at = clone.createdAt;
+  }
+  if (clone.updated_at !== undefined && clone.updatedAt === undefined) {
+    clone.updatedAt = clone.updated_at;
+  }
+  if (clone.updatedAt !== undefined && clone.updated_at === undefined) {
+    clone.updated_at = clone.updatedAt;
+  }
+  if (clone.last_login !== undefined && clone.lastLogin === undefined) {
+    clone.lastLogin = clone.last_login;
+  }
+  if (clone.lastLogin !== undefined && clone.last_login === undefined) {
+    clone.last_login = clone.lastLogin;
+  }
+  if (clone.farmer_id !== undefined && clone.farmerId === undefined) {
+    clone.farmerId = clone.farmer_id;
+  }
+  if (clone.user_id !== undefined && clone.userId === undefined) {
+    clone.userId = clone.user_id;
+  }
+  if (clone.stock !== undefined && clone.quantity === undefined) {
+    clone.quantity = clone.stock;
   }
   if (clone.name && KNOWN_IMAGE_FIXES[clone.name.toLowerCase().trim()]) {
     const fixedUrl = KNOWN_IMAGE_FIXES[clone.name.toLowerCase().trim()];
@@ -560,11 +599,18 @@ const dbAdapter = {
     const store = loadLocalStore();
     const index = store.products.findIndex(p => p.id === id || p._id === id);
     if (index === -1) return null;
+    const existing = store.products[index];
+    const isAvail = updateData.isAvailable !== undefined
+      ? Boolean(updateData.isAvailable)
+      : (updateData.is_available !== undefined ? Boolean(updateData.is_available) : (existing.is_available !== false));
     store.products[index] = {
-      ...store.products[index],
+      ...existing,
       ...updateData,
-      is_available: updateData.isAvailable !== undefined ? updateData.isAvailable : store.products[index].is_available,
-      isAvailable: updateData.isAvailable !== undefined ? updateData.isAvailable : store.products[index].isAvailable
+      price: updateData.price !== undefined ? parseFloat(updateData.price) : existing.price,
+      stock: updateData.stock !== undefined ? parseInt(updateData.stock, 10) : (updateData.quantity !== undefined ? parseInt(updateData.quantity, 10) : existing.stock),
+      is_available: isAvail,
+      isAvailable: isAvail,
+      updated_at: new Date().toISOString()
     };
     saveLocalStore();
     return formatEntity(store.products[index]);
@@ -747,7 +793,7 @@ const dbAdapter = {
         .select('*, user:users!orders_user_id_fkey(id, name, email)')
         .order('created_at', { ascending: false });
 
-      if (role !== 'admin') {
+      if (role !== 'admin' && role !== 'farmer') {
         query = query.eq('user_id', userId).neq('status', 'cancelled');
       }
 
@@ -758,7 +804,17 @@ const dbAdapter = {
 
     const store = loadLocalStore();
     let orders = store.orders || [];
-    if (role !== 'admin') {
+    if (role === 'farmer') {
+      // Farmers can view orders placed by them or orders containing their farm produce
+      orders = orders.filter(o => {
+        if (o.user_id === userId) return true;
+        return (o.items || []).some(item => {
+          const prodId = item.product?.id || item.product?._id || item.product;
+          const p = store.products?.find(prod => prod.id === prodId || prod._id === prodId);
+          return p && (p.farmer_id === userId || p.farmer?.id === userId || p.farmer?._id === userId);
+        });
+      });
+    } else if (role !== 'admin') {
       orders = orders.filter(o => o.user_id === userId && o.status !== 'cancelled');
     }
     return orders.map(formatEntity);
@@ -1043,27 +1099,38 @@ const dbAdapter = {
   // ---------------- ADMIN METRICS ----------------
   async getAdminStats() {
     if (isSupabaseConfigured()) {
-      const [usersRes, productsRes, farmersRes, consumersRes] = await Promise.all([
+      const [usersRes, productsRes, farmersRes, consumersRes, ordersRes, pendingOrdersRes, ticketsRes] = await Promise.all([
         supabase.from('users').select('*', { count: 'exact', head: true }),
         supabase.from('products').select('*', { count: 'exact', head: true }),
         supabase.from('users').select('*', { count: 'exact', head: true }).eq('role', 'farmer'),
         supabase.from('users').select('*', { count: 'exact', head: true }).eq('role', 'consumer'),
+        supabase.from('orders').select('*', { count: 'exact', head: true }),
+        supabase.from('orders').select('*', { count: 'exact', head: true }).in('status', ['pending', 'processing']),
+        supabase.from('support_tickets').select('*', { count: 'exact', head: true }).eq('status', 'open')
       ]);
 
       return {
         totalUsers: usersRes.count || 0,
         totalProducts: productsRes.count || 0,
         farmers: farmersRes.count || 0,
-        consumers: consumersRes.count || 0
+        consumers: consumersRes.count || 0,
+        totalOrders: ordersRes.count || 0,
+        pendingOrders: pendingOrdersRes.count || 0,
+        openTickets: ticketsRes.count || 0
       };
     }
 
     const store = loadLocalStore();
+    const orders = store.orders || [];
+    const tickets = store.support_tickets || [];
     return {
       totalUsers: store.users.length,
       totalProducts: store.products.length,
       farmers: store.users.filter(u => u.role === 'farmer').length,
-      consumers: store.users.filter(u => u.role === 'consumer').length
+      consumers: store.users.filter(u => u.role === 'consumer').length,
+      totalOrders: orders.length,
+      pendingOrders: orders.filter(o => o.status === 'pending' || o.status === 'processing').length,
+      openTickets: tickets.filter(t => t.status === 'open').length
     };
   }
 };

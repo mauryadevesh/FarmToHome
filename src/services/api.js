@@ -209,11 +209,23 @@ class ApiService {
   }
 
   async getAdminUsers() {
-    return this.get('/users');
+    return this.get('/admin/users');
+  }
+
+  async updateUserRole(userId, role) {
+    return this.put(`/admin/users/${userId}/role`, { role });
+  }
+
+  async deleteUser(userId) {
+    return this.delete(`/admin/users/${userId}`);
   }
 
   async getAdminProducts() {
-    return this.get('/products');
+    return this.get('/admin/products');
+  }
+
+  async createAdminProduct(productData) {
+    return this.post('/admin/products', productData);
   }
 
   async updateAdminProduct(id, productData) {

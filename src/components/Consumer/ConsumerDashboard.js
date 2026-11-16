@@ -19,6 +19,17 @@ import {
 const ConsumerDashboard = () => {
   const { user } = useAuth();
 
+  const formatJoinedDate = (dateString) => {
+    if (!dateString) return 'Active Member';
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return 'Active Member';
+    return date.toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+  };
+
   return (
     <PageTransition className="consumer-dashboard-page">
       {/* Welcome Banner */}
@@ -54,6 +65,10 @@ const ConsumerDashboard = () => {
                 {user.address}
               </span>
             )}
+            <span className="pill">
+              <FaClock style={{ marginRight: '6px' }} />
+              Member since {formatJoinedDate(user?.createdAt || user?.created_at)}
+            </span>
           </div>
         </div>
       </motion.div>

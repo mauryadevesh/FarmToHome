@@ -22,7 +22,9 @@ const AdminDashboard = () => {
     totalProducts: 0,
     farmers: 0,
     consumers: 0,
-    totalOrders: 0
+    totalOrders: 0,
+    pendingOrders: 0,
+    openTickets: 0
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -114,6 +116,26 @@ const AdminDashboard = () => {
           <div className="stat-details">
             <h3>{stats.consumers ?? 0}</h3>
             <p>Active Household Consumers</p>
+          </div>
+        </div>
+
+        <div className="stat-card">
+          <div className="stat-icon orders-icon">
+            <FaClipboardList />
+          </div>
+          <div className="stat-details">
+            <h3>{stats.totalOrders ?? 0}</h3>
+            <p>Total Customer Orders</p>
+          </div>
+        </div>
+
+        <div className="stat-card">
+          <div className="stat-icon support-icon">
+            <FaHeadset />
+          </div>
+          <div className="stat-details">
+            <h3>{stats.openTickets ?? 0}</h3>
+            <p>Active Support Inquiries</p>
           </div>
         </div>
       </div>

@@ -128,6 +128,48 @@ router.delete('/users/:id', async (req, res) => {
   }
 });
 
+// @route   GET /api/admin/products
+// @desc    Admin get all products (including out-of-stock and unavailable)
+router.get('/products', async (req, res) => {
+  try {
+    const products = await dbAdapter.getProducts({});
+    return res.json(products);
+  } catch (error) {
+    console.error('Error fetching admin products:', error);
+    return res.status(500).json({ message: 'Server error fetching products' });
+  }
+});
+
+// @route   POST /api/admin/products
+// @desc    Admin create new product
+router.post('/products', async (req, res) => {
+  try {
+    const { name, description, price, category, image, stock, unit, isAvailable } = req.body;
+    if (!name || !description || price === undefined || !category || stock === undefined || !unit) {
+      return res.status(400).json({ message: 'Please provide all required product details' });
+    }
+
+    const newProduct = await dbAdapter.createProduct(
+      {
+        name: name.trim(),
+        description: description.trim(),
+        price: parseFloat(price),
+        category: category.trim(),
+        image: image || 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=500',
+        stock: parseInt(stock, 10),
+        unit: unit.trim(),
+        isAvailable: isAvailable !== undefined ? Boolean(isAvailable) : true
+      },
+      req.user
+    );
+
+    return res.status(201).json(newProduct);
+  } catch (error) {
+    console.error('Error creating product as admin:', error);
+    return res.status(500).json({ message: error.message || 'Server error creating product' });
+  }
+});
+
 // @route   PUT /api/admin/products/:id
 // @desc    Admin update product
 router.put('/products/:id', async (req, res) => {

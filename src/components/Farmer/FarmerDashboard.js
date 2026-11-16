@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import apiService from '../../services/api';
+import { useAuth } from '../../contexts/AuthContext';
 import { formatCurrency } from '../../utils/currency';
 import { getProductImage } from '../../utils/productImage';
+import ImageUpload from '../UI/ImageUpload';
 import { PageTransition, motion, AnimatePresence } from '../UI/Motion';
+import { FaMapMarkerAlt, FaClock, FaPhoneAlt } from 'react-icons/fa';
 
 const FarmerDashboard = () => {
+  const { user } = useAuth();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -142,14 +146,44 @@ const FarmerDashboard = () => {
     );
   }
 
+  const formatJoinedDate = (dateString) => {
+    if (!dateString) return 'Active Grower';
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return 'Active Grower';
+    return date.toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+  };
+
   return (
     <PageTransition className="farmer-dashboard-container">
       <div className="dashboard-header">
-        <h1>Farmer Dashboard</h1>
-        <p>Manage your farm products and keep inventory fresh</p>
-        <button className="btn btn-primary" onClick={openCreateForm}>
-          Add New Product
-        </button>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', width: '100%' }}>
+          <div>
+            <h1>Farmer Harvest Control</h1>
+            <p>Welcome, <strong>{user?.name || 'Grower'}</strong>! Manage your crops, update morning harvest stock, and add fresh produce.</p>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '8px', fontSize: '12px', color: 'var(--color-muted)' }}>
+              {user?.address && (
+                <span className="pill" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <FaMapMarkerAlt /> {user.address}
+                </span>
+              )}
+              {user?.phone && (
+                <span className="pill" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <FaPhoneAlt /> {user.phone}
+                </span>
+              )}
+              <span className="pill" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                <FaClock /> Member since {formatJoinedDate(user?.createdAt || user?.created_at)}
+              </span>
+            </div>
+          </div>
+          <button className="btn btn-primary" onClick={openCreateForm}>
+            Add New Product
+          </button>
+        </div>
       </div>
 
       <div className="dashboard-content">
@@ -299,22 +333,21 @@ const FarmerDashboard = () => {
                   Unit
                   <select name="unit" value={formData.unit} onChange={handleFormChange}>
                     <option value="kg">kg</option>
-                    <option value="g">g</option>
-                    <option value="lb">lb</option>
-                    <option value="piece">piece</option>
+                    <option value="liters">liters</option>
+                    <option value="pieces">pieces</option>
+                    <option value="dozens">dozens</option>
+                    <option value="grams">grams</option>
+                    <option value="bunches">bunches</option>
                   </select>
                 </label>
               </div>
-              <label>
-                Image URL
-                <input
-                  type="url"
-                  name="image"
-                  value={formData.image}
-                  onChange={handleFormChange}
-                  placeholder="https://example.com/product.jpg"
-                />
-              </label>
+
+              <ImageUpload
+                value={formData.image}
+                onChange={(img) => setFormData(prev => ({ ...prev, image: img }))}
+                label="Produce Photo (Upload File or Enter URL)"
+              />
+
               <div className="modal-actions">
                 <button type="button" className="btn btn-outline" onClick={() => { setShowForm(false); resetForm(); }}>
                   Cancel
