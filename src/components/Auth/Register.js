@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { FaUserPlus, FaLeaf, FaShoppingBag, FaExclamationCircle } from 'react-icons/fa';
+import { FaUserPlus, FaLeaf, FaShoppingBag, FaExclamationCircle, FaCheckCircle } from 'react-icons/fa';
 import { PageTransition, motion, AnimatePresence } from '../UI/Motion';
 
 const Register = () => {
@@ -162,23 +162,63 @@ const Register = () => {
 
         <form onSubmit={handleSubmit} className="auth-form" noValidate>
           <div className="form-group role-selector-group">
-            <label className="form-label">I want to:</label>
-            <div className="role-toggle-pills">
+            <div className="role-selector-header">
+              <label className="form-label">I want to:</label>
+              <span className="role-selector-hint">Select your marketplace role</span>
+            </div>
+            <div className="role-selection-grid">
               <button
                 type="button"
-                className={`role-pill ${formData.role === 'consumer' ? 'active' : ''}`}
+                className={`role-choice-card ${formData.role === 'consumer' ? 'selected' : ''}`}
                 onClick={() => setFormData(prev => ({ ...prev, role: 'consumer' }))}
+                aria-pressed={formData.role === 'consumer'}
               >
-                <FaShoppingBag style={{ marginRight: '6px' }} />
-                Buy Fresh Produce (Consumer)
+                <div className="role-choice-top">
+                  <div className="role-choice-icon-wrap consumer">
+                    <FaShoppingBag />
+                  </div>
+                  <div className="role-choice-radio">
+                    {formData.role === 'consumer' ? (
+                      <FaCheckCircle className="radio-circle-checked" />
+                    ) : (
+                      <span className="radio-circle-empty" />
+                    )}
+                  </div>
+                </div>
+                <div className="role-choice-content">
+                  <span className="role-choice-title">Buy Fresh Produce</span>
+                  <span className="role-choice-badge">Consumer</span>
+                  <p className="role-choice-desc">
+                    Order fresh morning harvests delivered directly to your doorstep.
+                  </p>
+                </div>
               </button>
+
               <button
                 type="button"
-                className={`role-pill ${formData.role === 'farmer' ? 'active' : ''}`}
+                className={`role-choice-card ${formData.role === 'farmer' ? 'selected' : ''}`}
                 onClick={() => setFormData(prev => ({ ...prev, role: 'farmer' }))}
+                aria-pressed={formData.role === 'farmer'}
               >
-                <FaLeaf style={{ marginRight: '6px' }} />
-                Sell Farm Harvest (Farmer)
+                <div className="role-choice-top">
+                  <div className="role-choice-icon-wrap farmer">
+                    <FaLeaf />
+                  </div>
+                  <div className="role-choice-radio">
+                    {formData.role === 'farmer' ? (
+                      <FaCheckCircle className="radio-circle-checked" />
+                    ) : (
+                      <span className="radio-circle-empty" />
+                    )}
+                  </div>
+                </div>
+                <div className="role-choice-content">
+                  <span className="role-choice-title">Sell Farm Harvest</span>
+                  <span className="role-choice-badge">Farmer</span>
+                  <p className="role-choice-desc">
+                    List your crops, set honest prices, and sell directly to consumers.
+                  </p>
+                </div>
               </button>
             </div>
           </div>

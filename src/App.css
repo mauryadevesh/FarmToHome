@@ -1750,6 +1750,151 @@ select.filter-input {
   margin-bottom: var(--space-md);
 }
 
+/* Join & Register Role Selector Card Grid */
+.role-selector-group {
+  margin-bottom: var(--space-lg);
+}
+
+.role-selector-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-xs);
+}
+
+.role-selector-hint {
+  font-size: 11px;
+  color: var(--color-muted);
+}
+
+.role-selection-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+@media (max-width: 580px) {
+  .role-selection-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.role-choice-card {
+  background: var(--color-paper-2);
+  border: 1.5px solid var(--color-rule-2);
+  border-radius: var(--radius-card);
+  padding: var(--space-md);
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  transition: transform var(--dur-short) var(--ease-out),
+              box-shadow var(--dur-short) var(--ease-out),
+              border-color var(--dur-short) var(--ease-out),
+              background-color var(--dur-short) var(--ease-out);
+  user-select: none;
+  width: 100%;
+}
+
+.role-choice-card:hover {
+  border-color: var(--color-accent);
+  background: var(--color-paper-3);
+  transform: translateY(-1px);
+}
+
+.role-choice-card.selected {
+  border-color: var(--color-accent);
+  background: var(--tint-moss);
+  box-shadow: 0 4px 16px rgba(44, 122, 44, 0.08);
+}
+
+.role-choice-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-xs);
+}
+
+.role-choice-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all var(--dur-short) var(--ease-out);
+}
+
+.role-choice-icon-wrap.consumer {
+  background: var(--color-paper);
+  border: var(--rule-hair) solid var(--color-rule);
+  color: var(--color-ink);
+}
+
+.role-choice-icon-wrap.farmer {
+  background: var(--color-paper);
+  border: var(--rule-hair) solid var(--color-rule);
+  color: var(--color-accent);
+}
+
+.role-choice-card.selected .role-choice-icon-wrap {
+  background: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+}
+
+.role-choice-radio {
+  display: flex;
+  align-items: center;
+}
+
+.radio-circle-empty {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-rule-2);
+  background: var(--color-paper);
+  display: inline-block;
+}
+
+.radio-circle-checked {
+  color: var(--color-accent);
+  font-size: 1.15rem;
+}
+
+.role-choice-title {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-bottom: 2px;
+  display: block;
+}
+
+.role-choice-badge {
+  display: inline-block;
+  font-family: var(--font-outlier);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 4px;
+}
+
+.role-choice-card.selected .role-choice-badge {
+  color: var(--color-accent);
+}
+
+.role-choice-desc {
+  font-size: 11.5px;
+  color: var(--color-ink-2);
+  line-height: 1.45;
+  margin: 0;
+}
+
 .form-label {
   font-family: var(--font-outlier);
   font-size: var(--text-xs);
