@@ -109,7 +109,7 @@ const OrderTracking = () => {
               data-lenis-prevent
             >
               <div className="modal-header">
-                <h2>Order Details - #{selectedOrder._id.substring(0, 8)}</h2>
+                <h2>Order Details - #{((selectedOrder._id || selectedOrder.id || 'ORD00000').toString()).substring(0, 8)}</h2>
                 <button className="btn btn-outline" onClick={() => setSelectedOrder(null)}>
                   ×
                 </button>
@@ -158,7 +158,7 @@ const OrderTracking = () => {
                     <h3>Update Status</h3>
                     <button
                       className="btn btn-primary"
-                      onClick={() => handleStatusUpdate(selectedOrder._id, getNextStatus(selectedOrder.status))}
+                      onClick={() => handleStatusUpdate(selectedOrder._id || selectedOrder.id, getNextStatus(selectedOrder.status))}
                       disabled={updatingStatus}
                     >
                       {updatingStatus ? 'Updating...' : `Mark as ${getNextStatus(selectedOrder.status).replace('_', ' ').toUpperCase()}`}
@@ -210,83 +210,87 @@ const OrderTracking = () => {
           </div>
         ) : (
           <div className="orders-grid">
-            {orders.map(order => (
-              <div key={order._id} className="order-card">
-                <div className="order-header">
-                  <div className="order-id">
-                    <h4>Order #{order._id.substring(0, 8)}</h4>
-                    <small>{new Date(order.createdAt).toLocaleDateString()}</small>
-                  </div>
-                  <div className="order-status">
-                    <span className={`badge-status badge-status--${order.status}`}>
-                      {order.status.replace('_', ' ').toUpperCase()}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="order-summary">
-                  <div className="order-items-preview">
-                    {order.items.slice(0, 2).map((item, index) => (
-                      <div key={index} className="item-preview">
-                        <div className="item-preview-image">
-                          <img 
-                            src={getProductImage(item.product?.image, item.name)} 
-                            alt={item.name}
-                            onError={(e) => {
-                              e.target.src = getProductImage(null, item.name);
-                            }}
-                          />
-                        </div>
-                        <span>{item.name} × {item.quantity}</span>
-                      </div>
-                    ))}
-                    {order.items.length > 2 && (
-                      <div className="item-preview">
-                        <span>+{order.items.length - 2} more items</span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="order-total">
-                    <span className="label">Total:</span>
-                    <span className="amount">₹{order.totalAmount}</span>
-                  </div>
-                </div>
-
-                <div className="order-progress">
-                  <div className="progress-bar">
-                    <div className="progress-steps">
-                      {getStatusSteps(order.status).map((step, index) => (
-                        <div
-                          key={step.key}
-                          className={`progress-step ${step.completed ? 'completed' : 'pending'}`}
-                          style={{ width: '25%' }}
-                        >
-                          <div className="step-dot"></div>
-                        </div>
-                      ))}
+            {orders.map(order => {
+              const orderId = order._id || order.id || Math.random().toString();
+              const displayId = (order._id || order.id || 'ORD00000').toString().substring(0, 8);
+              return (
+                <div key={orderId} className="order-card">
+                  <div className="order-header">
+                    <div className="order-id">
+                      <h4>Order #{displayId}</h4>
+                      <small>{new Date(order.createdAt).toLocaleDateString()}</small>
+                    </div>
+                    <div className="order-status">
+                      <span className={`badge-status badge-status--${order.status}`}>
+                        {order.status.replace('_', ' ').toUpperCase()}
+                      </span>
                     </div>
                   </div>
-                </div>
 
-                <div className="order-actions">
-                  <button
-                    className="btn btn-outline"
-                    onClick={() => setSelectedOrder(order)}
-                  >
-                    View Details
-                  </button>
-                  {getNextStatus(order.status) && (
+                  <div className="order-summary">
+                    <div className="order-items-preview">
+                      {(order.items || []).slice(0, 2).map((item, index) => (
+                        <div key={index} className="item-preview">
+                          <div className="item-preview-image">
+                            <img 
+                              src={getProductImage(item.product?.image, item.name)} 
+                              alt={item.name}
+                              onError={(e) => {
+                                e.target.src = getProductImage(null, item.name);
+                              }}
+                            />
+                          </div>
+                          <span>{item.name} × {item.quantity}</span>
+                        </div>
+                      ))}
+                      {(order.items || []).length > 2 && (
+                        <div className="item-preview">
+                          <span>+{order.items.length - 2} more items</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="order-total">
+                      <span className="label">Total:</span>
+                      <span className="amount">₹{order.totalAmount}</span>
+                    </div>
+                  </div>
+
+                  <div className="order-progress">
+                    <div className="progress-bar">
+                      <div className="progress-steps">
+                        {getStatusSteps(order.status).map((step, index) => (
+                          <div
+                            key={step.key}
+                            className={`progress-step ${step.completed ? 'completed' : 'pending'}`}
+                            style={{ width: '25%' }}
+                          >
+                            <div className="step-dot"></div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="order-actions">
                     <button
-                      className="btn btn-primary"
-                      onClick={() => handleStatusUpdate(order._id, getNextStatus(order.status))}
-                      disabled={updatingStatus}
+                      className="btn btn-outline"
+                      onClick={() => setSelectedOrder(order)}
                     >
-                      {updatingStatus ? 'Updating...' : `Update Status`}
+                      View Details
                     </button>
-                  )}
+                    {getNextStatus(order.status) && (
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => handleStatusUpdate(order._id || order.id, getNextStatus(order.status))}
+                        disabled={updatingStatus}
+                      >
+                        {updatingStatus ? 'Updating...' : `Update Status`}
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

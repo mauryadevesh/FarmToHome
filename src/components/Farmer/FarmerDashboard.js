@@ -77,13 +77,15 @@ const FarmerDashboard = () => {
   };
 
   const handleQuantityAdjust = async (product, delta) => {
-    const newStock = Math.max(0, product.stock + delta);
+    const prodId = product._id || product.id;
+    const newStock = Math.max(0, (product.stock || 0) + delta);
     if (newStock === product.stock) return;
 
     try {
       setSaving(true);
-      const updated = await apiService.updateProduct(product._id, { stock: newStock });
-      setProducts(prev => prev.map(p => (p._id === updated._id ? updated : p)));
+      const updated = await apiService.updateProduct(prodId, { stock: newStock });
+      const updatedId = updated._id || updated.id;
+      setProducts(prev => prev.map(p => ((p._id || p.id) === updatedId ? { ...p, stock: newStock, ...updated } : p)));
     } catch (err) {
       setFormError(err.message || 'Failed to update stock');
     } finally {
@@ -105,13 +107,15 @@ const FarmerDashboard = () => {
 
       let response;
       if (editingProduct) {
-        response = await apiService.updateProduct(editingProduct._id, payload);
+        const editId = editingProduct._id || editingProduct.id;
+        response = await apiService.updateProduct(editId, payload);
       } else {
         response = await apiService.createProduct(payload);
       }
 
+      const resId = response._id || response.id;
       if (editingProduct) {
-        setProducts(prev => prev.map(p => (p._id === response._id ? response : p)));
+        setProducts(prev => prev.map(p => ((p._id || p.id) === resId ? response : p)));
       } else {
         setProducts(prev => [response, ...prev]);
       }
@@ -158,53 +162,62 @@ const FarmerDashboard = () => {
         ) : (
           <div className="product-management">
             <AnimatePresence>
-              {products.map((product, idx) => (
-                <motion.div
-                  layout
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: Math.min(idx * 0.04, 0.25) }}
-                  key={product._id}
-                  className="farmer-product-card"
-                >
-                <div className="product-media">
-                  <img src={getProductImage(product.image, product.name)} alt={product.name} />
-                </div>
-                <div className="product-details">
-                  <div className="product-header">
-                    <h3>{product.name}</h3>
-                    <span className="product-category">{product.category}</span>
+              {products.map((product, idx) => {
+                const prodKey = product._id || product.id || Math.random().toString();
+                return (
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: Math.min(idx * 0.04, 0.25) }}
+                    key={prodKey}
+                    className="farmer-product-card"
+                  >
+                  <div className="product-media">
+                    <img
+                      src={getProductImage(product.image, product.name)}
+                      alt={product.name}
+                      onError={(e) => {
+                        e.target.src = getProductImage(null, product.name);
+                      }}
+                    />
                   </div>
-                  <p>{product.description}</p>
-                  <div className="product-meta">
-                    <span>{formatCurrency(product.price)} / {product.unit}</span>
-                    <span>{product.stock} {product.unit} in stock</span>
-                  </div>
-                  <div className="product-actions">
-                    <div className="stock-controls">
-                      <button
-                        className="quantity-btn"
-                        onClick={() => handleQuantityAdjust(product, -1)}
-                        disabled={saving || product.stock <= 0}
-                      >
-                        -
-                      </button>
-                      <span className="stock-count">{product.stock}</span>
-                      <button
-                        className="quantity-btn"
-                        onClick={() => handleQuantityAdjust(product, 1)}
-                        disabled={saving}
-                      >
-                        +
+                  <div className="product-details">
+                    <div className="product-header">
+                      <h3>{product.name}</h3>
+                      <span className="product-category">{product.category}</span>
+                    </div>
+                    <p>{product.description}</p>
+                    <div className="product-meta">
+                      <span>{formatCurrency(product.price)} / {product.unit}</span>
+                      <span>{product.stock} {product.unit} in stock</span>
+                    </div>
+                    <div className="product-actions">
+                      <div className="stock-controls">
+                        <button
+                          className="quantity-btn"
+                          onClick={() => handleQuantityAdjust(product, -1)}
+                          disabled={saving || product.stock <= 0}
+                        >
+                          -
+                        </button>
+                        <span className="stock-count">{product.stock}</span>
+                        <button
+                          className="quantity-btn"
+                          onClick={() => handleQuantityAdjust(product, 1)}
+                          disabled={saving}
+                        >
+                          +
+                        </button>
+                      </div>
+                      <button className="btn btn-outline" onClick={() => openEditForm(product)}>
+                        Edit Details
                       </button>
                     </div>
-                    <button className="btn btn-outline" onClick={() => openEditForm(product)}>
-                      Edit Details
-                    </button>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+                );
+              })}
           </AnimatePresence>
         </div>
       )}

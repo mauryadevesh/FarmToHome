@@ -303,3 +303,117 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Product Management Specifics */
+.product-thumbnail {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  border: var(--rule-hair) solid var(--color-rule);
+  background-color: var(--color-paper-3);
+  display: block;
+}
+
+.edit-form-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(20, 30, 24, 0.45);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--space-md);
+}
+
+.edit-form-modal {
+  background: var(--color-paper);
+  border: var(--rule-hair) solid var(--color-rule-2);
+  border-radius: var(--radius-card);
+  width: 100%;
+  max-width: 500px;
+  padding: var(--space-xl);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+}
+
+.edit-form-modal h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  color: var(--color-ink);
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-xs);
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+
+.error-message {
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-card);
+  font-size: var(--text-xs);
+  margin-bottom: var(--space-md);
+  background-color: var(--tint-danger);
+  border: var(--rule-hair) solid color-mix(in oklab, var(--color-danger) 30%, transparent);
+  color: var(--color-danger);
+}
+
+.success-message {
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-card);
+  font-size: var(--text-xs);
+  margin-bottom: var(--space-md);
+  background-color: var(--tint-moss);
+  border: var(--rule-hair) solid color-mix(in oklab, var(--color-accent) 30%, transparent);
+  color: var(--color-accent);
+}
+
+/* Support Container & Ticket Selection */
+.support-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .support-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ticket-card.selected {
+  border-color: var(--color-accent);
+  background-color: var(--tint-moss);
+}
+
+.ticket-response-view {
+  background: var(--color-paper-2);
+  border: var(--rule-hair) solid var(--color-rule-2);
+  border-radius: var(--radius-card);
+  padding: var(--space-xl);
+}
+
+.ticket-response-view h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--color-ink);
+  margin-bottom: var(--space-sm);
+  padding-bottom: var(--space-xs);
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+
+.ticket-response-view textarea {
+  width: 100%;
+  padding: 10px 12px;
+  background-color: var(--color-paper);
+  border: var(--rule-hair) solid var(--color-rule-2);
+  border-radius: var(--radius-card);
+  font-size: var(--text-xs);
+  color: var(--color-ink);
+  outline: none;
+  font-family: inherit;
+  margin-top: var(--space-sm);
+}
+
+.ticket-response-view textarea:focus {
+  border-color: var(--color-accent);
+}

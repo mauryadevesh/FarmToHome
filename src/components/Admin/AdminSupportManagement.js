@@ -27,13 +27,14 @@ const AdminSupportManagement = () => {
   };
 
   const handleRespond = async () => {
-    if (!selectedTicket || !response.trim()) {
+    const activeId = selectedTicket?._id || selectedTicket?.id;
+    if (!activeId || !response.trim()) {
       setError('Please provide a response');
       return;
     }
 
     try {
-      await api.respondToSupport(selectedTicket._id, response);
+      await api.respondToSupport(activeId, response);
       setSuccess('Response sent successfully!');
       setResponse('');
       setSelectedTicket(null);
@@ -89,31 +90,37 @@ const AdminSupportManagement = () => {
         <div className="tickets-list">
           <h3>Support Tickets</h3>
           <div className="tickets-grid">
-            {tickets.map(ticket => (
-              <div
-                key={ticket._id}
-                className={`ticket-card ${selectedTicket?._id === ticket._id ? 'selected' : ''}`}
-                onClick={() => {
-                  setSelectedTicket(ticket);
-                  setResponse('');
-                }}
-              >
-                <div className="ticket-header">
-                  <span className="ticket-id">#{ticket._id.slice(-8)}</span>
-                  <span className={`priority-badge priority-badge--${ticket.priority}`}>
-                    {ticket.priority}
+            {tickets.map(ticket => {
+              const ticketKey = ticket._id || ticket.id;
+              const isSelected = selectedTicket && (selectedTicket._id || selectedTicket.id) === ticketKey;
+              const displayId = (ticketKey || 'TCK').toString().slice(-8);
+
+              return (
+                <div
+                  key={ticketKey}
+                  className={`ticket-card ${isSelected ? 'selected' : ''}`}
+                  onClick={() => {
+                    setSelectedTicket(ticket);
+                    setResponse('');
+                  }}
+                >
+                  <div className="ticket-header">
+                    <span className="ticket-id">#{displayId}</span>
+                    <span className={`priority-badge priority-badge--${ticket.priority}`}>
+                      {ticket.priority}
+                    </span>
+                  </div>
+                  <div className="ticket-subject">{ticket.subject}</div>
+                  <div className="ticket-meta">
+                    <div className="customer-name">{ticket.user?.name}</div>
+                    <div className="ticket-date">{formatDate(ticket.createdAt)}</div>
+                  </div>
+                  <span className={`status-badge status-badge--${ticket.status}`}>
+                    {ticket.status}
                   </span>
                 </div>
-                <div className="ticket-subject">{ticket.subject}</div>
-                <div className="ticket-meta">
-                  <div className="customer-name">{ticket.user?.name}</div>
-                  <div className="ticket-date">{formatDate(ticket.createdAt)}</div>
-                </div>
-                <span className={`status-badge status-badge--${ticket.status}`}>
-                  {ticket.status}
-                </span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -123,7 +130,7 @@ const AdminSupportManagement = () => {
             <div className="ticket-info">
               <div className="info-row">
                 <label>Ticket ID:</label>
-                <span>#{selectedTicket._id.slice(-8)}</span>
+                <span>#{(selectedTicket._id || selectedTicket.id || 'TCK').toString().slice(-8)}</span>
               </div>
               <div className="info-row">
                 <label>Customer:</label>

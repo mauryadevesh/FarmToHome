@@ -277,26 +277,29 @@ const SupportDashboard = () => {
           </div>
         ) : (
           <div className="tickets-list">
-            {tickets.map(ticket => (
-              <div key={ticket._id} className="ticket-card" onClick={() => handleTicketClick(ticket._id)}>
-                <div className="ticket-header">
-                  <h4>{ticket.subject}</h4>
-                  <div className="ticket-meta">
-                    <span className={`badge-status badge-status--${ticket.status}`}>
-                      {ticket.status}
-                    </span>
-                    <span className={`badge-priority badge-priority--${ticket.priority}`}>
-                      {ticket.priority}
-                    </span>
+            {tickets.map(ticket => {
+              const ticketId = ticket._id || ticket.id;
+              return (
+                <div key={ticketId} className="ticket-card" onClick={() => handleTicketClick(ticketId)}>
+                  <div className="ticket-header">
+                    <h4>{ticket.subject}</h4>
+                    <div className="ticket-meta">
+                      <span className={`badge-status badge-status--${ticket.status}`}>
+                        {ticket.status}
+                      </span>
+                      <span className={`badge-priority badge-priority--${ticket.priority}`}>
+                        {ticket.priority}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="ticket-preview">{(ticket.message || '').substring(0, 100)}...</p>
+                  <div className="ticket-footer">
+                    <span className="category">{ticket.category}</span>
+                    <small>{new Date(ticket.createdAt).toLocaleDateString()}</small>
                   </div>
                 </div>
-                <p className="ticket-preview">{ticket.message.substring(0, 100)}...</p>
-                <div className="ticket-footer">
-                  <span className="category">{ticket.category}</span>
-                  <small>{new Date(ticket.createdAt).toLocaleDateString()}</small>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

@@ -116,94 +116,99 @@ const AdminProductManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map(product => (
-              <tr key={product._id}>
-                {editingProduct && editingProduct._id === product._id ? (
-                  <>
-                    <td>
-                      <input
-                        type="text"
-                        name="name"
-                        value={editingProduct.name}
-                        onChange={handleChange}
-                        className="form-input"
-                      />
-                    </td>
-                    <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+            {products.map(product => {
+              const currentId = product._id || product.id;
+              const isEditing = editingProduct && (editingProduct._id || editingProduct.id) === currentId;
+
+              return (
+                <tr key={currentId}>
+                  {isEditing ? (
+                    <>
+                      <td>
+                        <input
+                          type="text"
+                          name="name"
+                          value={editingProduct.name}
+                          onChange={handleChange}
+                          className="form-input"
+                        />
+                      </td>
+                      <td>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                          <input
+                            type="number"
+                            name="price"
+                            value={editingProduct.price}
+                            onChange={handleChange}
+                            className="form-input"
+                            min="0"
+                            step="0.01"
+                            style={{ width: '80px' }}
+                          />
+                          <span>/</span>
+                          <select
+                            name="unit"
+                            value={editingProduct.unit || 'kg'}
+                            onChange={handleChange}
+                            className="form-input"
+                            style={{ width: '80px' }}
+                          >
+                            <option value="kg">kg</option>
+                            <option value="liters">liters</option>
+                            <option value="pieces">pieces</option>
+                            <option value="dozens">dozens</option>
+                            <option value="grams">grams</option>
+                            <option value="bunches">bunches</option>
+                          </select>
+                        </div>
+                      </td>
+                      <td>
                         <input
                           type="number"
-                          name="price"
-                          value={editingProduct.price}
+                          name="stock"
+                          value={editingProduct.stock ?? editingProduct.quantity ?? 0}
                           onChange={handleChange}
                           className="form-input"
                           min="0"
-                          step="0.01"
-                          style={{ width: '80px' }}
                         />
-                        <span>/</span>
-                        <select
-                          name="unit"
-                          value={editingProduct.unit || 'kg'}
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          name="category"
+                          value={editingProduct.category}
                           onChange={handleChange}
                           className="form-input"
-                          style={{ width: '80px' }}
-                        >
-                          <option value="kg">kg</option>
-                          <option value="liters">liters</option>
-                          <option value="pieces">pieces</option>
-                          <option value="dozens">dozens</option>
-                          <option value="grams">grams</option>
-                          <option value="bunches">bunches</option>
-                        </select>
-                      </div>
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        name="stock"
-                        value={editingProduct.stock ?? editingProduct.quantity ?? 0}
-                        onChange={handleChange}
-                        className="form-input"
-                        min="0"
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        name="category"
-                        value={editingProduct.category}
-                        onChange={handleChange}
-                        className="form-input"
-                      />
-                    </td>
-                    <td>
-                      <button onClick={handleSave} className="btn btn-primary btn-sm">
-                        Save
-                      </button>
-                      <button onClick={handleCancel} className="btn btn-secondary btn-sm">
-                        Cancel
-                      </button>
-                    </td>
-                  </>
-                ) : (
-                  <>
-                    <td><strong>{product.name}</strong></td>
-                    <td>{formatCurrency(product.price)} / {product.unit}</td>
-                    <td>{product.stock ?? product.quantity ?? 0} {product.unit}</td>
-                    <td><span className="product-category">{product.category}</span></td>
-                    <td>
-                      <button onClick={() => handleEdit(product)} className="btn btn-primary btn-sm">
-                        Edit
-                      </button>
-                      <button onClick={() => handleDelete(product.id || product._id)} className="btn btn-danger btn-sm">
-                        Delete
-                      </button>
-                    </td>
-                  </>
-                )}
-              </tr>
-            ))}
+                        />
+                      </td>
+                      <td>
+                        <button onClick={handleSave} className="btn btn-primary btn-sm">
+                          Save
+                        </button>
+                        <button onClick={handleCancel} className="btn btn-secondary btn-sm">
+                          Cancel
+                        </button>
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td><strong>{product.name}</strong></td>
+                      <td>{formatCurrency(product.price)} / {product.unit}</td>
+                      <td>{product.stock ?? product.quantity ?? 0} {product.unit}</td>
+                      <td><span className="product-category">{product.category}</span></td>
+                      <td>
+                        <button onClick={() => handleEdit(product)} className="btn btn-primary btn-sm">
+                          Edit
+                        </button>
+                        <button onClick={() => handleDelete(currentId)} className="btn btn-danger btn-sm">
+                          Delete
+                        </button>
+                      </td>
+                    </>
+                  )}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

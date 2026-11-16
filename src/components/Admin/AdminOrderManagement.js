@@ -95,46 +95,50 @@ const AdminOrderManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {orders.map(order => (
-              <tr key={order._id}>
-                <td className="order-id">#{order._id.slice(-8)}</td>
-                <td>
-                  <div className="customer-info">
-                    <div className="customer-name">{order.user?.name || 'Unknown'}</div>
-                    <div className="customer-email">{order.user?.email || 'N/A'}</div>
-                  </div>
-                </td>
-                <td>{formatDate(order.createdAt)}</td>
-                <td>
-                  <div className="order-items">
-                    {order.items.map((item, index) => (
-                      <div key={index} className="item-info">
-                        {item.quantity}x {item.product?.name || 'Product'}
-                      </div>
-                    ))}
-                  </div>
-                </td>
-                <td className="order-total">{formatCurrency(order.totalAmount)}</td>
-                <td>
-                  <span className={`status-badge status-badge--${order.status}`}>
-                    {order.status}
-                  </span>
-                </td>
-                <td>
-                  <select
-                    value={order.status}
-                    onChange={(e) => handleStatusUpdate(order._id, e.target.value)}
-                    className="status-select"
-                  >
-                    {orderStatuses.map(status => (
-                      <option key={status} value={status}>
-                        {status.charAt(0).toUpperCase() + status.slice(1)}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-              </tr>
-            ))}
+            {orders.map(order => {
+              const orderKey = order._id || order.id || Math.random().toString();
+              const orderDisplayId = (order._id || order.id || 'ORD').toString().slice(-8);
+              return (
+                <tr key={orderKey}>
+                  <td className="order-id">#{orderDisplayId}</td>
+                  <td>
+                    <div className="customer-info">
+                      <div className="customer-name">{order.user?.name || 'Unknown'}</div>
+                      <div className="customer-email">{order.user?.email || 'N/A'}</div>
+                    </div>
+                  </td>
+                  <td>{formatDate(order.createdAt)}</td>
+                  <td>
+                    <div className="order-items">
+                      {(order.items || []).map((item, index) => (
+                        <div key={index} className="item-info">
+                          {item.quantity}x {item.product?.name || item.name || 'Product'}
+                        </div>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="order-total">{formatCurrency(order.totalAmount)}</td>
+                  <td>
+                    <span className={`status-badge status-badge--${order.status}`}>
+                      {order.status}
+                    </span>
+                  </td>
+                  <td>
+                    <select
+                      value={order.status}
+                      onChange={(e) => handleStatusUpdate(order._id || order.id, e.target.value)}
+                      className="status-select"
+                    >
+                      {orderStatuses.map(status => (
+                        <option key={status} value={status}>
+                          {status.charAt(0).toUpperCase() + status.slice(1)}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
