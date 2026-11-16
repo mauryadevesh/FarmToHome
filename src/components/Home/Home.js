@@ -49,13 +49,6 @@ const Home = () => {
             animate="visible"
             variants={staggerContainer}
           >
-            <motion.div variants={fadeInUp} className="hero-badge">
-              <span className="live-pulse-dot" />
-              <span className="hero-badge-tag">Direct Harvest Dispatch</span>
-              <span className="hero-badge-sep">•</span>
-              <span className="hero-badge-location">Active across Karnataka & Tamil Nadu</span>
-            </motion.div>
-
             <motion.h1 variants={fadeInUp} className="hero-title">
               Fresh village harvests, <span className="hero-title-italic">cut today</span> for your family's table
             </motion.h1>
@@ -134,10 +127,6 @@ const Home = () => {
                     <span className="hero-farmer-name">Kisan Ramesh Kumar</span>
                     <span className="hero-farmer-village">Green Valley Farms • Doddaballapura</span>
                   </div>
-                </div>
-                <div className="hero-dispatch-chip">
-                  <span className="live-pulse-dot" />
-                  <span>Harvesting Daily</span>
                 </div>
               </div>
 

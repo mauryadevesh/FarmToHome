@@ -570,7 +570,7 @@
   z-index: 2;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: var(--space-sm);
   padding: 8px 12px;
   background-color: rgba(247, 244, 236, 0.94);
