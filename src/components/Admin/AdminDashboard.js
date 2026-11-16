@@ -477,7 +477,7 @@ const AdminDashboard = () => {
                       <h4 className="slot-time-heading">{slot.time_window || slot.timeWindow}</h4>
                     </div>
                     <span className={`slot-health-badge ${remaining <= 5 ? 'tight' : 'healthy'}`}>
-                      {remaining} spots left
+                      ● {remaining} spots left
                     </span>
                   </div>
 
@@ -501,6 +501,8 @@ const AdminDashboard = () => {
                         className="btn-cap-delta"
                         onClick={() => handleUpdateSlotCapacity(sid, max, -5)}
                         disabled={max <= booked}
+                        title="Reduce slot capacity by 5"
+                        aria-label="Reduce slot capacity by 5"
                       >
                         -5
                       </button>
@@ -509,6 +511,8 @@ const AdminDashboard = () => {
                         type="button"
                         className="btn-cap-delta"
                         onClick={() => handleUpdateSlotCapacity(sid, max, 5)}
+                        title="Increase slot capacity by 5"
+                        aria-label="Increase slot capacity by 5"
                       >
                         +5
                       </button>
@@ -518,6 +522,15 @@ const AdminDashboard = () => {
               );
             })}
           </div>
+
+          {deliverySlots.length === 0 && (
+            <div style={{ padding: '3rem', textAlign: 'center', background: '#ffffff', borderRadius: '16px', border: '1px solid #eae6dc', marginTop: '1rem' }}>
+              <p style={{ color: '#757d6e', marginBottom: '1rem' }}>No delivery slots configured yet.</p>
+              <button className="btn btn--primary btn--sm" onClick={() => setShowSlotModal(true)}>
+                <FaPlus /> Add First Delivery Slot
+              </button>
+            </div>
+          )}
 
           {/* Create Slot Modal */}
           {showSlotModal && (
