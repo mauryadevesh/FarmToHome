@@ -8,7 +8,7 @@ router.use(auth);
 router.use(isAdmin);
 
 // @route   GET /api/admin/stats
-// @desc    Get dashboard metrics
+// @desc    Get dashboard metrics & Idea Lab indicators
 router.get('/stats', async (req, res) => {
   try {
     const stats = await dbAdapter.getAdminStats();
@@ -16,6 +16,83 @@ router.get('/stats', async (req, res) => {
   } catch (error) {
     console.error('Error fetching admin stats:', error);
     return res.status(500).json({ message: 'Server error fetching statistics' });
+  }
+});
+
+// @route   GET /api/admin/farmers
+// @desc    Get all registered farmers with approval status
+router.get('/farmers', async (req, res) => {
+  try {
+    const farmers = await dbAdapter.getFarmers();
+    return res.json(farmers);
+  } catch (error) {
+    console.error('Error fetching admin farmers:', error);
+    return res.status(500).json({ message: 'Error retrieving farmers' });
+  }
+});
+
+// @route   PUT /api/admin/farmers/:id/approve
+// @desc    Approve or suspend a farmer account
+router.put('/farmers/:id/approve', async (req, res) => {
+  try {
+    const isApproved = req.body.isApproved !== undefined ? Boolean(req.body.isApproved) : true;
+    const updated = await dbAdapter.approveFarmer(req.params.id, isApproved);
+    if (!updated) {
+      return res.status(404).json({ message: 'Farmer not found' });
+    }
+    return res.json(updated);
+  } catch (error) {
+    console.error('Error toggling farmer approval:', error);
+    return res.status(500).json({ message: error.message || 'Error updating approval status' });
+  }
+});
+
+// @route   GET /api/admin/delivery-slots
+// @desc    Get delivery slots with capacity utilization
+router.get('/delivery-slots', async (req, res) => {
+  try {
+    const slots = await dbAdapter.getDeliverySlots();
+    return res.json(slots);
+  } catch (error) {
+    console.error('Error fetching delivery slots for admin:', error);
+    return res.status(500).json({ message: 'Error fetching delivery slots' });
+  }
+});
+
+// @route   POST /api/admin/delivery-slots
+// @desc    Create new delivery slot
+router.post('/delivery-slots', async (req, res) => {
+  try {
+    const slot = await dbAdapter.createDeliverySlot(req.body);
+    return res.status(201).json(slot);
+  } catch (error) {
+    console.error('Error creating delivery slot:', error);
+    return res.status(400).json({ message: error.message || 'Error creating delivery slot' });
+  }
+});
+
+// @route   PUT /api/admin/delivery-slots/:id
+// @desc    Update delivery slot capacity or toggle active
+router.put('/delivery-slots/:id', async (req, res) => {
+  try {
+    const updated = await dbAdapter.updateDeliverySlot(req.params.id, req.body);
+    if (!updated) return res.status(404).json({ message: 'Slot not found' });
+    return res.json(updated);
+  } catch (error) {
+    console.error('Error updating delivery slot:', error);
+    return res.status(400).json({ message: error.message || 'Error updating delivery slot' });
+  }
+});
+
+// @route   GET /api/admin/categories
+// @desc    List all produce categories
+router.get('/categories', async (req, res) => {
+  try {
+    const categories = await dbAdapter.getCategories();
+    return res.json(categories);
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    return res.status(500).json({ message: 'Error fetching categories' });
   }
 });
 
@@ -36,7 +113,10 @@ router.get('/orders', async (req, res) => {
 router.put('/orders/:id/status', async (req, res) => {
   try {
     const { status } = req.body;
-    const validStatuses = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'];
+    const validStatuses = [
+      'Pending', 'Accepted', 'Preparing', 'Ready', 'Out for Delivery', 'Delivered', 'Cancelled',
+      'pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'
+    ];
     if (!status || !validStatuses.includes(status)) {
       return res.status(400).json({ message: 'Invalid status' });
     }
@@ -120,7 +200,7 @@ router.put('/users/:id/role', async (req, res) => {
 // @desc    Delete user account
 router.delete('/users/:id', async (req, res) => {
   try {
-    const result = await dbAdapter.deleteUser(req.params.id);
+    await dbAdapter.deleteUser(req.params.id);
     return res.json({ message: 'User deleted successfully' });
   } catch (error) {
     console.error('Error deleting user:', error);
@@ -144,7 +224,7 @@ router.get('/products', async (req, res) => {
 // @desc    Admin create new product
 router.post('/products', async (req, res) => {
   try {
-    const { name, description, price, category, image, stock, unit, isAvailable } = req.body;
+    const { name, description, price, category, image, stock, unit, isAvailable, originFarm, harvestDate } = req.body;
     if (!name || !description || price === undefined || !category || stock === undefined || !unit) {
       return res.status(400).json({ message: 'Please provide all required product details' });
     }
@@ -158,6 +238,8 @@ router.post('/products', async (req, res) => {
         image: image || 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=500',
         stock: parseInt(stock, 10),
         unit: unit.trim(),
+        originFarm: originFarm || 'Uttan Coastal Agro Farm',
+        harvestDate: harvestDate || 'Morning Harvest (5:30 AM)',
         isAvailable: isAvailable !== undefined ? Boolean(isAvailable) : true
       },
       req.user
@@ -189,7 +271,7 @@ router.put('/products/:id', async (req, res) => {
 // @desc    Admin delete product
 router.delete('/products/:id', async (req, res) => {
   try {
-    const result = await dbAdapter.deleteProduct(req.params.id);
+    await dbAdapter.deleteProduct(req.params.id);
     return res.json({ message: 'Product deleted successfully' });
   } catch (error) {
     console.error('Error deleting product as admin:', error);

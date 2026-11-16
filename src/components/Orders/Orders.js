@@ -157,11 +157,23 @@ const Orders = () => {
                     <div>
                       <span className="order-label">Shipping Address</span>
                       <p>{order.shippingAddress || 'Not provided'}</p>
+                      {order.deliveryTimeSlot && (
+                        <p style={{ marginTop: '4px', fontSize: '0.85rem', color: '#1b4d29', fontWeight: 600 }}>
+                          🕒 Slot: {order.deliveryTimeSlot} ({order.deliveryDate || 'Scheduled'})
+                        </p>
+                      )}
                     </div>
-                    <div className="order-meta-actions">
+                    <div className="order-meta-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                       <span className="order-label">Status</span>
                       <span className={`order-status ${order.status || 'pending'}`}>{order.status || 'Pending'}</span>
-                      {['ordered', 'pending', 'processing', 'shipped'].includes(order.status) && (
+                      <Link
+                        to={`/tracking?orderId=${order._id || order.id}`}
+                        className="btn btn-outline"
+                        style={{ padding: '6px 12px', fontSize: '0.85rem', borderColor: '#236838', color: '#236838', fontWeight: 600 }}
+                      >
+                        🚚 Track Delivery
+                      </Link>
+                      {['ordered', 'pending', 'processing', 'shipped', 'accepted', 'preparing', 'ready'].includes(order.status?.toLowerCase()) && (
                         <button
                           className="btn btn-outline"
                           onClick={() => handleCancel(order._id || order.id)}

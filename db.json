@@ -11,16 +11,6 @@
       "address": "FarmToHome Operations Center, Sector 4, Bengaluru",
       "login_history": [
         {
-          "loginTime": "2026-11-16T11:36:06.786Z",
-          "ipAddress": "127.0.0.1",
-          "userAgent": ""
-        },
-        {
-          "loginTime": "2026-11-16T12:47:20.290Z",
-          "ipAddress": "127.0.0.1",
-          "userAgent": ""
-        },
-        {
           "loginTime": "2026-11-16T13:00:12.359Z",
           "ipAddress": "127.0.0.1",
           "userAgent": ""
@@ -71,13 +61,18 @@
           "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36 OPR/139.0.0.0"
         },
         {
-          "loginTime": "2026-11-16T18:25:24.332Z",
+          "loginTime": "2026-11-16T18:57:03.030Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": ""
+        },
+        {
+          "loginTime": "2026-11-16T18:58:05.736Z",
           "ipAddress": "127.0.0.1",
           "userAgent": ""
         }
       ],
       "created_at": "2026-11-16T11:36:06.601Z",
-      "last_login": "2026-11-16T18:25:24.332Z"
+      "last_login": "2026-11-16T18:58:05.736Z"
     },
     {
       "id": "user_farmer",
@@ -108,16 +103,6 @@
       "phone": "+91 98765 43210",
       "address": "Flat 302, Palm Grove Apts, Indiranagar, Bengaluru",
       "login_history": [
-        {
-          "loginTime": "2026-11-16T11:36:06.700Z",
-          "ipAddress": "127.0.0.1",
-          "userAgent": ""
-        },
-        {
-          "loginTime": "2026-11-16T12:47:20.227Z",
-          "ipAddress": "127.0.0.1",
-          "userAgent": ""
-        },
         {
           "loginTime": "2026-11-16T13:00:12.297Z",
           "ipAddress": "127.0.0.1",
@@ -159,13 +144,47 @@
           "userAgent": ""
         },
         {
-          "loginTime": "2026-11-16T18:25:24.267Z",
+          "loginTime": "2026-11-16T18:29:12.824Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36 OPR/139.0.0.0"
+        },
+        {
+          "loginTime": "2026-11-16T18:57:02.958Z",
+          "ipAddress": "127.0.0.1",
+          "userAgent": ""
+        },
+        {
+          "loginTime": "2026-11-16T18:58:05.659Z",
           "ipAddress": "127.0.0.1",
           "userAgent": ""
         }
       ],
       "created_at": "2026-11-16T11:36:06.601Z",
-      "last_login": "2026-11-16T18:25:24.267Z"
+      "last_login": "2026-11-16T18:58:05.659Z"
+    },
+    {
+      "id": "user_farmer_2",
+      "_id": "user_farmer_2",
+      "name": "Sunita Mhatre",
+      "email": "sunita@farmtohome.com",
+      "password": "$2a$10$tYn9SEJExKkdynJTMmO4qeudylzd2yW8GOA9rqUs78sY2iVZyibrq",
+      "role": "farmer",
+      "phone": "+91 98202 23456",
+      "address": "Chena Creek Organic Greens, Ghodbunder Belt, Mira Bhayandar 401107",
+      "login_history": [],
+      "created_at": "2026-11-16T18:57:02.863Z"
+    },
+    {
+      "id": "user_farmer_3",
+      "_id": "user_farmer_3",
+      "name": "Ganesh Tare",
+      "email": "ganesh@farmtohome.com",
+      "password": "$2a$10$tYn9SEJExKkdynJTMmO4qeudylzd2yW8GOA9rqUs78sY2iVZyibrq",
+      "role": "farmer",
+      "phone": "+91 98203 34567",
+      "address": "Rai-Morva Village Fields, Bhayandar West 401101",
+      "login_history": [],
+      "created_at": "2026-11-16T18:57:02.863Z"
     }
   ],
   "products": [
@@ -183,12 +202,18 @@
         "name": "Kisan Ramesh Kumar",
         "email": "farmer@farmtohome.com"
       },
-      "stock": 100,
+      "stock": 75,
       "unit": "1 kg",
       "image": "https://images.unsplash.com/photo-1561136594-7f68413baa99?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "updated_at": "2026-11-16T18:58:05.668Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_2",
@@ -209,7 +234,12 @@
       "image": "https://images.unsplash.com/photo-1508747703725-719777637510?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_3",
@@ -230,7 +260,12 @@
       "image": "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_4",
@@ -251,7 +286,12 @@
       "image": "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_5",
@@ -272,7 +312,12 @@
       "image": "https://images.unsplash.com/photo-1528826007177-f38517ce9a8a?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_6",
@@ -293,7 +338,12 @@
       "image": "https://images.unsplash.com/photo-1556801712-76c8eb07bbc9?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_7",
@@ -314,7 +364,12 @@
       "image": "https://images.unsplash.com/photo-1568584711075-3d021a7c3ca3?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_8",
@@ -335,7 +390,12 @@
       "image": "https://images.unsplash.com/photo-1597115580039-b849ed2d6398?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_9",
@@ -356,7 +416,12 @@
       "image": "https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_10",
@@ -377,7 +442,12 @@
       "image": "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_11",
@@ -398,7 +468,12 @@
       "image": "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_12",
@@ -419,7 +494,12 @@
       "image": "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_13",
@@ -440,7 +520,12 @@
       "image": "https://images.unsplash.com/photo-1553279768-865429fa0078?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_14",
@@ -461,7 +546,12 @@
       "image": "https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_15",
@@ -482,7 +572,12 @@
       "image": "https://images.unsplash.com/photo-1541344999736-83eca272f6fc?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_16",
@@ -503,7 +598,12 @@
       "image": "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_17",
@@ -524,7 +624,12 @@
       "image": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_18",
@@ -545,7 +650,12 @@
       "image": "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_19",
@@ -566,7 +676,12 @@
       "image": "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_20",
@@ -587,7 +702,12 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Sugarcane_stalks.jpg",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_21",
@@ -608,7 +728,12 @@
       "image": "https://images.unsplash.com/photo-1546545584-c03ac781caaf?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_22",
@@ -629,7 +754,12 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Split_pea.jpg",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_23",
@@ -650,7 +780,12 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Green_Gram_Dal_%28_%E0%A6%96%E0%A7%8B%E0%A6%B8%E0%A6%BE_%E0%A6%B8%E0%A6%B9_%E0%A6%8F%E0%A6%AC%E0%A6%82_%E0%A6%96%E0%A7%8B%E0%A6%B8%E0%A6%BE_%E0%A6%9B%E0%A6%BE%E0%A6%A1%E0%A6%BC%E0%A6%BE_%E0%A6%AE%E0%A7%81%E0%A6%97_%E0%A6%A1%E0%A6%BE%E0%A6%B2%29.JPG",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_24",
@@ -671,7 +806,12 @@
       "image": "https://images.unsplash.com/photo-1521763069287-579ca77694e8?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_25",
@@ -692,7 +832,12 @@
       "image": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_26",
@@ -713,7 +858,12 @@
       "image": "https://images.unsplash.com/photo-1571212515416-fef01fc43637?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     },
     {
       "id": "prod_27",
@@ -734,19 +884,125 @@
       "image": "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=600&auto=format&fit=crop&q=80",
       "is_available": true,
       "isAvailable": true,
-      "created_at": "2026-11-16T11:36:06.602Z"
+      "created_at": "2026-11-16T11:36:06.602Z",
+      "origin_farm": "Uttan Coastal Agro Farm",
+      "originFarm": "Uttan Coastal Agro Farm",
+      "harvest_date": "Today at 5:30 AM",
+      "harvestDate": "Today at 5:30 AM",
+      "rating": 4.8
     }
   ],
-  "cart_items": [
-    {
-      "id": "cart_item_1794828966707_4kda",
-      "_id": "cart_item_1794828966707_4kda",
-      "user_id": "user_consumer",
-      "product_id": "prod_1",
-      "quantity": 23
-    }
-  ],
+  "cart_items": [],
   "orders": [
+    {
+      "id": "order_1794855485668",
+      "_id": "order_1794855485668",
+      "user_id": "user_consumer",
+      "userId": "user_consumer",
+      "user": {
+        "id": "user_consumer",
+        "_id": "user_consumer",
+        "name": "Priya Sharma",
+        "email": "consumer@farmtohome.com",
+        "phone": "+91 98765 43210"
+      },
+      "items": [
+        {
+          "product": "prod_1",
+          "name": "Tomato",
+          "price": 30,
+          "quantity": 2,
+          "unit": "1 kg",
+          "image": "https://images.unsplash.com/photo-1561136594-7f68413baa99?w=600&auto=format&fit=crop&q=80",
+          "farmer_name": "Kisan Ramesh Kumar"
+        }
+      ],
+      "total_amount": 60,
+      "totalAmount": 60,
+      "shipping_address": "Flat 402, Shanti Park, Mira Road East, 401107",
+      "shippingAddress": "Flat 402, Shanti Park, Mira Road East, 401107",
+      "delivery_date": "Tomorrow Morning",
+      "deliveryDate": "Tomorrow Morning",
+      "delivery_time_slot": "07:00 AM - 10:00 AM",
+      "deliveryTimeSlot": "07:00 AM - 10:00 AM",
+      "delivery_slot_id": "slot_1",
+      "deliverySlotId": "slot_1",
+      "status": "Out for Delivery",
+      "order_status": "Out for Delivery",
+      "orderStatus": "Out for Delivery",
+      "payment_status": "paid",
+      "paymentStatus": "paid",
+      "created_at": "2026-11-16T18:58:05.668Z",
+      "updated_at": "2026-11-16T18:58:05.741Z"
+    },
+    {
+      "id": "order_1794855422966",
+      "_id": "order_1794855422966",
+      "user_id": "user_consumer",
+      "userId": "user_consumer",
+      "user": {
+        "id": "user_consumer",
+        "_id": "user_consumer",
+        "name": "Priya Sharma",
+        "email": "consumer@farmtohome.com",
+        "phone": "+91 98765 43210"
+      },
+      "items": [
+        {
+          "product": "prod_1",
+          "name": "Tomato",
+          "price": 30,
+          "quantity": 2,
+          "unit": "1 kg",
+          "image": "https://images.unsplash.com/photo-1561136594-7f68413baa99?w=600&auto=format&fit=crop&q=80",
+          "farmer_name": "Kisan Ramesh Kumar"
+        }
+      ],
+      "total_amount": 60,
+      "totalAmount": 60,
+      "shipping_address": "Flat 402, Shanti Park, Mira Road East, 401107",
+      "shippingAddress": "Flat 402, Shanti Park, Mira Road East, 401107",
+      "delivery_date": "Tomorrow Morning",
+      "deliveryDate": "Tomorrow Morning",
+      "delivery_time_slot": "07:00 AM - 10:00 AM",
+      "deliveryTimeSlot": "07:00 AM - 10:00 AM",
+      "delivery_slot_id": "slot_1",
+      "deliverySlotId": "slot_1",
+      "status": "Pending",
+      "order_status": "Pending",
+      "orderStatus": "Pending",
+      "payment_status": "paid",
+      "paymentStatus": "paid",
+      "created_at": "2026-11-16T18:57:02.967Z"
+    },
+    {
+      "id": "order_1794853902926",
+      "_id": "order_1794853902926",
+      "user_id": "user_consumer",
+      "user": {
+        "id": "user_consumer",
+        "_id": "user_consumer",
+        "name": "Priya Sharma",
+        "email": "consumer@farmtohome.com"
+      },
+      "items": [
+        {
+          "product": "prod_1",
+          "name": "Tomato",
+          "price": 30,
+          "quantity": 21,
+          "image": "https://images.unsplash.com/photo-1561136594-7f68413baa99?w=600&auto=format&fit=crop&q=80"
+        }
+      ],
+      "total_amount": 630,
+      "totalAmount": 630,
+      "shipping_address": "Flat 302, Palm Grove Apts, Indiranagar, Bengaluru",
+      "shippingAddress": "Flat 302, Palm Grove Apts, Indiranagar, Bengaluru",
+      "status": "processing",
+      "payment_status": "paid",
+      "paymentStatus": "paid",
+      "created_at": "2026-11-16T18:31:42.926Z"
+    },
     {
       "id": "order_1001",
       "_id": "order_1001",
@@ -801,6 +1057,417 @@
       "status": "resolved",
       "response": "Yes Priya! Early morning delivery has been noted with your farmer route.",
       "created_at": "2026-11-15T23:36:06.602Z"
+    }
+  ],
+  "farmers": [
+    {
+      "id": "farmer_1",
+      "_id": "farmer_1",
+      "user_id": "user_farmer",
+      "userId": "user_farmer",
+      "name": "Ramesh Patil",
+      "farm_name": "Uttan Coastal Agro Farm",
+      "farmName": "Uttan Coastal Agro Farm",
+      "location": "Uttan Green Belt, Mira Bhayandar",
+      "farm_size": "4.5 Acres",
+      "farmSize": "4.5 Acres",
+      "experience_years": 18,
+      "experienceYears": 18,
+      "bio": "Multi-generational cultivator practicing natural vermicomposting and sustainable coastal soil conservation in Uttan.",
+      "rating": 4.9,
+      "total_sales": 48500,
+      "totalSales": 48500,
+      "is_approved": true,
+      "isApproved": true,
+      "phone": "+91 98201 12345",
+      "image": "https://images.unsplash.com/photo-1595273670150-bd0c3c392e46?w=400&auto=format&fit=crop&q=80",
+      "created_at": "2026-01-10T06:00:00.000Z"
+    },
+    {
+      "id": "farmer_2",
+      "_id": "farmer_2",
+      "user_id": "user_farmer_2",
+      "userId": "user_farmer_2",
+      "name": "Sunita Mhatre",
+      "farm_name": "Chena Creek Organic Greens",
+      "farmName": "Chena Creek Organic Greens",
+      "location": "Chena River Valley, Mira Bhayandar",
+      "farm_size": "3 Acres",
+      "farmSize": "3 Acres",
+      "experience_years": 12,
+      "experienceYears": 12,
+      "bio": "Specializing in daily early-morning hand-harvested leafy greens and seasonal vegetables irrigated with natural spring water.",
+      "rating": 4.88,
+      "total_sales": 36200,
+      "totalSales": 36200,
+      "is_approved": true,
+      "isApproved": true,
+      "phone": "+91 98202 23456",
+      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&auto=format&fit=crop&q=80",
+      "created_at": "2026-02-14T06:00:00.000Z"
+    },
+    {
+      "id": "farmer_3",
+      "_id": "farmer_3",
+      "user_id": "user_farmer_3",
+      "userId": "user_farmer_3",
+      "name": "Ganesh Tare",
+      "farm_name": "Rai-Morva Family Fields",
+      "farmName": "Rai-Morva Family Fields",
+      "location": "Rai Village, Bhayandar West",
+      "farm_size": "2.5 Acres",
+      "farmSize": "2.5 Acres",
+      "experience_years": 9,
+      "experienceYears": 9,
+      "bio": "Pesticide-free smallholder farm cultivating traditional native root vegetables, gourds, and native herbs.",
+      "rating": 4.82,
+      "total_sales": 21900,
+      "totalSales": 21900,
+      "is_approved": true,
+      "isApproved": true,
+      "phone": "+91 98203 34567",
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80",
+      "created_at": "2026-03-01T06:00:00.000Z"
+    }
+  ],
+  "categories": [
+    {
+      "id": "cat_veg",
+      "_id": "cat_veg",
+      "name": "Fresh Vegetables",
+      "slug": "vegetables",
+      "description": "Daily morning hand-harvested kitchen vegetables from Uttan & Rai",
+      "icon": "FaCarrot",
+      "count": "9 items"
+    },
+    {
+      "id": "cat_greens",
+      "_id": "cat_greens",
+      "name": "Leafy Greens",
+      "slug": "leafy_greens",
+      "description": "Tender, pesticide-tested spinach, methi & coriander from Chena Creek",
+      "icon": "FaLeaf",
+      "count": "4 items"
+    },
+    {
+      "id": "cat_fruits",
+      "_id": "cat_fruits",
+      "name": "Farm Fruits",
+      "slug": "fruits",
+      "description": "Naturally ripened orchard fruits including Vasai bananas & mangoes",
+      "icon": "FaAppleAlt",
+      "count": "6 items"
+    },
+    {
+      "id": "cat_grains",
+      "_id": "cat_grains",
+      "name": "Grains & Pulses",
+      "slug": "grains",
+      "description": "Aged heritage rice, golden wheat, and unpolished farm dals",
+      "icon": "FaSeedling",
+      "count": "6 items"
+    },
+    {
+      "id": "cat_dairy",
+      "_id": "cat_dairy",
+      "name": "Farm Dairy & Eggs",
+      "slug": "dairy",
+      "description": "Pure A2 cow milk, thick artisanal curd & country brown eggs",
+      "icon": "FaEgg",
+      "count": "3 items"
+    },
+    {
+      "id": "cat_spices",
+      "_id": "cat_spices",
+      "name": "Spices & Herbs",
+      "slug": "spices",
+      "description": "Sun-dried chillies and freshly ground aromatics from village gardens",
+      "icon": "FaPepperHot",
+      "count": "2 items"
+    }
+  ],
+  "delivery_slots": [
+    {
+      "id": "slot_1",
+      "_id": "slot_1",
+      "slot_date": "2026-11-16",
+      "slotDate": "2026-11-16",
+      "time_window": "07:00 AM - 10:00 AM",
+      "timeWindow": "07:00 AM - 10:00 AM",
+      "label": "Morning Harvest Dispatch (7 AM - 10 AM)",
+      "max_capacity": 25,
+      "maxCapacity": 25,
+      "booked_count": 16,
+      "bookedCount": 14,
+      "is_active": true,
+      "isActive": true
+    },
+    {
+      "id": "slot_2",
+      "_id": "slot_2",
+      "slot_date": "2026-11-16",
+      "slotDate": "2026-11-16",
+      "time_window": "11:00 AM - 02:00 PM",
+      "timeWindow": "11:00 AM - 02:00 PM",
+      "label": "Mid-Day Fresh Batch (11 AM - 2 PM)",
+      "max_capacity": 20,
+      "maxCapacity": 20,
+      "booked_count": 8,
+      "bookedCount": 8,
+      "is_active": true,
+      "isActive": true
+    },
+    {
+      "id": "slot_3",
+      "_id": "slot_3",
+      "slot_date": "2026-11-16",
+      "slotDate": "2026-11-16",
+      "time_window": "05:00 PM - 08:00 PM",
+      "timeWindow": "05:00 PM - 08:00 PM",
+      "label": "Evening Kitchen Dispatch (5 PM - 8 PM)",
+      "max_capacity": 25,
+      "maxCapacity": 25,
+      "booked_count": 19,
+      "bookedCount": 19,
+      "is_active": true,
+      "isActive": true
+    },
+    {
+      "id": "slot_4",
+      "_id": "slot_4",
+      "slot_date": "2026-11-17",
+      "slotDate": "2026-11-17",
+      "time_window": "07:00 AM - 10:00 AM",
+      "timeWindow": "07:00 AM - 10:00 AM",
+      "label": "Morning Harvest Dispatch (7 AM - 10 AM)",
+      "max_capacity": 25,
+      "maxCapacity": 25,
+      "booked_count": 5,
+      "bookedCount": 5,
+      "is_active": true,
+      "isActive": true
+    },
+    {
+      "id": "slot_5",
+      "_id": "slot_5",
+      "slot_date": "2026-11-17",
+      "slotDate": "2026-11-17",
+      "time_window": "11:00 AM - 02:00 PM",
+      "timeWindow": "11:00 AM - 02:00 PM",
+      "label": "Mid-Day Fresh Batch (11 AM - 2 PM)",
+      "max_capacity": 20,
+      "maxCapacity": 20,
+      "booked_count": 2,
+      "bookedCount": 2,
+      "is_active": true,
+      "isActive": true
+    },
+    {
+      "id": "slot_6",
+      "_id": "slot_6",
+      "slot_date": "2026-11-17",
+      "slotDate": "2026-11-17",
+      "time_window": "05:00 PM - 08:00 PM",
+      "timeWindow": "05:00 PM - 08:00 PM",
+      "label": "Evening Kitchen Dispatch (5 PM - 8 PM)",
+      "max_capacity": 25,
+      "maxCapacity": 25,
+      "booked_count": 6,
+      "bookedCount": 6,
+      "is_active": true,
+      "isActive": true
+    },
+    {
+      "id": "slot_7",
+      "_id": "slot_7",
+      "slot_date": "2026-11-18",
+      "slotDate": "2026-11-18",
+      "time_window": "07:00 AM - 10:00 AM",
+      "timeWindow": "07:00 AM - 10:00 AM",
+      "label": "Morning Harvest Dispatch (7 AM - 10 AM)",
+      "max_capacity": 25,
+      "maxCapacity": 25,
+      "booked_count": 1,
+      "bookedCount": 1,
+      "is_active": true,
+      "isActive": true
+    },
+    {
+      "id": "slot_8",
+      "_id": "slot_8",
+      "slot_date": "2026-11-18",
+      "slotDate": "2026-11-18",
+      "time_window": "11:00 AM - 02:00 PM",
+      "timeWindow": "11:00 AM - 02:00 PM",
+      "label": "Mid-Day Fresh Batch (11 AM - 2 PM)",
+      "max_capacity": 20,
+      "maxCapacity": 20,
+      "booked_count": 0,
+      "bookedCount": 0,
+      "is_active": true,
+      "isActive": true
+    },
+    {
+      "id": "slot_9",
+      "_id": "slot_9",
+      "slot_date": "2026-11-18",
+      "slotDate": "2026-11-18",
+      "time_window": "05:00 PM - 08:00 PM",
+      "timeWindow": "05:00 PM - 08:00 PM",
+      "label": "Evening Kitchen Dispatch (5 PM - 8 PM)",
+      "max_capacity": 25,
+      "maxCapacity": 25,
+      "booked_count": 2,
+      "bookedCount": 2,
+      "is_active": true,
+      "isActive": true
+    }
+  ],
+  "deliveries": [
+    {
+      "id": "del_1001",
+      "_id": "del_1001",
+      "order_id": "order_1001",
+      "orderId": "order_1001",
+      "delivery_slot_id": "slot_1",
+      "deliverySlotId": "slot_1",
+      "delivery_status": "Out for Delivery",
+      "deliveryStatus": "Out for Delivery",
+      "driver_name": "Sanjay Raut (Mira Electric Van #03)",
+      "driverName": "Sanjay Raut (Mira Electric Van #03)",
+      "driver_phone": "+91 98205 99887",
+      "driverPhone": "+91 98205 99887",
+      "origin_hub": "Uttan Farmers Collection Hub",
+      "originHub": "Uttan Farmers Collection Hub",
+      "destination_area": "Beverly Park, Mira Road East",
+      "destinationArea": "Beverly Park, Mira Road East",
+      "current_lat": 19.2845,
+      "current_lng": 72.8612,
+      "estimated_arrival": "18-25 mins (In Transit on Kanakia Rd)",
+      "estimatedArrival": "18-25 mins (In Transit on Kanakia Rd)",
+      "updated_at": "2026-11-16T18:57:02.794Z"
+    },
+    {
+      "id": "del_order_1794855422966",
+      "_id": "del_order_1794855422966",
+      "order_id": "order_1794855422966",
+      "orderId": "order_1794855422966",
+      "delivery_slot_id": "slot_1",
+      "delivery_status": "Pending",
+      "driver_name": "Sanjay Raut (Mira Electric Van #03)",
+      "driver_phone": "+91 98205 99887",
+      "origin_hub": "Uttan Farmers Collection Hub (Mira Bhayandar)",
+      "destination_area": "Flat 402, Shanti Park, Mira Road East, 401107",
+      "current_lat": 19.2812,
+      "current_lng": 72.8561,
+      "estimated_arrival": "Scheduled for delivery window: 07:00 AM - 10:00 AM",
+      "updated_at": "2026-11-16T18:57:02.967Z"
+    },
+    {
+      "id": "del_order_1794855485668",
+      "_id": "del_order_1794855485668",
+      "order_id": "order_1794855485668",
+      "orderId": "order_1794855485668",
+      "delivery_slot_id": "slot_1",
+      "delivery_status": "Out for Delivery",
+      "driver_name": "Sanjay Raut (Mira Electric Van #03)",
+      "driver_phone": "+91 98205 99887",
+      "origin_hub": "Uttan Farmers Collection Hub (Mira Bhayandar)",
+      "destination_area": "Flat 402, Shanti Park, Mira Road East, 401107",
+      "current_lat": 19.2845,
+      "current_lng": 72.8612,
+      "estimated_arrival": "15-20 mins (Driver on Mira Road East route)",
+      "updated_at": "2026-11-16T18:58:05.742Z",
+      "deliveryStatus": "Out for Delivery"
+    }
+  ],
+  "reviews": [
+    {
+      "id": "rev_1",
+      "_id": "rev_1",
+      "product_id": "prod_1",
+      "productId": "prod_1",
+      "farmer_id": "user_farmer",
+      "farmerId": "user_farmer",
+      "user_id": "user_consumer",
+      "userId": "user_consumer",
+      "user_name": "Priya Sharma",
+      "userName": "Priya Sharma",
+      "rating": 5,
+      "comment": "The tomatoes were picked fresh this morning! Unbelievable sweetness compared to what we get at roadside mandis.",
+      "created_at": "2026-11-15T18:57:02.794Z"
+    },
+    {
+      "id": "rev_2",
+      "_id": "rev_2",
+      "product_id": "prod_4",
+      "productId": "prod_4",
+      "farmer_id": "user_farmer_2",
+      "farmerId": "user_farmer_2",
+      "user_id": "user_consumer",
+      "userId": "user_consumer",
+      "user_name": "Aaditya M.",
+      "userName": "Aaditya M.",
+      "rating": 5,
+      "comment": "Chena Creek spinach was completely crisp with zero yellow leaves or grit. Steamed it directly, tastes phenomenal.",
+      "created_at": "2026-11-16T06:57:02.794Z"
+    },
+    {
+      "id": "rev_3",
+      "_id": "rev_3",
+      "product_id": "prod_12",
+      "productId": "prod_12",
+      "farmer_id": "user_farmer_3",
+      "farmerId": "user_farmer_3",
+      "user_id": "user_consumer",
+      "userId": "user_consumer",
+      "user_name": "Rajesh Nair",
+      "userName": "Rajesh Nair",
+      "rating": 5,
+      "comment": "Authentic Vasai Rajeli bananas! Naturally tree-ripened with unmistakable fragrance. 100% recommending Farm2Home to neighbours in Beverly Park.",
+      "created_at": "2026-11-16T12:57:02.794Z"
+    }
+  ],
+  "addresses": [
+    {
+      "id": "addr_1",
+      "_id": "addr_1",
+      "user_id": "user_consumer",
+      "userId": "user_consumer",
+      "full_name": "Priya Sharma",
+      "fullName": "Priya Sharma",
+      "phone": "+91 98204 45678",
+      "flat_building": "Flat 402, Beverly Park Tower A",
+      "flatBuilding": "Flat 402, Beverly Park Tower A",
+      "street": "Kanakia Road",
+      "area": "Mira Road East",
+      "landmark": "Near Cinemax Multiplex",
+      "pincode": "401107",
+      "lat": 19.2812,
+      "lng": 72.8561,
+      "is_default": true,
+      "isDefault": true,
+      "created_at": "2026-11-16T18:57:02.794Z"
+    },
+    {
+      "id": "addr_2",
+      "_id": "addr_2",
+      "user_id": "user_consumer",
+      "userId": "user_consumer",
+      "full_name": "Priya Sharma",
+      "fullName": "Priya Sharma",
+      "phone": "+91 98204 45678",
+      "flat_building": "Shop 12, Venkateshwar Plaza",
+      "flatBuilding": "Shop 12, Venkateshwar Plaza",
+      "street": "150 Feet Road",
+      "area": "Bhayandar West",
+      "landmark": "Opposite Maxus Mall",
+      "pincode": "401101",
+      "lat": 19.3015,
+      "lng": 72.8423,
+      "is_default": false,
+      "isDefault": false,
+      "created_at": "2026-11-16T18:57:02.794Z"
     }
   ]
 }

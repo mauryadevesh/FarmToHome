@@ -3,16 +3,30 @@ const router = express.Router();
 const dbAdapter = require('../services/dbAdapter');
 const { auth, isFarmerOrAdmin } = require('../middleware/auth');
 
+// @route   GET /api/products/categories
+// @desc    Get all produce categories
+router.get('/categories', async (req, res) => {
+  try {
+    const categories = await dbAdapter.getCategories();
+    return res.json(categories);
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    return res.status(500).json({ message: 'Error retrieving categories' });
+  }
+});
+
 // @route   GET /api/products
-// @desc    Get available products (or all products if all=true)
+// @desc    Get available products (filter by category, search, farmerId, or all)
 router.get('/', async (req, res) => {
   try {
-    const { category, all } = req.query;
+    const { category, all, search, farmerId } = req.query;
     const filter = {};
     if (all !== 'true') {
       filter.isAvailable = true;
     }
     if (category) filter.category = category;
+    if (search) filter.search = search;
+    if (farmerId) filter.farmerId = farmerId;
 
     const products = await dbAdapter.getProducts(filter);
     return res.json(products);
@@ -41,7 +55,7 @@ router.get('/:id', async (req, res) => {
 // @desc    Create a new product (Farmer or Admin)
 router.post('/', [auth, isFarmerOrAdmin], async (req, res) => {
   try {
-    const { name, description, price, category, image, stock, unit } = req.body;
+    const { name, description, price, category, image, stock, unit, originFarm, harvestDate } = req.body;
 
     if (!name || !description || price === undefined || !category || stock === undefined || !unit) {
       return res.status(400).json({ message: 'Please provide all required product details' });
@@ -55,7 +69,9 @@ router.post('/', [auth, isFarmerOrAdmin], async (req, res) => {
         category: category.trim(),
         image: image || 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=500',
         stock: parseInt(stock, 10),
-        unit: unit.trim()
+        unit: unit.trim(),
+        originFarm: originFarm || 'Mira Bhayandar Local Farm',
+        harvestDate: harvestDate || 'Morning Harvest (5:30 AM)'
       },
       req.user
     );
@@ -77,7 +93,7 @@ router.put('/:id', auth, async (req, res) => {
     }
 
     const userId = req.user.id || req.user._id;
-    const isOwner = existing.farmer_id === userId || existing.farmer?.id === userId || existing.farmer?._id === userId;
+    const isOwner = existing.farmer_id === userId || existing.farmerId === userId || existing.farmer?.id === userId || existing.farmer?._id === userId;
     const isAdmin = req.user.role === 'admin';
 
     if (!isOwner && !isAdmin) {
@@ -102,15 +118,15 @@ router.delete('/:id', auth, async (req, res) => {
     }
 
     const userId = req.user.id || req.user._id;
-    const isOwner = existing.farmer_id === userId || existing.farmer?.id === userId || existing.farmer?._id === userId;
+    const isOwner = existing.farmer_id === userId || existing.farmerId === userId || existing.farmer?.id === userId || existing.farmer?._id === userId;
     const isAdmin = req.user.role === 'admin';
 
     if (!isOwner && !isAdmin) {
       return res.status(403).json({ message: 'Access denied. You can only delete your own products.' });
     }
 
-    const result = await dbAdapter.deleteProduct(req.params.id);
-    return res.json(result);
+    await dbAdapter.deleteProduct(req.params.id);
+    return res.json({ message: 'Product deleted successfully' });
   } catch (error) {
     console.error('Error deleting product:', error);
     return res.status(500).json({ message: error.message || 'Server error deleting product' });

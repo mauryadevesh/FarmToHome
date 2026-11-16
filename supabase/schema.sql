@@ -1,15 +1,23 @@
 -- ============================================================
--- FarmToHome Supabase PostgreSQL Schema & Initial Seed Data
+-- Farm2Home Supabase PostgreSQL Schema
+-- Mira Bhayandar Peri-Urban Direct Agricultural Network
 -- ============================================================
 
--- Enable pgcrypto for UUID and bcrypt password generation
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
--- Drop existing tables if re-running
-DROP TABLE IF EXISTS support_tickets CASCADE;
+-- Drop existing tables in correct dependency order
+DROP TABLE IF EXISTS reviews CASCADE;
+DROP TABLE IF EXISTS deliveries CASCADE;
+DROP TABLE IF EXISTS order_items CASCADE;
 DROP TABLE IF EXISTS orders CASCADE;
+DROP TABLE IF EXISTS delivery_slots CASCADE;
+DROP TABLE IF EXISTS addresses CASCADE;
 DROP TABLE IF EXISTS cart_items CASCADE;
 DROP TABLE IF EXISTS products CASCADE;
+DROP TABLE IF EXISTS categories CASCADE;
+DROP TABLE IF EXISTS customers CASCADE;
+DROP TABLE IF EXISTS farmers CASCADE;
+DROP TABLE IF EXISTS support_tickets CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 
 -- ------------------------------------------------------------
@@ -23,6 +31,7 @@ CREATE TABLE users (
     role TEXT NOT NULL CHECK (role IN ('farmer', 'consumer', 'admin')),
     phone TEXT DEFAULT '',
     address TEXT DEFAULT '',
+    is_active BOOLEAN DEFAULT true,
     login_history JSONB DEFAULT '[]'::jsonb,
     last_login TIMESTAMPTZ,
     created_at TIMESTAMPTZ DEFAULT now(),
@@ -33,19 +42,73 @@ CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_role ON users(role);
 
 -- ------------------------------------------------------------
--- 2. PRODUCTS TABLE
+-- 2. FARMERS TABLE (Profile & Onboarding)
+-- ------------------------------------------------------------
+CREATE TABLE farmers (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    user_id TEXT UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    farm_name TEXT NOT NULL,
+    location TEXT NOT NULL, -- e.g., 'Uttan Organic Green Belt, Mira Bhayandar'
+    farm_size TEXT DEFAULT '3 Acres',
+    experience_years INTEGER DEFAULT 5,
+    bio TEXT DEFAULT '',
+    rating NUMERIC(3, 2) DEFAULT 4.85,
+    total_sales NUMERIC(12, 2) DEFAULT 0,
+    is_approved BOOLEAN DEFAULT true, -- Admins approve new farmer accounts
+    phone TEXT DEFAULT '',
+    created_at TIMESTAMPTZ DEFAULT now(),
+    updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX idx_farmers_user_id ON farmers(user_id);
+CREATE INDEX idx_farmers_is_approved ON farmers(is_approved);
+
+-- ------------------------------------------------------------
+-- 3. CUSTOMERS TABLE (Profile & Preferences)
+-- ------------------------------------------------------------
+CREATE TABLE customers (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    user_id TEXT UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    default_address TEXT DEFAULT '',
+    preferred_slot TEXT DEFAULT '07:00 AM - 10:00 AM',
+    phone TEXT DEFAULT '',
+    created_at TIMESTAMPTZ DEFAULT now(),
+    updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX idx_customers_user_id ON customers(user_id);
+
+-- ------------------------------------------------------------
+-- 4. CATEGORIES TABLE
+-- ------------------------------------------------------------
+CREATE TABLE categories (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    name TEXT NOT NULL,
+    slug TEXT UNIQUE NOT NULL,
+    description TEXT DEFAULT '',
+    icon TEXT DEFAULT 'FaLeaf',
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX idx_categories_slug ON categories(slug);
+
+-- ------------------------------------------------------------
+-- 5. PRODUCTS TABLE
 -- ------------------------------------------------------------
 CREATE TABLE products (
     id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    farmer_id TEXT REFERENCES users(id) ON DELETE SET NULL,
+    category TEXT NOT NULL,
     name TEXT NOT NULL,
     description TEXT NOT NULL,
     price NUMERIC(10, 2) NOT NULL CHECK (price >= 0),
-    category TEXT NOT NULL,
-    image TEXT DEFAULT 'https://via.placeholder.com/300x300?text=Farm+Product',
-    stock INTEGER NOT NULL DEFAULT 100 CHECK (stock >= 0),
-    unit TEXT NOT NULL,
-    farmer_id TEXT REFERENCES users(id) ON DELETE SET NULL,
+    unit TEXT NOT NULL DEFAULT '1 kg',
+    stock INTEGER NOT NULL DEFAULT 50 CHECK (stock >= 0),
+    image TEXT DEFAULT 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=500',
+    origin_farm TEXT DEFAULT 'Uttan Agro Cooperative',
+    harvest_date TEXT DEFAULT 'Morning Harvest (6:00 AM)',
     is_available BOOLEAN DEFAULT true,
+    rating NUMERIC(3, 2) DEFAULT 4.80,
     created_at TIMESTAMPTZ DEFAULT now(),
     updated_at TIMESTAMPTZ DEFAULT now()
 );
@@ -55,7 +118,28 @@ CREATE INDEX idx_products_farmer_id ON products(farmer_id);
 CREATE INDEX idx_products_is_available ON products(is_available);
 
 -- ------------------------------------------------------------
--- 3. CART ITEMS TABLE
+-- 6. ADDRESSES TABLE (Mira Bhayandar Localities)
+-- ------------------------------------------------------------
+CREATE TABLE addresses (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    full_name TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    flat_building TEXT NOT NULL,
+    street TEXT NOT NULL,
+    area TEXT NOT NULL, -- e.g., 'Mira Road East', 'Bhayandar West', 'Beverly Park'
+    landmark TEXT DEFAULT '',
+    pincode TEXT NOT NULL DEFAULT '401107',
+    lat NUMERIC(9, 6) DEFAULT 19.2812,
+    lng NUMERIC(9, 6) DEFAULT 72.8561,
+    is_default BOOLEAN DEFAULT false,
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX idx_addresses_user_id ON addresses(user_id);
+
+-- ------------------------------------------------------------
+-- 7. CART ITEMS TABLE
 -- ------------------------------------------------------------
 CREATE TABLE cart_items (
     id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
@@ -70,32 +154,103 @@ CREATE TABLE cart_items (
 CREATE INDEX idx_cart_items_user_id ON cart_items(user_id);
 
 -- ------------------------------------------------------------
--- 4. ORDERS TABLE
+-- 8. DELIVERY SLOTS TABLE (Capacity & Overbooking Guard)
+-- ------------------------------------------------------------
+CREATE TABLE delivery_slots (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    slot_date DATE NOT NULL,
+    time_window TEXT NOT NULL CHECK (time_window IN ('07:00 AM - 10:00 AM', '11:00 AM - 02:00 PM', '05:00 PM - 08:00 PM')),
+    max_capacity INTEGER NOT NULL DEFAULT 20,
+    booked_count INTEGER NOT NULL DEFAULT 0 CHECK (booked_count <= max_capacity),
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    UNIQUE(slot_date, time_window)
+);
+
+CREATE INDEX idx_delivery_slots_date ON delivery_slots(slot_date);
+
+-- ------------------------------------------------------------
+-- 9. ORDERS TABLE
 -- ------------------------------------------------------------
 CREATE TABLE orders (
     id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
     user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    delivery_slot_id TEXT REFERENCES delivery_slots(id) ON DELETE SET NULL,
     items JSONB NOT NULL DEFAULT '[]'::jsonb,
     total_amount NUMERIC(10, 2) NOT NULL,
     shipping_address TEXT NOT NULL,
-    status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('ordered', 'pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled')),
-    payment_status TEXT NOT NULL DEFAULT 'pending' CHECK (payment_status IN ('pending', 'paid', 'failed')),
+    delivery_date TEXT NOT NULL,
+    delivery_time_slot TEXT NOT NULL,
+    payment_status TEXT NOT NULL DEFAULT 'pending' CHECK (payment_status IN ('pending', 'paid', 'cod')),
+    order_status TEXT NOT NULL DEFAULT 'Pending' CHECK (order_status IN ('Pending', 'Accepted', 'Preparing', 'Ready', 'Out for Delivery', 'Delivered', 'Cancelled')),
     created_at TIMESTAMPTZ DEFAULT now(),
     updated_at TIMESTAMPTZ DEFAULT now()
 );
 
 CREATE INDEX idx_orders_user_id ON orders(user_id);
-CREATE INDEX idx_orders_status ON orders(status);
+CREATE INDEX idx_orders_status ON orders(order_status);
 
 -- ------------------------------------------------------------
--- 5. SUPPORT TICKETS TABLE
+-- 10. ORDER ITEMS TABLE (Relational Mapping)
+-- ------------------------------------------------------------
+CREATE TABLE order_items (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    order_id TEXT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    product_id TEXT REFERENCES products(id) ON DELETE SET NULL,
+    quantity INTEGER NOT NULL CHECK (quantity >= 1),
+    unit_price NUMERIC(10, 2) NOT NULL,
+    subtotal NUMERIC(10, 2) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX idx_order_items_order_id ON order_items(order_id);
+
+-- ------------------------------------------------------------
+-- 11. DELIVERIES TABLE (6-Stage Map Tracking)
+-- ------------------------------------------------------------
+CREATE TABLE deliveries (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    order_id TEXT UNIQUE NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    delivery_slot_id TEXT REFERENCES delivery_slots(id) ON DELETE SET NULL,
+    delivery_status TEXT NOT NULL DEFAULT 'Pending' CHECK (delivery_status IN ('Pending', 'Accepted', 'Preparing', 'Ready', 'Out for Delivery', 'Delivered', 'Cancelled')),
+    driver_name TEXT DEFAULT 'Rakesh Patil (Mira Green Dispatch)',
+    driver_phone TEXT DEFAULT '+91 98201 54321',
+    origin_hub TEXT DEFAULT 'Uttan Farmers Collection Center',
+    destination_area TEXT DEFAULT 'Mira Road East',
+    current_lat NUMERIC(9, 6) DEFAULT 19.2812,
+    current_lng NUMERIC(9, 6) DEFAULT 72.8561,
+    estimated_arrival TEXT DEFAULT 'Within delivery window',
+    updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX idx_deliveries_order_id ON deliveries(order_id);
+CREATE INDEX idx_deliveries_status ON deliveries(delivery_status);
+
+-- ------------------------------------------------------------
+-- 12. REVIEWS TABLE
+-- ------------------------------------------------------------
+CREATE TABLE reviews (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    product_id TEXT REFERENCES products(id) ON DELETE CASCADE,
+    farmer_id TEXT REFERENCES users(id) ON DELETE CASCADE,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    comment TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX idx_reviews_product_id ON reviews(product_id);
+CREATE INDEX idx_reviews_farmer_id ON reviews(farmer_id);
+
+-- ------------------------------------------------------------
+-- 13. SUPPORT TICKETS TABLE
 -- ------------------------------------------------------------
 CREATE TABLE support_tickets (
     id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
     user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     subject TEXT NOT NULL,
     message TEXT NOT NULL,
-    category TEXT NOT NULL DEFAULT 'other' CHECK (category IN ('order', 'product', 'payment', 'account', 'other')),
+    category TEXT NOT NULL DEFAULT 'other' CHECK (category IN ('order', 'product', 'payment', 'delivery', 'account', 'other')),
     priority TEXT NOT NULL DEFAULT 'medium' CHECK (priority IN ('low', 'medium', 'high')),
     status TEXT NOT NULL DEFAULT 'open' CHECK (status IN ('open', 'in_progress', 'resolved', 'closed')),
     response TEXT DEFAULT '',
@@ -106,65 +261,40 @@ CREATE TABLE support_tickets (
 );
 
 CREATE INDEX idx_support_user_id ON support_tickets(user_id);
-CREATE INDEX idx_support_status ON support_tickets(status);
 
 -- ------------------------------------------------------------
 -- ROW LEVEL SECURITY (RLS)
 -- ------------------------------------------------------------
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE farmers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
+ALTER TABLE addresses ENABLE ROW LEVEL SECURITY;
 ALTER TABLE cart_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE delivery_slots ENABLE ROW LEVEL SECURITY;
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE order_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE deliveries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
 ALTER TABLE support_tickets ENABLE ROW LEVEL SECURITY;
 
 -- Allow anon and service role full access (Backend handles application-level auth)
 CREATE POLICY "Public read products" ON products FOR SELECT USING (true);
+CREATE POLICY "Public read categories" ON categories FOR SELECT USING (true);
+CREATE POLICY "Public read farmers" ON farmers FOR SELECT USING (true);
+CREATE POLICY "Public read slots" ON delivery_slots FOR SELECT USING (true);
+CREATE POLICY "Public read reviews" ON reviews FOR SELECT USING (true);
+
 CREATE POLICY "Service role full access users" ON users FOR ALL USING (true);
+CREATE POLICY "Service role full access farmers" ON farmers FOR ALL USING (true);
+CREATE POLICY "Service role full access customers" ON customers FOR ALL USING (true);
 CREATE POLICY "Service role full access products" ON products FOR ALL USING (true);
+CREATE POLICY "Service role full access addresses" ON addresses FOR ALL USING (true);
 CREATE POLICY "Service role full access cart_items" ON cart_items FOR ALL USING (true);
+CREATE POLICY "Service role full access delivery_slots" ON delivery_slots FOR ALL USING (true);
 CREATE POLICY "Service role full access orders" ON orders FOR ALL USING (true);
+CREATE POLICY "Service role full access order_items" ON order_items FOR ALL USING (true);
+CREATE POLICY "Service role full access deliveries" ON deliveries FOR ALL USING (true);
+CREATE POLICY "Service role full access reviews" ON reviews FOR ALL USING (true);
 CREATE POLICY "Service role full access support_tickets" ON support_tickets FOR ALL USING (true);
-
--- ------------------------------------------------------------
--- DEFAULT SEED DATA
--- ------------------------------------------------------------
-
--- Seed Users (Bcrypt passwords via crypt)
-INSERT INTO users (id, name, email, password, role, phone, address)
-VALUES
-    ('user_admin', 'Admin Desk', 'admin@farmtohome.com', crypt('admin123', gen_salt('bf', 10)), 'admin', '+91 76710 14068', 'FarmToHome Operations Center, Sector 4, Bengaluru'),
-    ('user_farmer', 'Kisan Ramesh Kumar', 'farmer@farmtohome.com', crypt('password123', gen_salt('bf', 10)), 'farmer', '+91 98765 12345', 'Green Valley Organic Farms, Doddaballapura, Karnataka'),
-    ('user_consumer', 'Priya Sharma', 'consumer@farmtohome.com', crypt('password123', gen_salt('bf', 10)), 'consumer', '+91 98765 43210', 'Flat 302, Palm Grove Apts, Indiranagar, Bengaluru')
-ON CONFLICT (email) DO NOTHING;
-
--- Seed Products
-INSERT INTO products (id, name, description, price, category, image, stock, unit, farmer_id, is_available)
-VALUES
-    ('prod_1', 'Tomato', 'Fresh, juicy, pesticide-free farm tomatoes.', 30.00, 'vegetables', 'https://images.unsplash.com/photo-1561136594-7f68413baa99?w=600&auto=format&fit=crop&q=80', 100, '1 kg', 'user_farmer', true),
-    ('prod_2', 'Onion', 'Crisp organic red onions freshly harvested from Karnataka fields.', 35.00, 'vegetables', 'https://images.unsplash.com/photo-1508747703725-719777637510?w=600&auto=format&fit=crop&q=80', 100, '1 kg', 'user_farmer', true),
-    ('prod_3', 'Potato', 'Farm-fresh premium baking and cooking potatoes.', 25.00, 'vegetables', 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600&auto=format&fit=crop&q=80', 120, '1 kg', 'user_farmer', true),
-    ('prod_4', 'Carrot', 'Sweet, nutrient-rich tender orange carrots.', 50.00, 'vegetables', 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=600&auto=format&fit=crop&q=80', 80, '1 kg', 'user_farmer', true),
-    ('prod_5', 'Brinjal', 'Glossy purple eggplants directly from organic gardens.', 40.00, 'vegetables', 'https://images.unsplash.com/photo-1528826007177-f38517ce9a8a?w=600&auto=format&fit=crop&q=80', 60, '1 kg', 'user_farmer', true),
-    ('prod_6', 'Cabbage', 'Crisp, firmly packed fresh green cabbage head.', 30.00, 'vegetables', 'https://images.unsplash.com/photo-1556801712-76c8eb07bbc9?w=600&auto=format&fit=crop&q=80', 50, '1 pc', 'user_farmer', true),
-    ('prod_7', 'Cauliflower', 'Pure white fresh cauliflower head rich in dietary fiber.', 45.00, 'vegetables', 'https://images.unsplash.com/photo-1568584711075-3d021a7c3ca3?w=600&auto=format&fit=crop&q=80', 40, '1 pc', 'user_farmer', true),
-    ('prod_8', 'Green Chilli', 'Spicy, zesty fresh hand-picked green chillies.', 80.00, 'vegetables', 'https://images.unsplash.com/photo-1597115580039-b849ed2d6398?w=600&auto=format&fit=crop&q=80', 50, '250 g', 'user_farmer', true),
-    ('prod_9', 'Capsicum', 'Crisp bell peppers packed with vitamins and antioxidants.', 70.00, 'vegetables', 'https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?w=600&auto=format&fit=crop&q=80', 70, '500 g', 'user_farmer', true),
-    ('prod_10', 'Red Chilli', 'Sun-dried high aroma red chillies for rich culinary flavors.', 200.00, 'spices', 'https://images.unsplash.com/photo-1588252303782-cb80119abd6d?w=600&auto=format&fit=crop&q=80', 30, '1 kg', 'user_farmer', true),
-    ('prod_11', 'Apple', 'Sweet, crunchy Shimla apples picked at peak ripeness.', 160.00, 'fruits', 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=600&auto=format&fit=crop&q=80', 90, '1 kg', 'user_farmer', true),
-    ('prod_12', 'Banana', 'Naturally ripened sweet bananas packed with potassium.', 60.00, 'fruits', 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&auto=format&fit=crop&q=80', 80, '1 dozen', 'user_farmer', true),
-    ('prod_13', 'Mango', 'Fragrant, succulent seasonal premium mangoes.', 120.00, 'fruits', 'https://images.unsplash.com/photo-1553279768-865429fa0078?w=600&auto=format&fit=crop&q=80', 60, '1 kg', 'user_farmer', true),
-    ('prod_14', 'Grapes', 'Sweet, seedless fresh green grapes.', 90.00, 'fruits', 'https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=600&auto=format&fit=crop&q=80', 75, '1 kg', 'user_farmer', true),
-    ('prod_15', 'Pomegranate', 'Ruby-red, juicy antioxidant-packed pomegranates.', 180.00, 'fruits', 'https://images.unsplash.com/photo-1541344999736-83eca272f6fc?w=600&auto=format&fit=crop&q=80', 45, '1 kg', 'user_farmer', true),
-    ('prod_16', 'Watermelon', 'Refreshing, sweet organic watermelons for summer hydration.', 40.00, 'fruits', 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600&auto=format&fit=crop&q=80', 30, '1 pc', 'user_farmer', true),
-    ('prod_17', 'Rice', 'Aromatic aged Sona Masoori unpolished farm rice.', 55.00, 'grains', 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&auto=format&fit=crop&q=80', 200, '1 kg', 'user_farmer', true),
-    ('prod_18', 'Wheat', 'Cleaned high-protein whole grain organic golden wheat.', 30.00, 'grains', 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&auto=format&fit=crop&q=80', 250, '1 kg', 'user_farmer', true),
-    ('prod_19', 'Maize', 'Sweet, sun-ripened whole corn maize.', 28.00, 'grains', 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=600&auto=format&fit=crop&q=80', 150, '1 kg', 'user_farmer', true),
-    ('prod_20', 'Sugarcane', 'Sweet, juicy farm sugarcane stalks.', 15.00, 'grains', 'https://upload.wikimedia.org/wikipedia/commons/d/d0/Sugarcane_stalks.jpg', 100, '1 stick', 'user_farmer', true),
-    ('prod_21', 'Groundnut', 'Crunchy, rich organic groundnuts from local harvest.', 90.00, 'pulses', 'https://images.unsplash.com/photo-1546545584-c03ac781caaf?w=600&auto=format&fit=crop&q=80', 110, '1 kg', 'user_farmer', true),
-    ('prod_22', 'Tur Dal', 'Pure unpolished protein-rich pigeon pea dal.', 130.00, 'pulses', 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Split_pea.jpg', 100, '1 kg', 'user_farmer', true),
-    ('prod_23', 'Moong Dal', 'Nutritious, easy-to-digest yellow split moong dal.', 110.00, 'pulses', 'https://upload.wikimedia.org/wikipedia/commons/a/a1/Green_Gram_Dal_%28_%E0%A6%96%E0%A7%8B%E0%A6%B8%E0%A6%BE_%E0%A6%B8%E0%A6%B9_%E0%A6%8F%E0%A6%AC%E0%A6%82_%E0%A6%96%E0%A7%8B%E0%A6%B8%E0%A6%BE_%E0%A6%9B%E0%A6%BE%E0%A6%A1%E0%A6%BC%E0%A6%BE_%E0%A6%AE%E0%A7%81%E0%A6%97_%E0%A6%A1%E0%A6%BE%E0%A6%B2%29.JPG', 100, '1 kg', 'user_farmer', true),
-    ('prod_24', 'Chana Dal', 'Wholesome split Bengal gram dal with authentic aroma.', 95.00, 'pulses', 'https://images.unsplash.com/photo-1521763069287-579ca77694e8?w=600&auto=format&fit=crop&q=80', 120, '1 kg', 'user_farmer', true),
-    ('prod_25', 'Milk', 'Fresh, pure unadulterated whole cow milk.', 60.00, 'dairy', 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=600&auto=format&fit=crop&q=80', 50, '1 L', 'user_farmer', true),
-    ('prod_26', 'Curd', 'Thick, creamy traditional artisanal probiotic curd.', 50.00, 'dairy', 'https://images.unsplash.com/photo-1571212515416-fef01fc43637?w=600&auto=format&fit=crop&q=80', 40, '500 g', 'user_farmer', true),
-    ('prod_27', 'Eggs', 'Free-range country brown farm eggs with golden yolks.', 60.00, 'dairy', 'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=600&auto=format&fit=crop&q=80', 80, '6 pcs', 'user_farmer', true)
-ON CONFLICT (id) DO NOTHING;

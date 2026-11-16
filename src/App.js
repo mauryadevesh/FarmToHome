@@ -24,6 +24,7 @@ import { AnimatePresence } from 'framer-motion';
 import { useAuth } from './contexts/AuthContext';
 import './App.css';
 import './styles/admin.css';
+import './styles/farm2home.css';
 
 // Protected route that redirects based on user role
 const RoleBasedRedirect = () => {
@@ -92,6 +93,14 @@ const AppContent = () => {
             />
             <Route
               path="/tracking"
+              element={
+                <ProtectedRoute>
+                  <OrderTracking />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/tracking/:orderId"
               element={
                 <ProtectedRoute>
                   <OrderTracking />

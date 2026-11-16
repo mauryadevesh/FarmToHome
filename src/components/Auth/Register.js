@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { FaUserPlus, FaLeaf, FaShoppingBag, FaExclamationCircle, FaCheckCircle } from 'react-icons/fa';
+import { FaUserPlus, FaLeaf, FaShoppingBag, FaExclamationCircle, FaCheckCircle, FaMapMarkerAlt } from 'react-icons/fa';
 import { PageTransition, motion, AnimatePresence } from '../UI/Motion';
 
 const Register = () => {
@@ -16,6 +16,7 @@ const Register = () => {
     role: initialRole,
     phone: '',
     address: '',
+    farmName: ''
   });
   const [errors, setErrors] = useState({});
   const { register, loading, error, clearError } = useAuth();
@@ -68,7 +69,11 @@ const Register = () => {
     }
 
     if (!formData.address.trim()) {
-      newErrors.address = formData.role === 'farmer' ? 'Farm location / village is required' : 'Delivery address is required';
+      newErrors.address = formData.role === 'farmer' ? 'Farm location / village near Mira Bhayandar is required' : 'Delivery address in Mira Bhayandar is required';
+    }
+
+    if (formData.role === 'farmer' && !formData.farmName.trim()) {
+      newErrors.farmName = 'Farm or nursery name is required';
     }
 
     if (!formData.password) {
@@ -96,7 +101,10 @@ const Register = () => {
     }
 
     try {
-      const { confirmPassword, ...registrationData } = formData;
+      const { confirmPassword, farmName, ...registrationData } = formData;
+      if (formData.role === 'farmer') {
+        registrationData.farm_name = farmName;
+      }
       const result = await register(registrationData, (user) => {
         if (user.role === 'farmer') {
           navigate('/farmer-dashboard', { replace: true });
@@ -131,8 +139,8 @@ const Register = () => {
           <div className="auth-icon-badge">
             <FaLeaf />
           </div>
-          <h1>Join FarmToHome</h1>
-          <p>Direct farm-to-table connection with honest pricing and fresh produce.</p>
+          <h1>Join Farm2Home</h1>
+          <p>Direct farm-to-table connection with honest pricing and fresh harvest for Mira Bhayandar.</p>
         </div>
 
         <AnimatePresence>
@@ -189,7 +197,7 @@ const Register = () => {
                   <span className="role-choice-title">Buy Fresh Produce</span>
                   <span className="role-choice-badge">Consumer</span>
                   <p className="role-choice-desc">
-                    Order fresh morning harvests delivered directly to your doorstep.
+                    Order morning harvests picked from Uttan & Chena Creek, delivered to your doorstep.
                   </p>
                 </div>
               </button>
@@ -214,9 +222,9 @@ const Register = () => {
                 </div>
                 <div className="role-choice-content">
                   <span className="role-choice-title">Sell Farm Harvest</span>
-                  <span className="role-choice-badge">Farmer</span>
+                  <span className="role-choice-badge">Cultivator</span>
                   <p className="role-choice-desc">
-                    List your crops, set honest prices, and sell directly to consumers.
+                    List crops with 0% middleman deduction and direct scheduled delivery.
                   </p>
                 </div>
               </button>
@@ -232,11 +240,28 @@ const Register = () => {
               value={formData.name}
               onChange={handleChange}
               className={`form-input ${errors.name ? 'error' : ''}`}
-              placeholder="e.g. Ramesh Kumar or Priya Sharma"
+              placeholder="e.g. Ramesh Patil or Priya Sharma"
               disabled={loading}
             />
             {errors.name && <span className="error-message">{errors.name}</span>}
           </div>
+
+          {formData.role === 'farmer' && (
+            <div className="form-group">
+              <label htmlFor="farmName" className="form-label">Farm / Nursery Name</label>
+              <input
+                type="text"
+                id="farmName"
+                name="farmName"
+                value={formData.farmName}
+                onChange={handleChange}
+                className={`form-input ${errors.farmName ? 'error' : ''}`}
+                placeholder="e.g. Uttan Coastal Agro Farm or Chena River Greens"
+                disabled={loading}
+              />
+              {errors.farmName && <span className="error-message">{errors.farmName}</span>}
+            </div>
+          )}
 
           <div className="form-group">
             <label htmlFor="email" className="form-label">Email Address</label>
@@ -254,7 +279,7 @@ const Register = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="phone" className="form-label">Phone Number</label>
+            <label htmlFor="phone" className="form-label">Phone Number (For Delivery Coordination)</label>
             <input
               type="tel"
               id="phone"
@@ -262,7 +287,7 @@ const Register = () => {
               value={formData.phone}
               onChange={handleChange}
               className={`form-input ${errors.phone ? 'error' : ''}`}
-              placeholder="e.g. +91 98765 43210"
+              placeholder="e.g. +91 98201 12345"
               disabled={loading}
             />
             {errors.phone && <span className="error-message">{errors.phone}</span>}
@@ -270,7 +295,7 @@ const Register = () => {
 
           <div className="form-group">
             <label htmlFor="address" className="form-label">
-              {formData.role === 'farmer' ? 'Farm Location / Village & District' : 'Home Delivery Address'}
+              {formData.role === 'farmer' ? 'Farm Location / Village Belt near Mira Bhayandar' : 'Delivery Address in Mira Bhayandar'}
             </label>
             <textarea
               id="address"
@@ -278,8 +303,8 @@ const Register = () => {
               value={formData.address}
               onChange={handleChange}
               className={`form-input ${errors.address ? 'error' : ''}`}
-              placeholder={formData.role === 'farmer' ? 'e.g. Green Valley Farm, Doddaballapura, Karnataka' : 'e.g. Flat 302, Palm Grove Apts, Indiranagar, Bengaluru'}
-              rows="3"
+              placeholder={formData.role === 'farmer' ? 'e.g. Survey 42, Uttan Coastal Green Belt, Mira Bhayandar 401106' : 'e.g. Flat 402, Beverly Park, Kanakia Road, Mira Road East 401107'}
+              rows="2"
               disabled={loading}
             />
             {errors.address && <span className="error-message">{errors.address}</span>}
@@ -325,7 +350,7 @@ const Register = () => {
             whileTap={{ scale: 0.98 }}
           >
             <FaUserPlus style={{ marginRight: '8px' }} />
-            {loading ? 'Creating Your Account...' : `Join as ${formData.role === 'farmer' ? 'Farmer' : 'Consumer'}`}
+            {loading ? 'Creating Your Account...' : `Join as ${formData.role === 'farmer' ? 'Cultivator' : 'Consumer'}`}
           </motion.button>
         </form>
 

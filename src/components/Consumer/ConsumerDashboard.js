@@ -136,8 +136,8 @@ const ConsumerDashboard = () => {
             <FaHandsHelping />
           </span>
           <div>
-            <h4>Human Helpline & WhatsApp</h4>
-            <p>Talk to our Bangalore operations team directly at +91 76710 14068 for any assistance.</p>
+            <h4>Mira Bhayandar Helpline & WhatsApp</h4>
+            <p>Talk to our local dispatch team directly at +91 98200 12345 for any assistance.</p>
           </div>
         </div>
       </div>

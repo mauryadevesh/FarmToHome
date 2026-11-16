@@ -1,4 +1,4 @@
-// API Service for FarmToHome
+// API Service for Farm2Home (Mira Bhayandar Agricultural Direct Network)
 let rawBase = process.env.REACT_APP_API_URL;
 if (!rawBase) {
   // On Vercel and production deployments, use relative /api on the same origin
@@ -67,7 +67,7 @@ class ApiService {
       return data;
     } catch (error) {
       if (!error.response) {
-        error.message = 'Unable to connect to FarmToHome API. Please ensure the backend is reachable.';
+        error.message = 'Unable to connect to Farm2Home API. Please ensure the backend is reachable.';
         error.response = { message: error.message };
       }
       throw error;
@@ -140,9 +140,63 @@ class ApiService {
     }
   }
 
+  // Farmers & Categories
+  async getFarmers() {
+    return this.get('/auth/farmers');
+  }
+
+  async getAdminFarmers() {
+    return this.get('/admin/farmers');
+  }
+
+  async approveFarmer(farmerId, isApproved) {
+    return this.put(`/admin/farmers/${farmerId}/approve`, { isApproved });
+  }
+
+  async getCategories() {
+    return this.get('/products/categories');
+  }
+
+  // Addresses
+  async getAddresses() {
+    return this.get('/auth/addresses');
+  }
+
+  async createAddress(addressData) {
+    return this.post('/auth/addresses', addressData);
+  }
+
+  // Delivery Slots & Tracking
+  async getDeliverySlots(date) {
+    const endpoint = date ? `/delivery/slots?date=${encodeURIComponent(date)}` : '/delivery/slots';
+    return this.get(endpoint);
+  }
+
+  async createDeliverySlot(slotData) {
+    return this.post('/delivery/slots', slotData);
+  }
+
+  async updateDeliverySlot(slotId, slotData) {
+    return this.put(`/delivery/slots/${slotId}`, slotData);
+  }
+
+  async getDeliveryTracking(orderId) {
+    return this.get(`/delivery/track/${orderId}`);
+  }
+
+  async updateDeliveryStatus(orderId, statusData) {
+    return this.put(`/delivery/status/${orderId}`, statusData);
+  }
+
   // Product endpoints
-  async getProducts() {
-    return this.get('/products');
+  async getProducts(params = {}) {
+    const query = new URLSearchParams();
+    if (params.category && params.category !== 'all') query.append('category', params.category);
+    if (params.search) query.append('search', params.search);
+    if (params.farmerId) query.append('farmerId', params.farmerId);
+    if (params.all) query.append('all', 'true');
+    const qs = query.toString();
+    return this.get(qs ? `/products?${qs}` : '/products');
   }
 
   async getProduct(id) {
@@ -159,6 +213,15 @@ class ApiService {
 
   async deleteProduct(id) {
     return this.delete(`/products/${id}`);
+  }
+
+  // Reviews
+  async getProductReviews(productId) {
+    return this.get(`/reviews/product/${productId}`);
+  }
+
+  async addReview(reviewData) {
+    return this.post('/reviews', reviewData);
   }
 
   // Cart endpoints

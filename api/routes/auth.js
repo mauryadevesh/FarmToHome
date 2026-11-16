@@ -13,7 +13,7 @@ const generateToken = (id) => {
 // @desc    Register a new user (farmer or consumer)
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password, role, address, phone } = req.body;
+    const { name, email, password, role, address, phone, farm_name, farmName, location } = req.body;
 
     if (!name || !email || !password || !role) {
       return res.status(400).json({ message: 'Name, email, password, and role are required' });
@@ -38,7 +38,9 @@ router.post('/register', async (req, res) => {
       password,
       role,
       address: address ? address.trim() : '',
-      phone: phone ? phone.trim() : ''
+      phone: phone ? phone.trim() : '',
+      farm_name: farm_name || farmName || '',
+      location: location || 'Mira Bhayandar Agricultural Belt'
     });
 
     const token = generateToken(user.id);
@@ -88,6 +90,12 @@ router.post('/login', async (req, res) => {
 
     const token = generateToken(user.id);
 
+    // If farmer, attach farmer profile
+    let farmerProfile = null;
+    if (user.role === 'farmer') {
+      farmerProfile = await dbAdapter.getFarmerById(user.id);
+    }
+
     return res.json({
       token,
       user: {
@@ -97,28 +105,79 @@ router.post('/login', async (req, res) => {
         email: user.email,
         role: user.role,
         address: user.address,
-        phone: user.phone
+        phone: user.phone,
+        farmerProfile
       }
     });
   } catch (error) {
     console.error('Login error:', error);
-    return res.status(500).json({ message: error.message || 'Server error during login' });
+    return res.status(500).json({ message: 'Server error during login' });
   }
 });
 
 // @route   GET /api/auth/me
 // @desc    Get currently logged in user profile
 router.get('/me', auth, async (req, res) => {
-  return res.json({
-    id: req.user.id,
-    _id: req.user.id,
-    name: req.user.name,
-    email: req.user.email,
-    role: req.user.role,
-    address: req.user.address,
-    phone: req.user.phone,
-    last_login: req.user.last_login
-  });
+  try {
+    const user = await dbAdapter.findUserById(req.user.id || req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    let farmerProfile = null;
+    if (user.role === 'farmer') {
+      farmerProfile = await dbAdapter.getFarmerById(user.id);
+    }
+
+    const addresses = await dbAdapter.getAddresses(user.id);
+
+    return res.json({
+      ...user,
+      farmerProfile,
+      addresses
+    });
+  } catch (error) {
+    console.error('Error in /me:', error);
+    return res.status(500).json({ message: 'Server error fetching user profile' });
+  }
+});
+
+// @route   GET /api/auth/farmers
+// @desc    Public list of local farmers near Mira Bhayandar
+router.get('/farmers', async (req, res) => {
+  try {
+    const farmers = await dbAdapter.getFarmers();
+    return res.json(farmers);
+  } catch (error) {
+    console.error('Error fetching farmers:', error);
+    return res.status(500).json({ message: 'Error retrieving farmers' });
+  }
+});
+
+// @route   GET /api/auth/addresses
+// @desc    Get saved delivery addresses for current user
+router.get('/addresses', auth, async (req, res) => {
+  try {
+    const userId = req.user.id || req.user._id;
+    const addresses = await dbAdapter.getAddresses(userId);
+    return res.json(addresses);
+  } catch (error) {
+    console.error('Error fetching addresses:', error);
+    return res.status(500).json({ message: 'Error fetching addresses' });
+  }
+});
+
+// @route   POST /api/auth/addresses
+// @desc    Save new delivery address in Mira Bhayandar
+router.post('/addresses', auth, async (req, res) => {
+  try {
+    const userId = req.user.id || req.user._id;
+    const address = await dbAdapter.createAddress(userId, req.body);
+    return res.status(201).json(address);
+  } catch (error) {
+    console.error('Error adding address:', error);
+    return res.status(400).json({ message: error.message || 'Error saving address' });
+  }
 });
 
 module.exports = router;

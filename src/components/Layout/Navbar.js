@@ -56,8 +56,16 @@ const Navbar = () => {
       <div className="header-container">
         {/* Brand Masthead */}
         <Link to="/" className="site-brand">
-          <span className="brand-wordmark">FarmToHome</span>
-          <span className="brand-descriptor">Direct growers marketplace</span>
+          <div className="brand-logo-badge">
+            <FaLeaf className="brand-leaf-icon" />
+          </div>
+          <div className="brand-copy">
+            <div className="brand-title-wrap">
+              <span className="brand-wordmark">Farm2Home</span>
+              <span className="brand-locality-pill">Mira Bhayandar</span>
+            </div>
+            <span className="brand-descriptor">Fresh from Local Farms to Your Home</span>
+          </div>
         </Link>
 
         {/* Primary Desktop Navigation */}
@@ -69,8 +77,8 @@ const Navbar = () => {
           {isAuthenticated && user?.role === 'consumer' && (
             <>
               {renderNavLink('/cart', <FaShoppingCart className="nav-icon" />, 'Cart')}
-              {renderNavLink('/orders', <FaClipboardList className="nav-icon" />, 'Orders')}
-              {renderNavLink('/tracking', <FaMapMarkerAlt className="nav-icon" />, 'Tracking')}
+              {renderNavLink('/orders', <FaClipboardList className="nav-icon" />, 'My Orders')}
+              {renderNavLink('/tracking', <FaMapMarkerAlt className="nav-icon" />, 'Live Tracking')}
               {renderNavLink('/consumer-dashboard', null, 'Account')}
             </>
           )}
@@ -78,15 +86,15 @@ const Navbar = () => {
           {/* Farmer navigation */}
           {isAuthenticated && user?.role === 'farmer' && (
             <>
-              {renderNavLink('/farmer-dashboard', <FaLeaf className="nav-icon" />, 'Grower hub')}
-              {renderNavLink('/orders', <FaClipboardList className="nav-icon" />, 'Harvest orders')}
+              {renderNavLink('/farmer-dashboard', <FaLeaf className="nav-icon" />, 'Grower Hub')}
+              {renderNavLink('/orders', <FaClipboardList className="nav-icon" />, 'Harvest Orders')}
             </>
           )}
 
           {/* Admin navigation */}
           {isAuthenticated && user?.role === 'admin' && (
             <>
-              {renderNavLink('/admin-dashboard', null, 'Dashboard')}
+              {renderNavLink('/admin-dashboard', null, 'Operations Desk')}
               {renderNavLink('/admin/products', <FaBox className="nav-icon" />, 'Catalog')}
               {renderNavLink('/admin/orders', <FaClipboardList className="nav-icon" />, 'Orders')}
               {renderNavLink('/admin/users', <FaUsers className="nav-icon" />, 'Members')}
@@ -95,7 +103,7 @@ const Navbar = () => {
           )}
 
           {/* Universal Help link */}
-          {(!user || user.role !== 'admin') && renderNavLink('/support', <FaHeadset className="nav-icon" />, 'Help')}
+          {(!user || user.role !== 'admin') && renderNavLink('/support', <FaHeadset className="nav-icon" />, 'Help & Support')}
         </nav>
 
         {/* Auth & Session Actions */}
@@ -148,94 +156,96 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
           >
-            <div className="mobile-drawer-links">
-            <Link to="/" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-              Home
-            </Link>
-            <Link to="/products" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-              Seasonal produce
-            </Link>
-
-            {isAuthenticated && user?.role === 'consumer' && (
-              <>
-                <Link to="/cart" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-                  Shopping cart
-                </Link>
-                <Link to="/orders" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-                  Order history
-                </Link>
-                <Link to="/tracking" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-                  Order tracking
-                </Link>
-                <Link to="/consumer-dashboard" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-                  Member profile
-                </Link>
-              </>
-            )}
-
-            {isAuthenticated && user?.role === 'farmer' && (
-              <>
-                <Link to="/farmer-dashboard" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-                  Farm management
-                </Link>
-                <Link to="/orders" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-                  Incoming orders
-                </Link>
-              </>
-            )}
-
-            {isAuthenticated && user?.role === 'admin' && (
-              <>
-                <Link to="/admin-dashboard" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-                  Platform overview
-                </Link>
-                <Link to="/admin/products" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-                  Manage catalog
-                </Link>
-                <Link to="/admin/orders" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-                  All orders
-                </Link>
-                <Link to="/admin/users" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-                  User roles
-                </Link>
-                <Link to="/admin/support" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-                  Support tickets
-                </Link>
-              </>
-            )}
-
-            <Link to="/support" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-              Customer support
-            </Link>
-          </div>
-
-          <div className="mobile-drawer-footer">
-            {isAuthenticated ? (
-              <button
-                onClick={() => {
-                  handleLogout();
-                  setIsMenuOpen(false);
-                }}
-                className="btn btn--secondary btn--block"
-              >
-                Sign out ({user?.name})
-              </button>
-            ) : (
-              <div className="mobile-drawer-auth">
-                <Link to="/login" className="btn btn--secondary btn--block" onClick={() => setIsMenuOpen(false)}>
-                  Sign in
-                </Link>
-                <Link to="/register" className="btn btn--primary btn--block" onClick={() => setIsMenuOpen(false)}>
-                  Create account
-                </Link>
+            <div className="mobile-drawer-inner">
+              <div className="mobile-locality-banner">
+                <FaMapMarkerAlt />
+                <span>Serving Mira Road East, Bhayandar West, Uttan & nearby localities</span>
               </div>
-            )}
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+              <nav className="mobile-nav" aria-label="Mobile Navigation">
+                <Link to="/" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
+                  <FaHome /> Home
+                </Link>
+                <Link to="/products" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
+                  <FaStore /> Produce Index
+                </Link>
+
+                {isAuthenticated && user?.role === 'consumer' && (
+                  <>
+                    <Link to="/cart" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
+                      <FaShoppingCart /> Cart
+                    </Link>
+                    <Link to="/orders" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
+                      <FaClipboardList /> Orders
+                    </Link>
+                    <Link to="/tracking" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
+                      <FaMapMarkerAlt /> Live Order Tracking
+                    </Link>
+                    <Link to="/consumer-dashboard" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
+                      Account Overview
+                    </Link>
+                  </>
+                )}
+
+                {isAuthenticated && user?.role === 'farmer' && (
+                  <>
+                    <Link to="/farmer-dashboard" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
+                      <FaLeaf /> Grower Hub
+                    </Link>
+                    <Link to="/orders" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
+                      <FaClipboardList /> Harvest Orders
+                    </Link>
+                  </>
+                )}
+
+                {isAuthenticated && user?.role === 'admin' && (
+                  <>
+                    <Link to="/admin-dashboard" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
+                      Operations Dashboard
+                    </Link>
+                    <Link to="/admin/products" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
+                      <FaBox /> Product Catalog
+                    </Link>
+                    <Link to="/admin/orders" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
+                      <FaClipboardList /> Order Management
+                    </Link>
+                    <Link to="/admin/users" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
+                      <FaUsers /> User Audit
+                    </Link>
+                    <Link to="/admin/support" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
+                      <FaHeadset /> Support Queue
+                    </Link>
+                  </>
+                )}
+
+                {(!user || user.role !== 'admin') && (
+                  <Link to="/support" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
+                    <FaHeadset /> Support Desk
+                  </Link>
+                )}
+              </nav>
+
+              <div className="mobile-drawer-auth">
+                {isAuthenticated ? (
+                  <button onClick={handleLogout} className="btn btn--secondary btn--full">
+                    <FaSignOutAlt /> Sign Out ({user?.name?.split(' ')[0]})
+                  </button>
+                ) : (
+                  <div className="mobile-auth-grid">
+                    <Link to="/login" className="btn btn--secondary" onClick={() => setIsMenuOpen(false)}>
+                      Sign In
+                    </Link>
+                    <Link to="/register" className="btn btn--primary" onClick={() => setIsMenuOpen(false)}>
+                      Join Free
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

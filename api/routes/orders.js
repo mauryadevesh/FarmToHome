@@ -4,7 +4,7 @@ const dbAdapter = require('../services/dbAdapter');
 const { auth } = require('../middleware/auth');
 
 // @route   GET /api/orders
-// @desc    Get orders (user's own or all if admin)
+// @desc    Get orders (user's own or all if admin/farmer)
 router.get('/', auth, async (req, res) => {
   try {
     const userId = req.user.id || req.user._id;
@@ -26,10 +26,10 @@ router.get('/:id', auth, async (req, res) => {
     }
 
     const userId = req.user.id || req.user._id;
-    const isOwner = order.user_id === userId || order.user?.id === userId || order.user?._id === userId;
-    const isAdmin = req.user.role === 'admin';
+    const isOwner = order.user_id === userId || order.userId === userId || order.user?.id === userId || order.user?._id === userId;
+    const isPrivileged = req.user.role === 'admin' || req.user.role === 'farmer';
 
-    if (!isOwner && !isAdmin) {
+    if (!isOwner && !isPrivileged) {
       return res.status(403).json({ message: 'Access denied to view this order' });
     }
 
@@ -41,18 +41,22 @@ router.get('/:id', auth, async (req, res) => {
 });
 
 // @route   POST /api/orders
-// @desc    Create a new order from active cart
+// @desc    Create a new order from active cart with delivery slot scheduling
 router.post('/', auth, async (req, res) => {
   try {
-    const { shippingAddress } = req.body;
+    const { shippingAddress, deliverySlotId, deliveryDate, deliveryTimeSlot, paymentMethod } = req.body;
     if (!shippingAddress || !shippingAddress.trim()) {
-      return res.status(400).json({ message: 'Shipping address is required' });
+      return res.status(400).json({ message: 'Shipping delivery address in Mira Bhayandar is required' });
     }
 
     const userId = req.user.id || req.user._id;
     const order = await dbAdapter.createOrder({
       userId,
-      shippingAddress: shippingAddress.trim()
+      shippingAddress: shippingAddress.trim(),
+      deliverySlotId,
+      deliveryDate,
+      deliveryTimeSlot,
+      paymentMethod: paymentMethod || 'cod'
     });
 
     return res.status(201).json(order);
@@ -81,11 +85,26 @@ router.delete('/:id', auth, handleCancelOrder);
 router.put('/:id/cancel', auth, handleCancelOrder);
 
 // @route   PUT /api/orders/:id/status
-// @desc    Update order tracking status
+// @desc    Update order tracking status across 6-stage lifecycle
 router.put('/:id/status', auth, async (req, res) => {
   try {
     const { status } = req.body;
-    const validStatuses = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'];
+    const validStatuses = [
+      'Pending',
+      'Accepted',
+      'Preparing',
+      'Ready',
+      'Out for Delivery',
+      'Delivered',
+      'Cancelled',
+      // Legacy lowercase backwards compatibility
+      'pending',
+      'confirmed',
+      'processing',
+      'shipped',
+      'delivered',
+      'cancelled'
+    ];
     if (!status || !validStatuses.includes(status)) {
       return res.status(400).json({ message: 'Invalid order status' });
     }
@@ -96,18 +115,18 @@ router.put('/:id/status', auth, async (req, res) => {
     }
 
     const userId = req.user.id || req.user._id;
-    const isOwner = order.user_id === userId || order.user?.id === userId || order.user?._id === userId;
     const isAdmin = req.user.role === 'admin';
+    const isFarmer = req.user.role === 'farmer';
 
-    if (!isOwner && !isAdmin) {
-      return res.status(403).json({ message: 'Access denied' });
+    if (!isAdmin && !isFarmer) {
+      return res.status(403).json({ message: 'Only cultivators or admins can update order tracking stage' });
     }
 
     const updated = await dbAdapter.updateOrderStatus(req.params.id, status);
     return res.json(updated);
   } catch (error) {
     console.error('Error updating order status:', error);
-    return res.status(500).json({ message: error.message || 'Server error updating order status' });
+    return res.status(500).json({ message: error.message || 'Server error updating status' });
   }
 });
 

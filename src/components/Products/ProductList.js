@@ -6,16 +6,29 @@ import { getProductImage } from '../../utils/productImage';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PageTransition } from '../UI/Motion';
 import ProductSkeletonGrid from '../UI/ProductSkeleton';
-import { FaSearch, FaFilter, FaShoppingBag, FaLeaf, FaTimes, FaSignInAlt, FaCheckCircle, FaExclamationCircle, FaSortAmountDown, FaSort } from 'react-icons/fa';
+import {
+  FaSearch,
+  FaFilter,
+  FaShoppingBag,
+  FaLeaf,
+  FaTimes,
+  FaSignInAlt,
+  FaCheckCircle,
+  FaExclamationCircle,
+  FaSortAmountDown,
+  FaSort,
+  FaMapMarkerAlt,
+  FaClock
+} from 'react-icons/fa';
 
 const ALL_CATEGORIES = [
   { value: '', label: 'All categories' },
   { value: 'vegetables', label: 'Fresh vegetables' },
+  { value: 'leafy_greens', label: 'Leafy greens' },
   { value: 'fruits', label: 'Farm fruits' },
-  { value: 'grains', label: 'Whole grains' },
-  { value: 'pulses', label: 'Pulses & dals' },
-  { value: 'spices', label: 'Spices & seasoning' },
+  { value: 'grains', label: 'Grains & pulses' },
   { value: 'dairy', label: 'Dairy & eggs' },
+  { value: 'spices', label: 'Spices & seasoning' },
 ];
 
 const ProductList = () => {
@@ -29,10 +42,13 @@ const ProductList = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const initialCategory = searchParams.get('category') || '';
+  const initialSearch = searchParams.get('search') || '';
+  const initialFarmer = searchParams.get('farmerId') || '';
 
   const [filters, setFilters] = useState({
     category: initialCategory,
-    search: '',
+    search: initialSearch,
+    farmerId: initialFarmer,
     sortBy: 'name',
     sortOrder: 'asc'
   });
@@ -46,10 +62,16 @@ const ProductList = () => {
   }, []);
 
   useEffect(() => {
-    const categoryParam = new URLSearchParams(location.search).get('category') || '';
-    if (categoryParam) {
-      setFilters(prev => ({ ...prev, category: categoryParam }));
-    }
+    const params = new URLSearchParams(location.search);
+    const cat = params.get('category') || '';
+    const q = params.get('search') || '';
+    const fId = params.get('farmerId') || '';
+    setFilters(prev => ({
+      ...prev,
+      category: cat,
+      search: q,
+      farmerId: fId
+    }));
   }, [location.search]);
 
   useEffect(() => {
@@ -83,6 +105,7 @@ const ProductList = () => {
     setFilters({
       category: '',
       search: '',
+      farmerId: '',
       sortBy: 'name',
       sortOrder: 'asc'
     });
@@ -105,7 +128,7 @@ const ProductList = () => {
       await apiService.addToCart(prodId, 1);
       setFeedback({
         type: 'success',
-        message: `Added 1 ${product.unit || 'kg'} of fresh ${product.name} to your cart!`
+        message: `Added 1 ${product.unit || 'kg'} of fresh ${product.name} to your basket!`
       });
     } catch (err) {
       setFeedback({ type: 'error', message: err.message || 'Could not add to cart.' });
@@ -122,12 +145,22 @@ const ProductList = () => {
       result = result.filter(p => p.category?.toLowerCase() === filters.category.toLowerCase());
     }
 
+    if (filters.farmerId) {
+      result = result.filter(p =>
+        p.farmer_id === filters.farmerId ||
+        p.farmerId === filters.farmerId ||
+        p.farmer?.id === filters.farmerId ||
+        p.farmer?._id === filters.farmerId
+      );
+    }
+
     if (filters.search.trim()) {
       const q = filters.search.toLowerCase().trim();
       result = result.filter(p =>
         p.name?.toLowerCase().includes(q) ||
         p.description?.toLowerCase().includes(q) ||
-        p.category?.toLowerCase().includes(q)
+        p.category?.toLowerCase().includes(q) ||
+        p.origin_farm?.toLowerCase().includes(q)
       );
     }
 
@@ -153,14 +186,15 @@ const ProductList = () => {
     return result;
   }, [allProducts, filters]);
 
-  const hasActiveFilters = Boolean(filters.category || filters.search);
+  const hasActiveFilters = Boolean(filters.category || filters.search || filters.farmerId);
 
   return (
     <PageTransition className="product-list-container">
       {/* Page Header */}
       <div className="product-list-header">
-        <h1>Direct Village Farm Produce</h1>
-        <p>Harvested fresh, sorted with care, and sold at fair per-unit rates directly by farmers.</p>
+        <span className="section-label">Direct Harvest Catalog</span>
+        <h1>Local Farm Produce • Mira Bhayandar</h1>
+        <p>Harvested fresh from Uttan, Chena Creek, and Rai-Morva. 0% middleman markups and guaranteed morning dispatch.</p>
       </div>
 
       {isFarmer && (
@@ -168,7 +202,7 @@ const ProductList = () => {
           <div>
             <h3>
               <FaLeaf style={{ marginRight: '8px', color: 'var(--brand)', verticalAlign: 'middle' }} />
-              You are logged in as a Farmer
+              You are logged in as a Cultivator
             </h3>
             <p>
               Looking to list new harvest crops, change unit prices, or update stock? Manage your listings in the Farmer Dashboard.
@@ -218,7 +252,7 @@ const ProductList = () => {
               </div>
               <h3>Sign in to Add to Cart</h3>
               <p>
-                Please log in or create a quick FarmToHome consumer account to add items to your basket and enjoy doorstep delivery.
+                Please log in or create a quick Farm2Home consumer account to add items to your basket and enjoy doorstep delivery.
               </p>
               <div className="modal-actions">
                 <Link to="/login" className="btn btn-primary btn-block">
@@ -274,7 +308,7 @@ const ProductList = () => {
               value={filters.search}
               onChange={handleFilterChange}
               className="filter-input"
-              placeholder="e.g. Tomato, Mango, Tur Dal, Milk..."
+              placeholder="e.g. Tomato, Palak, Methi, Mango, Milk..."
             />
           </div>
 
@@ -337,6 +371,7 @@ const ProductList = () => {
               Showing {filteredProducts.length} of {allProducts.length} items
               {filters.category ? ` in ${filters.category}` : ''}
               {filters.search ? ` matching "${filters.search}"` : ''}
+              {filters.farmerId ? ' from selected cultivator' : ''}
             </span>
             <button onClick={clearFilters} className="btn btn-outline btn-sm clear-filter-btn">
               <FaTimes style={{ marginRight: '4px' }} /> Clear Filters
@@ -350,7 +385,7 @@ const ProductList = () => {
         <div className="catalog-loading-wrapper">
           <div className="catalog-loading-meta">
             <span className="live-pulse-dot" />
-            <span>Fetching fresh field inventory from village farmers...</span>
+            <span>Fetching fresh field inventory from local village cultivators...</span>
           </div>
           <ProductSkeletonGrid count={8} />
         </div>
@@ -412,6 +447,7 @@ const ProductList = () => {
                       ) : (
                         <span className="availability-badge available">✓ Fresh in Stock</span>
                       )}
+                      <span className="product-card-rating">★ {product.rating || 4.8}</span>
                     </div>
 
                     <div className="product-info">
@@ -424,10 +460,15 @@ const ProductList = () => {
                       <p className="product-description">{product.description}</p>
 
                       <div className="product-farmer">
-                        <FaLeaf className="farmer-icon" />
+                        <FaMapMarkerAlt className="farmer-icon" />
                         <span className="farmer-name">
-                          {product.farmer?.name || 'Local Farm Cultivator'}
+                          {product.origin_farm || product.farmer_name || product.farmer?.name || 'Uttan Agro Farm'}
                         </span>
+                      </div>
+
+                      <div className="product-harvest-time">
+                        <FaClock style={{ fontSize: '11px', marginRight: '4px' }} />
+                        <span>{product.harvest_date || 'Harvested 5:30 AM'}</span>
                       </div>
 
                       <div className="product-pricing-bar">

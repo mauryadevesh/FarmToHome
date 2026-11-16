@@ -76,3 +76,5 @@ export const getProductImage = (imagePath, productName) => {
   // 3. Fallback: clean Garden-themed SVG placeholder
   return createSvgPlaceholder(productName || 'Fresh Harvest');
 };
+
+export default getProductImage;
